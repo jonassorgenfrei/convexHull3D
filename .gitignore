@@ -33,7 +33,13 @@
 
 # Ignore x64 Builds
 x64/
+**/x64/
 
 # Ignore x32 Builds
 Debug/
 Release/
+**/Debug/
+**/Release/
+
+# VS Ordner
+.vs/
