@@ -9,6 +9,8 @@
  */
 
 #include <iostream>
+#include "convexHull.h"
+#include "visualisation.h"
 
 int main(int argc, char* argv[]) {
 	std::cout << "Convex Hull Program" << std::endl;
