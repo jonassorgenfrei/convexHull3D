@@ -123,10 +123,14 @@
     <ClCompile Include="visualisation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="conflictGraph.h" />
     <ClInclude Include="convexHull.h" />
     <ClInclude Include="dcel.h" />
-    <ClInclude Include="math.h" />
+    <ClInclude Include="edge.h" />
     <ClInclude Include="point.h" />
+    <ClInclude Include="math.h" />
+    <ClInclude Include="point2D.h" />
+    <ClInclude Include="point3D.h" />
     <ClInclude Include="visualisation.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

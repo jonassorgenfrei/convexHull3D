@@ -32,10 +32,22 @@
     <ClInclude Include="visualisation.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="math.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="conflictGraph.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="point2D.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="point3D.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
     <ClInclude Include="point.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="math.h">
+    <ClInclude Include="edge.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

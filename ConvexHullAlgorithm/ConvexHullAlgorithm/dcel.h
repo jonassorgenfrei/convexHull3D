@@ -1,5 +1,12 @@
 #pragma once
 
-class DCEL {
+#include <iostream>
 
+class DCEL {
+	public:
+		DCEL() {};
+		void print() {
+
+		}
+	private:
 };
