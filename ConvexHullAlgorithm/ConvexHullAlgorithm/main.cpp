@@ -10,9 +10,9 @@
 
 #include <iostream>
 
-
-int main() {
+int main(int argc, char* argv[]) {
 	std::cout << "Convex Hull Program" << std::endl;
-	
+	std::cout << "ARGS:" << argc << std::endl;
+
 	return 0;
 }
