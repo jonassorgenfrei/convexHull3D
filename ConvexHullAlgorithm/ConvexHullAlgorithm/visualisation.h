@@ -24,6 +24,13 @@
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+typedef struct DrawAble {
+	unsigned int VBO;
+	unsigned int VAO;
+	GLenum mode;
+	unsigned int count;
+} DrawAble;
+
 class Visualisation {
 	public:
 		Visualisation();
@@ -32,20 +39,15 @@ class Visualisation {
 
 		void addRender(DCEL * dcel);
 
-		void addRender(std::vector<Point2D> points);
-
-		void addRender(std::vector<Point3D> points);
+		void addRender(std::vector<Point*> points, GLenum mode);
 
 		void render();
 	private:
-		static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-		/*void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-		// current Mouse position 
-		void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-		void processInput(GLFWwindow *window);*/
+		/* Members */
 		GLFWwindow* window;
 		Shader shader;
-		Camera camera; 
+		Camera camera;
+		std::vector<DrawAble> drawAbles;
 		bool firstMouse = true;
 		float lastX = SCR_WIDTH / 2.0;
 		float lastY = SCR_HEIGHT / 2.0;
@@ -53,8 +55,15 @@ class Visualisation {
 		// timing 
 		float deltaTime = 0.0f; // time between current frame and last frame
 		float lastFrame = 0.0f; // time of last frame
+		
+		/* Functions*/
 
-
+		/* Callbacks */
+		static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+		/*void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+		// current Mouse position 
+		void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);*/
+		void processInput(GLFWwindow *window);
 };
 
 #endif // !VISUALISATION_H

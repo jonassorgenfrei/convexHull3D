@@ -29,7 +29,7 @@ typedef enum SPACE {TWO_DIM, THREE_DIM} Space;
 // Which space we are operating in
 Space space = THREE_DIM;
 // How many input points we want to calculate
-int pointCount = 1000;
+int pointCount = 20;
 // Visualize Result
 bool vis = false;
 // run Convex Hull Algorithm
@@ -105,7 +105,7 @@ int main(int argc, char* argv[]) {
 
 		std::srand(std::time(nullptr)); // use current time as seed for random generator
 
-		/* random points sets */
+		/* random points set */
 		std::vector<Point*> pointSet;
 		
 		switch (space) {
@@ -151,7 +151,10 @@ int main(int argc, char* argv[]) {
 						std::cout << std::endl;
 					}
 					if (vis) {
+						ch.push_back(ch[0]);
 						Visualisation * visu = new Visualisation();
+						visu->addRender(pointSet, GL_POINTS);
+						visu->addRender(ch, GL_LINE_STRIP);
 						visu->render();
 					}
 					break;

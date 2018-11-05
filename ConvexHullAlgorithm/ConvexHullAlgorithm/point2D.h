@@ -27,8 +27,7 @@ class Point2D : public Point {
 		};
 
 		float getZ() {
-			// ERROR 
-			return NAN;
+			return 0.0;
 		};
 
 	private: 
