@@ -29,7 +29,7 @@ typedef enum SPACE {TWO_DIM, THREE_DIM} Space;
 // Which space we are operating in
 Space space = THREE_DIM;
 // How many input points we want to calculate
-int pointCount = 10;
+int pointCount = 1000;
 // Visualize Result
 bool vis = false;
 // run Convex Hull Algorithm
@@ -76,7 +76,7 @@ int main(int argc, char* argv[]) {
 					strcmp(argv[current_arg], "--visualisation") == 0 ||
 					strcmp(argv[current_arg], "-v") == 0)
 				{
-					// Turn on/off visualisation
+					vis = true;
 				}
 				else if (strcmp(argv[current_arg], "-help") == 0 ||
 					strcmp(argv[current_arg], "--help") == 0 ||
@@ -107,7 +107,7 @@ int main(int argc, char* argv[]) {
 
 		/* random points sets */
 		std::vector<Point*> pointSet;
-		DCEL dcel;
+		
 		switch (space) {
 			case TWO_DIM:
 				for (int i = 0; i < pointCount; i++) {
@@ -131,21 +131,43 @@ int main(int argc, char* argv[]) {
 				break;
 		}
 
+		// Print Generated Points
+		std::cout << "Generated Points (" << pointSet.size() << "):" << std::endl;
 		for (auto p : pointSet) {
 			p->print();
 			std::cout << std::endl;
 		}
 
 		if (run) {
-			//Run Convex Hull Algorithm 
-			//dcel = ConvexHull2D(pointSet);
+			std::vector<Point*> ch;
+			DCEL dcel;
+			switch (space) {
+				case TWO_DIM:
+					//Run Convex Hull Algorithm 
+					ch = ConvexHull2D(pointSet);
+					std::cout << "Convex Hull Points (" << ch.size() << "):" << std::endl;
+					for (auto p : ch) {
+						p->print();
+						std::cout << std::endl;
+					}
+					if (vis) {
+						Visualisation * visu = new Visualisation();
+						visu->render();
+					}
+					break;
+				case THREE_DIM:
+					//Run Convex Hull Algorithm 
+					dcel = ConvexHull3D(pointSet);
+					if (vis) {
+						//Visualise Points and CH Result
+						//TODO:
+					}
+					break;
+				default:
+					break;
+			}
 		}
-
-
-		if (vis) {
-			//Visualise Points and CH Result
-			//TODO:
-		}
+		
 	} catch (const std::exception& e) {
 		std::cout << e.what() << std::endl;
 	}

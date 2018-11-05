@@ -19,6 +19,18 @@ class Point3D : public Point {
 
 		}
 
+		float getX() {
+			return this->x;
+		};
+
+		float getY() {
+			return this->y;
+		};
+
+		float getZ() {
+			return this->z;
+		};
+
 	private:
 		float x;
 		float y;

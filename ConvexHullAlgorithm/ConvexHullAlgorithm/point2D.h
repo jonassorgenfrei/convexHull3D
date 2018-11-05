@@ -18,6 +18,19 @@ class Point2D : public Point {
 		
 		}
 
+		float getX() {
+			return this->x;
+		};
+
+		float getY() {
+			return this->y;
+		};
+
+		float getZ() {
+			// ERROR 
+			return NAN;
+		};
+
 	private: 
 		float x;
 		float y;

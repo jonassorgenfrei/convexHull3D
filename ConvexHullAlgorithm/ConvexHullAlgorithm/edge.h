@@ -6,7 +6,7 @@
 
 class Edge {
 public:
-	Edge2D(Point * start, Point * end) {
+	Edge(Point * start, Point * end) {
 		this->start = start;
 		this->end = end;
 	}
