@@ -30,6 +30,9 @@ class Point2D : public Point {
 			return 0.0;
 		};
 
+		PointType getType() {
+			return PointType::POINT_2D;
+		}
 	private: 
 		float x;
 		float y;

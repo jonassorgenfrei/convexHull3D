@@ -32,8 +32,8 @@ int Visualisation::init()
 	glfwMakeContextCurrent(window);
 
 	glfwSetFramebufferSizeCallback(window, Visualisation::framebuffer_size_callback);
-	//glfwSetCursorPosCallback(window,mouse_callback);
-	//glfwSetScrollCallback(window, scroll_callback);
+	glfwSetCursorPosCallback(window,&Visualisation::mouse_callback);
+	glfwSetScrollCallback(window, &Visualisation::scroll_callback);
 
 	//tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -48,7 +48,7 @@ int Visualisation::init()
 
 	// build and compile our shader program
 	// ------------------------------------
-	this->camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+	this->camera = Camera(glm::vec3(10, 10, 35.0f));
 	this->shader = Shader(".\\shader\\vertexShader.vert", ".\\shader\\fragmentShader.frag");
 
 	return 1;
@@ -84,7 +84,7 @@ void Visualisation::addRender(std::vector<Point*> points, GLenum mode)
 	glBindVertexArray(0);
 
 	DrawAble drawAble;
-	drawAble.count = points.size() * 3;
+	drawAble.count = points.size();
 	drawAble.VAO = VAO;
 	drawAble.VBO = VBO;
 	drawAble.mode = mode;
@@ -157,6 +157,104 @@ void Visualisation::render()
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------
 	glfwTerminate();
+}
+
+// glfw: whenever the mouse moves, this callback is called
+// -------------------------------------------------------
+void Visualisation::mouse_callbackImpl(GLFWwindow* window, double xpos, double ypos)
+{
+	//Rotation 
+	if (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS &&
+		glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+		if (firstMouse)
+		{
+			lastX = xpos;
+			lastY = ypos;
+			firstMouse = false;
+		}
+
+		float xoffset = xpos - lastX;
+		float yoffset = lastY - ypos;
+		// reversed since y-coordinates range from bottom to top
+		lastX = xpos;
+		lastY = ypos;
+
+		camera.rotate(xoffset, yoffset);
+	}
+
+	//Moving 
+	if (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS &&
+		glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS) {
+		if (firstMouse)
+		{
+			lastX = xpos;
+			lastY = ypos;
+			firstMouse = false;
+		}
+
+		float xoffset = xpos - lastX;
+		float yoffset = lastY - ypos;
+		// reversed since y-coordinates range from bottom to top
+		lastX = xpos;
+		lastY = ypos;
+
+		//camera.ProcessMouseMovement(xoffset, yoffset);
+		if (xoffset > 0) {
+			camera.translate(LEFT, xoffset*0.05);
+		}
+		else {
+			camera.translate(RIGHT, xoffset*-0.05);
+		}
+
+		if (yoffset > 0) {
+			camera.translate(DOWN, yoffset*0.05);
+		}
+		else {
+			camera.translate(UP, yoffset*-0.05);
+		}
+	}
+
+	//Zoom 
+	if (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS &&
+		glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
+		if (firstMouse)
+		{
+			lastX = xpos;
+			//lastY = ypos;
+			firstMouse = false;
+		}
+
+		float xoffset = xpos - lastX;
+		//float yoffset = lastY - ypos;
+		// reversed since y-coordinates range from bottom to top
+		lastX = xpos;
+		//lastY = ypos;
+
+		//camera.ProcessMouseMovement(xoffset, yoffset);
+		if (xoffset > 0) {
+			camera.translate(FORWARD, xoffset*0.05);
+		}
+		else {
+			camera.translate(BACKWARD, xoffset*-0.05);
+		}
+	}
+
+	if ((glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_RELEASE ||
+		glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE) &&
+		(glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_RELEASE ||
+			glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_RELEASE) &&
+			(glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_RELEASE ||
+				glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)) {
+		firstMouse = true;
+	}
+
+}
+
+// glfw: whenever the mouse scroll wheel scrolls, this callback is called
+// ----------------------------------------------------------------------
+void Visualisation::scroll_callbackImpl(GLFWwindow* window, double xoffset, double yoffset)
+{
+	camera.ProcessMouseScroll(yoffset);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

@@ -22,6 +22,7 @@
 #include "point2D.h"
 #include "point3D.h"
 
+#define DEB 0
 #define MAX_VALUE 20.0
 
 typedef enum SPACE {TWO_DIM, THREE_DIM} Space;
@@ -29,12 +30,12 @@ typedef enum SPACE {TWO_DIM, THREE_DIM} Space;
 // Which space we are operating in
 Space space = THREE_DIM;
 // How many input points we want to calculate
-int pointCount = 20;
+int pointCount = 2000000;
+//int pointCount = 100;
 // Visualize Result
 bool vis = false;
 // run Convex Hull Algorithm
 bool run = false;
-
 
 float RandomFloat(float a, float b) {
 	float random = ((float)rand()) / (float)RAND_MAX;
@@ -133,11 +134,12 @@ int main(int argc, char* argv[]) {
 
 		// Print Generated Points
 		std::cout << "Generated Points (" << pointSet.size() << "):" << std::endl;
+		#if DEB
 		for (auto p : pointSet) {
 			p->print();
 			std::cout << std::endl;
 		}
-
+		#endif
 		if (run) {
 			std::vector<Point*> ch;
 			DCEL dcel;
@@ -146,16 +148,35 @@ int main(int argc, char* argv[]) {
 					//Run Convex Hull Algorithm 
 					ch = ConvexHull2D(pointSet);
 					std::cout << "Convex Hull Points (" << ch.size() << "):" << std::endl;
+					ch = ConvexHull2D(ch);
+					std::cout << "Convex Hull Points (" << ch.size() << "):" << std::endl;
+					ch = ConvexHull2D(ch);
+					std::cout << "Convex Hull Points (" << ch.size() << "):" << std::endl;
+					ch = ConvexHull2D(ch);
+					std::cout << "Convex Hull Points (" << ch.size() << "):" << std::endl;
+				
+					#if DEB
 					for (auto p : ch) {
 						p->print();
 						std::cout << std::endl;
 					}
+
+					//std::cout << "PunkteListe[{";
+						for (auto p : ch) {
+							std::cout << "pointSet.push_back(new Point2D(";
+							std::cout << p->getX();
+							std::cout << "f,";
+							std::cout << p->getY();
+							std::cout << "f));"<<std::endl;
+						}
+					//std::cout << "}]";
+					#endif
 					if (vis) {
 						ch.push_back(ch[0]);
-						Visualisation * visu = new Visualisation();
-						visu->addRender(pointSet, GL_POINTS);
-						visu->addRender(ch, GL_LINE_STRIP);
-						visu->render();
+						Visualisation &visu = Visualisation::getInstance(); // initialize the singleton
+						visu.addRender(pointSet, GL_POINTS);
+						visu.addRender(ch, GL_LINE_STRIP);
+						visu.render();
 					}
 					break;
 				case THREE_DIM:

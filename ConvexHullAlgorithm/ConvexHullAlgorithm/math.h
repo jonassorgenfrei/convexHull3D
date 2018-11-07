@@ -33,4 +33,9 @@ float ccw(Point * p1, Point * p2, Point * p3) {
 	return (p2->getX() - p1->getX())*(p3->getY() - p1->getY()) - (p2->getY() - p1->getY())*(p3->getX() - p1->getX());
 }
 
+bool cmpf(float A, float B, float epsilon = 0.005f)
+{
+	return (fabs(A - B) < epsilon);
+}
+
 #endif // !MATH_H

@@ -30,7 +30,9 @@ class Point3D : public Point {
 		float getZ() {
 			return this->z;
 		};
-
+		PointType getType() {
+			return PointType::POINT_2D;
+		}
 	private:
 		float x;
 		float y;

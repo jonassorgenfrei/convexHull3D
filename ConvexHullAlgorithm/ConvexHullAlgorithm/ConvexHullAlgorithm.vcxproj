@@ -140,6 +140,7 @@
     <ClInclude Include="visualisation.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Quelle.tx" />
     <None Include="Shader\fragmentShader.frag" />
     <None Include="Shader\vertexShader.vert" />
   </ItemGroup>

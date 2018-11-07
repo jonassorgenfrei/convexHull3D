@@ -73,5 +73,8 @@
     <None Include="Shader\fragmentShader.frag">
       <Filter>Shader</Filter>
     </None>
+    <None Include="Quelle.tx">
+      <Filter>Quelldateien</Filter>
+    </None>
   </ItemGroup>
 </Project>

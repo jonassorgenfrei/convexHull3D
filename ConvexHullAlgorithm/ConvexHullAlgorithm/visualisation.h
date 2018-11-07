@@ -21,8 +21,8 @@
 #include "camera.h"
 #include "shader.h"
 
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 3200;
+const unsigned int SCR_HEIGHT = 2400;
 
 typedef struct DrawAble {
 	unsigned int VBO;
@@ -33,7 +33,7 @@ typedef struct DrawAble {
 
 class Visualisation {
 	public:
-		Visualisation();
+		Visualisation(void);
 
 		int init();
 
@@ -42,6 +42,11 @@ class Visualisation {
 		void addRender(std::vector<Point*> points, GLenum mode);
 
 		void render();
+		static Visualisation& getInstance() // Singleton is accessed via getInstance()
+		{
+			static Visualisation instance; // lazy singleton, instantiated on first use
+			return instance;
+		};
 	private:
 		/* Members */
 		GLFWwindow* window;
@@ -60,10 +65,22 @@ class Visualisation {
 
 		/* Callbacks */
 		static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-		/*void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-		// current Mouse position 
-		void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);*/
+		static void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+			//here we access the instance via the singleton pattern and forward the callback to the instance method
+			getInstance().mouse_callbackImpl(window,xpos, ypos);
+		}
+		void mouse_callbackImpl(GLFWwindow* window, double xpos, double ypos);
+
+		static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+			//here we access the instance via the singleton pattern and forward the callback to the instance method
+			getInstance().scroll_callbackImpl(window, xoffset, yoffset);
+		}
+		void scroll_callbackImpl(GLFWwindow* window, double xoffset, double yoffset);
+
 		void processInput(GLFWwindow *window);
+
+		Visualisation(Visualisation const&); // prevent copies
+		void operator=(Visualisation const&); // prevent assignments
 };
 
 #endif // !VISUALISATION_H
