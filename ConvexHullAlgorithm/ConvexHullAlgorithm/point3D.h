@@ -8,7 +8,7 @@
 
 class Point3D : public Point {
 	public:
-		Point3D(float x = 0.0, float y = 0.0, float z = 0.0) {
+		Point3D(double x = 0.0, double y = 0.0, double z = 0.0) {
 			this->x = x;
 			this->y = y;
 			this->z = z;
@@ -19,24 +19,24 @@ class Point3D : public Point {
 
 		}
 
-		float getX() {
+		double getX() {
 			return this->x;
 		};
 
-		float getY() {
+		double getY() {
 			return this->y;
 		};
 
-		float getZ() {
+		double getZ() {
 			return this->z;
 		};
 		PointType getType() {
 			return PointType::POINT_2D;
 		}
 	private:
-		float x;
-		float y;
-		float z;
+		double x;
+		double y;
+		double z;
 };
 
 

@@ -58,7 +58,7 @@ void Visualisation::addRender(DCEL * dcel)
 {
 }
 
-void Visualisation::addRender(std::vector<Point*> points, GLenum mode)
+void Visualisation::addRender(std::vector<Point*> points, GLenum mode, float r, float g, float b)
 {
 	unsigned int VBO, VAO;
 	glGenVertexArrays(1, &VAO);
@@ -69,9 +69,9 @@ void Visualisation::addRender(std::vector<Point*> points, GLenum mode)
 	float * vertices = new float[points.size()*3];
 	int idx = 0;
 	for (int i = 0; i < points.size(); i ++) {
-		vertices[idx++] = points[i]->getX();
-		vertices[idx++] = points[i]->getY();
-		vertices[idx++] = points[i]->getZ();
+		vertices[idx++] = (float)points[i]->getX();
+		vertices[idx++] = (float)points[i]->getY();
+		vertices[idx++] = (float)points[i]->getZ();
 	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -88,6 +88,8 @@ void Visualisation::addRender(std::vector<Point*> points, GLenum mode)
 	drawAble.VAO = VAO;
 	drawAble.VBO = VBO;
 	drawAble.mode = mode;
+	drawAble.color = glm::vec3(r,g,b);
+
 
 	this->drawAbles.push_back(drawAble);
 	delete[] vertices;
@@ -122,7 +124,7 @@ void Visualisation::render()
 
 		// activate shader 
 		this->shader.use();
-
+		
 		// pass projection matrix to shader (note that in this cas it could change every frame)
 		glm::mat4 projection = glm::mat4(1.0f);
 		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -138,6 +140,7 @@ void Visualisation::render()
 			glBindVertexArray(drawObj.VAO);
 			glm::mat4 model = glm::mat4(1.0f);
 			this->shader.setMat4("model", model);
+			this->shader.setVec3("color",drawObj.color);
 			glDrawArrays(drawObj.mode, 0, drawObj.count);
 		}
 				

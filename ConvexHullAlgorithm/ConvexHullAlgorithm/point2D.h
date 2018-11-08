@@ -8,7 +8,7 @@
 
 class Point2D : public Point {
 	public:
-		Point2D(float x = 0.0, float y = 0.0) {
+		Point2D(double x = 0.0, double y = 0.0) {
 			this->x = x;
 			this->y = y;
 		};
@@ -18,15 +18,15 @@ class Point2D : public Point {
 		
 		}
 
-		float getX() {
+		double getX() {
 			return this->x;
 		};
 
-		float getY() {
+		double getY() {
 			return this->y;
 		};
 
-		float getZ() {
+		double getZ() {
 			return 0.0;
 		};
 
@@ -34,8 +34,8 @@ class Point2D : public Point {
 			return PointType::POINT_2D;
 		}
 	private: 
-		float x;
-		float y;
+		double x;
+		double y;
 };
 
 

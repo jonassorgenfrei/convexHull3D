@@ -27,7 +27,7 @@ std::vector<Point*> ConvexHull2D(std::vector<Point*> points) {
 		return ch;
 
 	// Select the Point with minimum y 
-	float y_min = points[0]->getY();
+	double y_min = points[0]->getY();
 	Point * min_Y_Point = points[0];
 	int idx_min = 0;
 
@@ -51,7 +51,7 @@ std::vector<Point*> ConvexHull2D(std::vector<Point*> points) {
 		Vec2 vec1 = {rhs->getX() - min_Y_Point->getX(), rhs->getY() - min_Y_Point->getY() };
 		Vec2 vec2 = {lhs->getX() - min_Y_Point->getX(), lhs->getY() - min_Y_Point->getY() };
 
-		float cross = crossVec2(vec1, vec2);
+		double cross = crossVec2(vec1, vec2);
 
 		if (cross < 0.0) {
 			return true;

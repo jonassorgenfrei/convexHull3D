@@ -30,14 +30,13 @@ typedef enum SPACE {TWO_DIM, THREE_DIM} Space;
 // Which space we are operating in
 Space space = THREE_DIM;
 // How many input points we want to calculate
-int pointCount = 2000000;
-//int pointCount = 100;
+int pointCount = 500;
 // Visualize Result
 bool vis = false;
 // run Convex Hull Algorithm
 bool run = false;
 
-float RandomFloat(float a, float b) {
+float random(float a, float b) {
 	float random = ((float)rand()) / (float)RAND_MAX;
 	float diff = b - a;
 	float r = random * diff;
@@ -112,8 +111,8 @@ int main(int argc, char* argv[]) {
 		switch (space) {
 			case TWO_DIM:
 				for (int i = 0; i < pointCount; i++) {
-					float x = RandomFloat(0.0, (float)MAX_VALUE);
-					float y = RandomFloat(0.0, (float)MAX_VALUE);
+					double x = (double)random(0.0f, (float)MAX_VALUE);
+					double y = (double)random(0.0f, (float)MAX_VALUE);
 					Point2D * point = new Point2D(x,y);
 					pointSet.push_back(point);
 				}
@@ -121,9 +120,9 @@ int main(int argc, char* argv[]) {
 				break;
 			case THREE_DIM:
 				for (int i = 0; i < pointCount; i++) {
-					float x = RandomFloat(0.0, (float)MAX_VALUE);
-					float y = RandomFloat(0.0, (float)MAX_VALUE);
-					float z = RandomFloat(0.0, (float)MAX_VALUE);
+					double x = (double)random(0.0f, (float)MAX_VALUE);
+					double y = (double)random(0.0f, (float)MAX_VALUE);
+					double z = (double)random(0.0f, (float)MAX_VALUE);
 					Point3D * point = new Point3D(x, y, z);
 					pointSet.push_back(point);
 				}
@@ -148,34 +147,20 @@ int main(int argc, char* argv[]) {
 					//Run Convex Hull Algorithm 
 					ch = ConvexHull2D(pointSet);
 					std::cout << "Convex Hull Points (" << ch.size() << "):" << std::endl;
-					ch = ConvexHull2D(ch);
-					std::cout << "Convex Hull Points (" << ch.size() << "):" << std::endl;
-					ch = ConvexHull2D(ch);
-					std::cout << "Convex Hull Points (" << ch.size() << "):" << std::endl;
-					ch = ConvexHull2D(ch);
-					std::cout << "Convex Hull Points (" << ch.size() << "):" << std::endl;
 				
 					#if DEB
 					for (auto p : ch) {
 						p->print();
 						std::cout << std::endl;
 					}
-
-					//std::cout << "PunkteListe[{";
-						for (auto p : ch) {
-							std::cout << "pointSet.push_back(new Point2D(";
-							std::cout << p->getX();
-							std::cout << "f,";
-							std::cout << p->getY();
-							std::cout << "f));"<<std::endl;
-						}
-					//std::cout << "}]";
 					#endif
+
 					if (vis) {
+						//Visualise Points and CH Result
 						ch.push_back(ch[0]);
 						Visualisation &visu = Visualisation::getInstance(); // initialize the singleton
-						visu.addRender(pointSet, GL_POINTS);
-						visu.addRender(ch, GL_LINE_STRIP);
+						//visu.addRender(pointSet, GL_POINTS);
+						visu.addRender(ch, GL_LINE_STRIP, 1.0, 0.0, 0.0);
 						visu.render();
 					}
 					break;
@@ -184,7 +169,11 @@ int main(int argc, char* argv[]) {
 					dcel = ConvexHull3D(pointSet);
 					if (vis) {
 						//Visualise Points and CH Result
+						Visualisation &visu = Visualisation::getInstance(); // initialize the singleton
+						visu.addRender(pointSet, GL_POINTS);
 						//TODO:
+						// Show DCEL
+						visu.render();
 					}
 					break;
 				default:

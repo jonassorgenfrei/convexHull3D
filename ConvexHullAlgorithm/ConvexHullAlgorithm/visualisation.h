@@ -29,6 +29,7 @@ typedef struct DrawAble {
 	unsigned int VAO;
 	GLenum mode;
 	unsigned int count;
+	glm::vec3 color;
 } DrawAble;
 
 class Visualisation {
@@ -39,7 +40,7 @@ class Visualisation {
 
 		void addRender(DCEL * dcel);
 
-		void addRender(std::vector<Point*> points, GLenum mode);
+		void addRender(std::vector<Point*> points, GLenum mode, float r = 1.0, float g = 1.0, float b = 1.0);
 
 		void render();
 		static Visualisation& getInstance() // Singleton is accessed via getInstance()
