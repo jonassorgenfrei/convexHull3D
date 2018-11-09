@@ -19,23 +19,41 @@
     <Filter Include="Headerdateien\Visualise">
       <UniqueIdentifier>{0b5cee77-eea3-4fe4-99dd-a1e26c9e6268}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\DCEL">
+      <UniqueIdentifier>{cead4cb9-b99a-4fd5-9410-053a4495b4a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\DCEL">
+      <UniqueIdentifier>{bd77a36c-83ff-4e47-bcfc-122c6ab4f92c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Visualisation">
+      <UniqueIdentifier>{bc698a44-bf35-4ce7-9b6f-24e1917195a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="dcel.cpp">
+      <Filter>Quelldateien\DCEL</Filter>
+    </ClCompile>
+    <ClCompile Include="dcelFace.cpp">
+      <Filter>Quelldateien\DCEL</Filter>
+    </ClCompile>
+    <ClCompile Include="dcelHalfEdge.cpp">
+      <Filter>Quelldateien\DCEL</Filter>
+    </ClCompile>
+    <ClCompile Include="dcelVertex.cpp">
+      <Filter>Quelldateien\DCEL</Filter>
+    </ClCompile>
     <ClCompile Include="visualisation.cpp">
-      <Filter>Quelldateien</Filter>
+      <Filter>Quelldateien\Visualisation</Filter>
     </ClCompile>
     <ClCompile Include="glad.c">
-      <Filter>Quelldateien</Filter>
+      <Filter>Quelldateien\Visualisation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="convexHull.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="dcel.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="math.h">
@@ -64,6 +82,18 @@
     </ClInclude>
     <ClInclude Include="shader.h">
       <Filter>Headerdateien\Visualise</Filter>
+    </ClInclude>
+    <ClInclude Include="dcel.h">
+      <Filter>Headerdateien\DCEL</Filter>
+    </ClInclude>
+    <ClInclude Include="dcelFace.h">
+      <Filter>Headerdateien\DCEL</Filter>
+    </ClInclude>
+    <ClInclude Include="dcelHalfEdge.h">
+      <Filter>Headerdateien\DCEL</Filter>
+    </ClInclude>
+    <ClInclude Include="dcelVertex.h">
+      <Filter>Headerdateien\DCEL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

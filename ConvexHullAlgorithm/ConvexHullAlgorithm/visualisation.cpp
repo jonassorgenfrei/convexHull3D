@@ -84,7 +84,7 @@ void Visualisation::addRender(std::vector<Point*> points, GLenum mode, float r, 
 	glBindVertexArray(0);
 
 	DrawAble drawAble;
-	drawAble.count = points.size();
+	drawAble.count = (unsigned int)points.size();
 	drawAble.VAO = VAO;
 	drawAble.VBO = VBO;
 	drawAble.mode = mode;
@@ -109,7 +109,7 @@ void Visualisation::render()
 	{
 		// per-frame time logic
 		// --------------------
-		float currentFrame = glfwGetTime();
+		float currentFrame = (float)glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
