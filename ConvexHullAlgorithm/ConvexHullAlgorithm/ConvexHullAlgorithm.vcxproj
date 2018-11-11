@@ -144,6 +144,7 @@
     <ClInclude Include="point2D.h" />
     <ClInclude Include="point3D.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="Test\testSuite.h" />
     <ClInclude Include="visualisation.h" />
   </ItemGroup>
   <ItemGroup>

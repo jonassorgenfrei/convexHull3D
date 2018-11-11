@@ -28,6 +28,9 @@
     <Filter Include="Quelldateien\Visualisation">
       <UniqueIdentifier>{bc698a44-bf35-4ce7-9b6f-24e1917195a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{bc4208e6-ae6a-421e-9493-327a2306e126}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="dcelVertex.h">
       <Filter>Headerdateien\DCEL</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\testSuite.h">
+      <Filter>Tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

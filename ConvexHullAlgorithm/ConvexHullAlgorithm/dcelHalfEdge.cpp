@@ -4,20 +4,20 @@
 
 
 void DCELHalfEdge::printEdge(int space) {
-	/*for (int i = 0; i < space; i++)
+	for (int i = 0; i < space; i++)
 		printf(" ");
 	printf("Edge {\n");
 	for (int i = 0; i < space; i++)
 		printf(" ");
 	printf(" Start: ");
-	this->origin->point.printPoint();
+	this->origin->point->print();
 	for (int i = 0; i < space; i++)
 		printf(" ");
 	printf(" End: ");
-	this->next->origin->point.printPoint();
+	this->next->origin->point->print();
 	for (int i = 0; i < space; i++)
 		printf(" ");
-	printf("}\n");*/
+	printf("}\n");
 }
 
 /**

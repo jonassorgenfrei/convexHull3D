@@ -5,37 +5,17 @@
 #include "dcelFace.h"
 
 DCEL::DCEL() {
-	this->surfaces.push_back(new DCELFace());
 };
 
 
 /**
 *  Creates and returns a new vertex at the given point location.
 */
-DCELVertex * DCEL::createVertex(double x, double y) {
+DCELVertex * DCEL::addVertex(Point * point) {
 	DCELVertex * newVertex = new DCELVertex();
-	/*newVertex->point = { x,y };
-	this->vertices.push_back(newVertex);*/
+	newVertex->point = point;
+	this->vertices.push_back(newVertex);
 	return newVertex;
-}
-
-/**
-* Returns the single unbounded face in the DCEL.
-*/
-DCELFace * DCEL::getUnboundedFace() {
-	/*if (this->getFaceCount() <= 2) {
-		return this->surfaces[0];
-	}*/
-
-	DCELFace * tempFace = this->surfaces[0];
-	/*int count = this->surfaces[0]->getBoundary().size();
-	for (auto &value : this->surfaces) {
-		if (value->getBoundary().size() > count) {
-			tempFace = value;
-			count = value->getBoundary().size();
-		}
-	}*/
-	return tempFace;
 }
 
 /**
@@ -43,6 +23,16 @@ DCELFace * DCEL::getUnboundedFace() {
 */
 int DCEL::getFaceCount() {
 	return this->surfaces.size();
+}
+
+int DCEL::getEdgeCount()
+{
+	return this->halfEdges.size();
+}
+
+int DCEL::getVerticeCount()
+{
+	return this->vertices.size();
 }
 
 /**
@@ -395,7 +385,7 @@ DCEL * DCEL::mergeAndDestroy(DCEL * d1, DCEL * d2) {
 }
 
 void DCEL::printDCEL() {
-/*	printf("DCEL : {\n");
+	printf("DCEL : {\n");
 	printf(" EDGES: {\n");
 	for (auto &ed : this->halfEdges) {
 		ed->printEdge(2);
@@ -409,5 +399,13 @@ void DCEL::printDCEL() {
 	printf(" }\n\n");
 
 
-	printf("}\n");*/
+	printf("}\n");
+}
+
+void DCEL::printDCELInfo() {
+	std::cout << "DCEL-Info: {" << std::endl;
+	std::cout << " Vertices: " << this->getVerticeCount() << std::endl;
+	std::cout << " Edges: " << this->getEdgeCount() <<std::endl;
+	std::cout << " Faces: " << this->getFaceCount() << std::endl;
+	std::cout << "}" << std::endl;
 }

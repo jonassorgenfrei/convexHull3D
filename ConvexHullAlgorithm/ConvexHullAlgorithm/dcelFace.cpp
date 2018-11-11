@@ -6,14 +6,14 @@
 
 
 void DCELFace::printFace() {
-	/*printf("Face {\n");
+	printf("Face {\n");
 	edge->printEdge(1);
 	DCELHalfEdge * temp = edge->next;
 	while (temp->origin != edge->origin) {
 		temp->printEdge(1);
 		temp = temp->next;
 	}
-	printf("}\n");*/
+	printf("}\n");
 }
 
 /**

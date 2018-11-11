@@ -33,7 +33,7 @@ std::vector<Point*> ConvexHull2D(std::vector<Point*> points) {
 	int idx_min = 0;
 
 	for (int i = 0; i < points.size(); i++) {
-		if (y_min > points[i]->getY() || (cmpf(y_min,points[i]->getY()) &&
+		if (y_min > points[i]->getY() || (cmpd(y_min,points[i]->getY()) &&
 			points[i]->getX() < points[idx_min]->getX())) {
 				y_min = points[i]->getY();
 				min_Y_Point = points[i];
@@ -93,14 +93,36 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 	if (points.size() < 4)
 		return dcel;
 
-	// 1. Find 4 points that form a tetrahedron.
-	Point * point1;
-	Point * point2;
-	Point * point3;
-	Point * point4;
+	// 1. Find 4 points that form a tetrahedron (don't lie in a common plane)
+	int p1 = -1, p2 = -1, p3 = -1, p4=-1;
+	
+	// If there are no 4 points coplanar in the set of points
+	if (p4 < 0 || p3 < 0 || p2 < 0 || p1 < 0) {
+		// Theoretical run 2D Convex Hull!!
+		return dcel;
+	}
 
-	// 2. Insert Points into dcel
+	// 2. Insert Points into DCEL
+	DCELVertex * point1 = dcel.addVertex(points[p1]);
+	DCELVertex * point2 = dcel.addVertex(points[p2]);
+	DCELVertex * point3 = dcel.addVertex(points[p3]);
+	DCELVertex * point4 = dcel.addVertex(points[p4]);
 
+	DCELHalfEdge * edge1 = dcel.createEdge(point1, point2);
+	DCELHalfEdge * edge2 = dcel.createEdge(point2, point3);
+	DCELHalfEdge * edge3 = dcel.createEdge(point3, point1);
+
+	DCELHalfEdge * edge4 = dcel.createEdge(point1, point4);
+	DCELHalfEdge * edge5 = dcel.createEdge(point2, point4);
+	DCELHalfEdge * edge6 = dcel.createEdge(point3, point4);
+
+	// theortical 4 Faces then!
+	// Delete from input set
+	points.erase(points.begin() + p1);
+	points.erase(points.begin() + p2);
+	points.erase(points.begin() + p3);
+	points.erase(points.begin() + p4);
+	
 	// 3. comput random permutation of points
 
 	// 4. Initialize the conflict graph G with all visible pairs (pt, f), where f is a facet of C and t > 4

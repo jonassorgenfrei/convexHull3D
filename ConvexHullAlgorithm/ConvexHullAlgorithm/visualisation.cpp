@@ -127,7 +127,7 @@ void Visualisation::render()
 		
 		// pass projection matrix to shader (note that in this cas it could change every frame)
 		glm::mat4 projection = glm::mat4(1.0f);
-		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10000.0f);
 		this->shader.setMat4("projection", projection);
 
 		// camera/view transformation 
