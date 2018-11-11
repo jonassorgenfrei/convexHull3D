@@ -1,9 +1,14 @@
 #pragma once
 
+#ifndef DCEL_H
+#define DCEL_H
+
 #include <iostream>
 #include <vector>
 #include <utility>
 #include "point.h"
+
+//#include "math.h"
 
 class DCELVertex;
 class DCELHalfEdge;
@@ -108,3 +113,5 @@ class DCEL {
 
 	private:
 };
+
+#endif // !DCEL_H

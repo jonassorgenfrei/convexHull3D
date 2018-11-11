@@ -1,3 +1,4 @@
+#pragma once
 /*
  * Sample program for convex hull calculation in 2-/3-Space
  * 
@@ -15,7 +16,7 @@
 #include <sstream>
 #include <set>
 
-#include "dcel.h"
+//#include "dcel.h"
 #include "convexHull.h"
 #include "visualisation.h"
 #include "point.h"

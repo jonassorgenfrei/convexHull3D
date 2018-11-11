@@ -1,4 +1,5 @@
 #pragma once
+
 #ifndef DCELFACE_H
 #define DCELFACE_H
 
