@@ -59,10 +59,12 @@ int main(int argc, char* argv[]) {
 					strcmp(argv[current_arg], "--count") == 0 ||
 					strcmp(argv[current_arg], "-c") == 0)
 				{
-					// argv[++current_arg] check if Number then adjust pointCount
+					int tempInp = std::atoi(argv[++current_arg]);
+					if (tempInp > 0)
+						pointCount = tempInp;
 				} else if (strcmp(argv[current_arg], "-space") == 0 ||
 					strcmp(argv[current_arg], "--space") == 0 ||
-					strcmp(argv[current_arg], "--s") == 0)
+					strcmp(argv[current_arg], "-s") == 0)
 				{
 					// Decide about space
 					if (strcmp(argv[current_arg + 1], "3D") == 0 ||
