@@ -31,7 +31,7 @@ class Point3D : public Point {
 			return this->z;
 		};
 		PointType getType() {
-			return PointType::POINT_2D;
+			return PointType::POINT_3D;
 		}
 	private:
 		double x;

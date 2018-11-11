@@ -83,6 +83,9 @@ std::vector<Point*> ConvexHull2D(std::vector<Point*> points) {
 
 /*
  * Convex Hull Algorithm in 3D Space
+ *
+ * @param points - Input Points to operate on
+ * @return Convex Hull of the Points
  */
 DCEL ConvexHull3D(std::vector<Point*> points) {
 	DCEL dcel;
