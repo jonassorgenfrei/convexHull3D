@@ -1,7 +1,6 @@
 #pragma once
 
 #ifndef MATH_H
-
 #define MATH_H
 
 #include <math.h>
@@ -18,10 +17,6 @@ typedef struct Vec3 {
 	double z = 0.0;
 } Vec3;
 
-double dotVec3(Vec3 v1, Vec3 v2) {
-	return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
-}
-
 double length2Vec2(Vec2 v) {
 	return v.x*v.x + v.y*v.y;
 }
@@ -36,10 +31,6 @@ double lengthVec2(Vec2 v) {
 
 double lengthVec3(Vec3 v) {
 	return sqrt(length2Vec3(v));
-}
-
-double ccw(Point * p1, Point * p2, Point * p3) {
-	return (p2->getX() - p1->getX())*(p3->getY() - p1->getY()) - (p2->getY() - p1->getY())*(p3->getX() - p1->getX());
 }
 
 Vec3 normalize(Vec3 v) {
@@ -81,6 +72,14 @@ Vec3 crossVec3(Vec3 v1, Vec3 v2) {
 	return res;
 };
 
+double dotVec3(Vec3 v1, Vec3 v2) {
+	return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
+}
+
+double ccw(Point * p1, Point * p2, Point * p3) {
+	return (p2->getX() - p1->getX())*(p3->getY() - p1->getY()) - (p2->getY() - p1->getY())*(p3->getX() - p1->getX());
+}
+
 
 /**
  * @param v - vector to project
@@ -93,8 +92,6 @@ Vec3 projectVec3onPlane(Vec3 v, Vec3 n) {
 	//					      ||n||^2
 	return subVec3(v,scalarMulVec3((dotVec3(v,n)/length2Vec3(n)),n));
 }
-
-
 
 /*
  * Checks if 3 Points are collinear

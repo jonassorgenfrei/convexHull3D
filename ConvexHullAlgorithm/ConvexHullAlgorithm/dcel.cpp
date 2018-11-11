@@ -5,8 +5,6 @@
 #include "dcelHalfEdge.h"
 #include "dcelFace.h"
 
-#include "math.h"
-
 /**
  * DCEL implementation 
  */
@@ -61,7 +59,7 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 	// Edge Conneting v1 -> v2
 	DCELHalfEdge * halfEdge = new DCELHalfEdge();
 	// Edge Conneting v2 -> v1
-	DCELHalfEdge * halfEdgeRet = new DCELHalfEdge();
+	/*DCELHalfEdge * halfEdgeRet = new DCELHalfEdge();
 
 	// Set Edge Attributes
 	halfEdge->origin = v1;
@@ -76,13 +74,13 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 	halfEdgeRet->face = openFace;
 
 	if (v2->leaving == nullptr) {
-		/* Case 1: No edge leaving from v2 */
+		// Case 1: No edge leaving from v2
 		v2->leaving = halfEdgeRet;
 		halfEdge->next = halfEdgeRet;
 	} else {
-		/* Case 2: At least 1 edge leaving from v2 */
+		// Case 2: At least 1 edge leaving from v2
 		vector<DCELHalfEdge *> leavingEdgesOfv2 = v2->leavingEdges();
-		/* Normal of Vertex v2 (with added edge) */
+		// Normal of Vertex v2 (with added edge)
 		Vec3 normal;
 
 		for (auto e : leavingEdgesOfv2) {
@@ -102,13 +100,13 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 	}
 
 	if (v1->leaving == nullptr) {
-		/* Case 1: No edge leaving from v2 */
+		// Case 1: No edge leaving from v2 
 		v1->leaving = halfEdge;
 		halfEdgeRet->next = halfEdge;
 	}	else {
-		/* Case 2: At least 1 edge leaving from v1 */
+		// Case 2: At least 1 edge leaving from v1 
 		vector<DCELHalfEdge *> leavingEdgesOfv1 = v2->leavingEdges();
-		/* Normal of Vertex v1 (with added edge) */
+		// Normal of Vertex v1 (with added edge) 
 		Vec3 normal;
 
 		for (auto e : leavingEdgesOfv1) {
@@ -122,7 +120,7 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 
 
 	this->halfEdges.push_back(halfEdge);
-	this->halfEdges.push_back(halfEdgeRet);
+	this->halfEdges.push_back(halfEdgeRet);*/
 
 	return halfEdge;
 }
