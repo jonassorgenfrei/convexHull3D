@@ -111,7 +111,7 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 		i++;
 	}
 
-	int i = 2;
+	i = 2;
 	while (p4 < 0 && i < points.size()) {
 		if (i != p1 && i != p2 && i != p3) {
 			if (!checkCoplanar(points[p1], points[p2], points[p3], points[i])) {

@@ -1,6 +1,7 @@
 #pragma once
 
 #ifndef MATH_H
+
 #define MATH_H
 
 #include <math.h>
@@ -17,6 +18,29 @@ typedef struct Vec3 {
 	double z = 0.0;
 } Vec3;
 
+double dotVec3(Vec3 v1, Vec3 v2) {
+	return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
+}
+
+double length2Vec2(Vec2 v) {
+	return v.x*v.x + v.y*v.y;
+}
+
+double length2Vec3(Vec3 v) {
+	return v.x*v.x + v.y*v.y + v.z*v.z;
+}
+
+double lengthVec2(Vec2 v) {
+	return sqrt(length2Vec2(v));
+}
+
+double lengthVec3(Vec3 v) {
+	return sqrt(length2Vec3(v));
+}
+
+double ccw(Point * p1, Point * p2, Point * p3) {
+	return (p2->getX() - p1->getX())*(p3->getY() - p1->getY()) - (p2->getY() - p1->getY())*(p3->getX() - p1->getX());
+}
 
 Vec3 normalize(Vec3 v) {
 	double lV = lengthVec3(v);
@@ -71,29 +95,6 @@ Vec3 projectVec3onPlane(Vec3 v, Vec3 n) {
 }
 
 
-double dotVec3(Vec3 v1, Vec3 v2) {
-	return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
-}
-
-double length2Vec2(Vec2 v) {
-	return v.x*v.x + v.y*v.y;
-}
-
-double length2Vec3(Vec3 v) {
-	return v.x*v.x + v.y*v.y+ v.z*v.z;
-}
-
-double lengthVec2(Vec2 v) {
-	return sqrt(length2Vec2(v));
-}
-
-double lengthVec3(Vec3 v) {
-	return sqrt(length2Vec3(v));
-}
-
-double ccw(Point * p1, Point * p2, Point * p3) {
-	return (p2->getX() - p1->getX())*(p3->getY() - p1->getY()) - (p2->getY() - p1->getY())*(p3->getX() - p1->getX());
-}
 
 /*
  * Checks if 3 Points are collinear
