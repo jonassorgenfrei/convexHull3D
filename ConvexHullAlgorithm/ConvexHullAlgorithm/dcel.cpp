@@ -1,12 +1,23 @@
 #pragma once
+
 #include "dcel.h"
 #include "dcelVertex.h"
 #include "dcelHalfEdge.h"
 #include "dcelFace.h"
 
-DCEL::DCEL() {
-};
+#include "math.h"
 
+/**
+ * DCEL implementation 
+ */
+
+
+/**
+ * DCEL constructor
+ */
+DCEL::DCEL() {
+	this->openFace = new DCELFace();
+};
 
 /**
 *  Creates and returns a new vertex at the given point location.
@@ -42,149 +53,76 @@ int DCEL::getVerticeCount()
 * creating a new face.
 */
 DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
-	DCELHalfEdge * halfEdge = new DCELHalfEdge();
-	/*DCELHalfEdge * halfEdgeTwin = new DCELHalfEdge();
-	halfEdge->twin = halfEdgeTwin;
-	halfEdgeTwin->twin = halfEdge;
-
-	//Check if edges exists
+	// if already connected
 	if (isConnected(v1, v2)) {
-		DCELHalfEdge * startEdge = v1->leaving;
-		if (startEdge->destination() == v2) {
-			return startEdge;
-		}
-		DCELHalfEdge * tempEdge = v1->nextLeaving(startEdge);
-
-		while (tempEdge != startEdge) {
-			if (tempEdge->destination() == v2) {
-				return tempEdge;
-			}
-			tempEdge = v1->nextLeaving(tempEdge);
-		}
+		return nullptr;
 	}
 
-	if (this->halfEdges.size() == 0 || (v2->leaving == NULL && v1->leaving == NULL)) {
-		halfEdge->face = this->getUnboundedFace();
-		halfEdge->origin = v1;
-		halfEdge->next = halfEdgeTwin;
-		v1->leaving = halfEdge;
+	// Edge Conneting v1 -> v2
+	DCELHalfEdge * halfEdge = new DCELHalfEdge();
+	// Edge Conneting v2 -> v1
+	DCELHalfEdge * halfEdgeRet = new DCELHalfEdge();
 
-		halfEdgeTwin->face = this->getUnboundedFace();
-		halfEdgeTwin->origin = v2;
-		halfEdgeTwin->next = halfEdge;
-		v2->leaving = halfEdgeTwin;
-
-		this->surfaces[0]->edge = halfEdge;
-		this->halfEdges.push_back(halfEdge);
-		this->halfEdges.push_back(halfEdgeTwin);
-
-		return halfEdge;
-	}
-
-	if (v2->leaving == NULL) {
-		halfEdge->face = this->getUnboundedFace();
-		halfEdge->origin = v1;
-		halfEdge->next = halfEdgeTwin;
-
-		halfEdgeTwin->face = this->getUnboundedFace();
-		halfEdgeTwin->origin = v2;
-
-		DCELHalfEdge * temp = v1->leaving;
-		while (temp->face != this->getUnboundedFace()) {
-			temp = v1->nextLeaving(temp);
-		}
-		halfEdgeTwin->next = temp;
-
-		DCELHalfEdge * temp2 = v1->leaving->twin;
-		while (temp2->next != temp) {
-			temp2 = v1->nextLeaving(temp2->twin)->twin;
-		}
-		temp2->next = halfEdge;
-
-		v2->leaving = halfEdgeTwin;
-
-		this->halfEdges.push_back(halfEdge);
-		this->halfEdges.push_back(halfEdgeTwin);
-
-		return halfEdge;
-	}*/
-
-	/* TODO: CHECK FOR DISTINCT LINES*/
-	/*if (findCommonFace(v1, v2) == this->getUnboundedFace()) {
-		DCELFace * newFace = new DCELFace();
-		newFace->edge = halfEdge;
-		this->getUnboundedFace()->edge = halfEdgeTwin;
-
-		halfEdge->face = newFace;
-		halfEdge->origin = v1;
-		halfEdge->next = v2->leaving;
-
-		halfEdgeTwin->face = this->getUnboundedFace();
-		halfEdgeTwin->origin = v2;
-		halfEdgeTwin->next = v1->leaving;
-
-		v1->leaving->twin->next = halfEdge;
-		v2->leaving->twin->next = halfEdgeTwin;
-
-		DCELHalfEdge * tempEdge = v2->leaving;
-		while (tempEdge->destination() != v1) {
-			tempEdge->face = newFace;
-			tempEdge = tempEdge->next;
-		}
-		tempEdge->face = newFace;
-
-		this->surfaces.push_back(newFace);
-		this->halfEdges.push_back(halfEdge);
-		this->halfEdges.push_back(halfEdgeTwin);
-
-		return halfEdge;
-	}
-
-	DCELFace * newFace = new DCELFace();
-	newFace->edge = halfEdge;
-
-	DCELFace * innerFace = findCommonFace(v1, v2);
-	innerFace->edge = halfEdgeTwin;
-
-	halfEdge->face = newFace;
+	// Set Edge Attributes
 	halfEdge->origin = v1;
+	halfEdge->twin = halfEdgeRet;
 
-	halfEdgeTwin->face = innerFace;
-	halfEdgeTwin->origin = v2;
+	halfEdge->face = openFace;
 
-	DCELHalfEdge * tempEdge = v2->leaving;
-	while (tempEdge->face != innerFace) {
-		tempEdge = v2->nextLeaving(tempEdge);
-	};
-	halfEdge->next = tempEdge;
+	// Set Edge Attributes
+	halfEdgeRet->origin = v2;
+	halfEdgeRet->twin = halfEdge;
 
-	while (tempEdge->destination() != v1) {
-		tempEdge->face = newFace;
-		tempEdge = tempEdge->next;
+	halfEdgeRet->face = openFace;
+
+	if (v2->leaving == nullptr) {
+		/* Case 1: No edge leaving from v2 */
+		v2->leaving = halfEdgeRet;
+		halfEdge->next = halfEdgeRet;
+	} else {
+		/* Case 2: At least 1 edge leaving from v2 */
+		vector<DCELHalfEdge *> leavingEdgesOfv2 = v2->leavingEdges();
+		/* Normal of Vertex v2 (with added edge) */
+		Vec3 normal;
+
+		for (auto e : leavingEdgesOfv2) {
+			normal = addVec3(normal, e->vec3());
+		}
+		normal = addVec3(normal, halfEdgeRet->vec3());
+		normal = normalize(scalarDivVec3(-((double)(leavingEdgesOfv2.size()+1)),normal));
+		
+		Vec3 newEdge = projectVec3onPlane(halfEdgeRet->vec3(), normal);
+
+		//DCELHalfEdge * hs;
+		//double smallest;
+		//DCELHalfEdge * hb;
+		//double biggest;
+		
+		v2->normal = normal;
 	}
-	tempEdge->face = newFace;
 
-	tempEdge = v1->leaving;
-	while (tempEdge->face != innerFace) {
-		tempEdge = v1->nextLeaving(tempEdge);
-	};
-	halfEdgeTwin->next = tempEdge;
+	if (v1->leaving == nullptr) {
+		/* Case 1: No edge leaving from v2 */
+		v1->leaving = halfEdge;
+		halfEdgeRet->next = halfEdge;
+	}	else {
+		/* Case 2: At least 1 edge leaving from v1 */
+		vector<DCELHalfEdge *> leavingEdgesOfv1 = v2->leavingEdges();
+		/* Normal of Vertex v1 (with added edge) */
+		Vec3 normal;
 
-	while (tempEdge->destination() != v2) {
-		tempEdge = tempEdge->next;
+		for (auto e : leavingEdgesOfv1) {
+			normal = addVec3(normal, e->vec3());
+		}
+		normal = addVec3(normal, halfEdgeRet->vec3());
+		normal = normalize(scalarDivVec3(-((double)(leavingEdgesOfv1.size() + 1)), normal));
+
+		v1->normal = normal;
 	}
-	tempEdge->next = halfEdgeTwin;
-
-	tempEdge = v1->leaving;
-	while (tempEdge->face == innerFace) {
-		tempEdge = v1->nextLeaving(tempEdge);
-	};
-	tempEdge->twin->next = halfEdge;
 
 
-	this->surfaces.push_back(newFace);
 	this->halfEdges.push_back(halfEdge);
-	this->halfEdges.push_back(halfEdgeTwin);*/
+	this->halfEdges.push_back(halfEdgeRet);
 
 	return halfEdge;
 }

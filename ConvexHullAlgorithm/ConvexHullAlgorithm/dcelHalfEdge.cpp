@@ -1,23 +1,21 @@
 #include "dcelHalfEdge.h"
 #include "dcelVertex.h"
-#include "stdio.h"
-
 
 void DCELHalfEdge::printEdge(int space) {
 	for (int i = 0; i < space; i++)
-		printf(" ");
-	printf("Edge {\n");
-	for (int i = 0; i < space; i++)
-		printf(" ");
+		std::cout << " ";
+	std::cout << "Edge { ";
+	//for (int i = 0; i < space; i++)
+	//	std::cout << " ";
 	printf(" Start: ");
 	this->origin->point->print();
-	for (int i = 0; i < space; i++)
-		printf(" ");
-	printf(" End: ");
+	//for (int i = 0; i < space; i++)
+	//	std::cout << " ";
+	std::cout << " End: ";
 	this->next->origin->point->print();
 	for (int i = 0; i < space; i++)
-		printf(" ");
-	printf("}\n");
+		std::cout << " ";
+	std::cout << "}" << std::endl;
 }
 
 /**
@@ -27,4 +25,11 @@ void DCELHalfEdge::printEdge(int space) {
 */
 DCELVertex * DCELHalfEdge::destination() {
 	return this->next->origin;
+}
+
+Vec3 DCELHalfEdge::vec3()
+{
+	return {	next->origin->point->getX() - origin->point->getX(), 
+				next->origin->point->getY() - origin->point->getY(),
+				next->origin->point->getZ() - origin->point->getZ() };
 }

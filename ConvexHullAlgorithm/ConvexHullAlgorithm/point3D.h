@@ -15,7 +15,7 @@ class Point3D : public Point {
 		};
 
 		void print() {
-			std::cout << "Point {" << this->x << ", " << this->y << ", " << this->z << "}";
+			std::cout << "Point (" << this->x << "; " << this->y << "; " << this->z << ")";
 
 		}
 

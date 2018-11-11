@@ -269,6 +269,8 @@ void Visualisation::framebuffer_size_callback(GLFWwindow * window, int width, in
 	glViewport(0, 0, width, height);
 }
 
+// called every loop
+// -------------------------------------------------------
 void Visualisation::processInput(GLFWwindow * window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)

@@ -157,14 +157,17 @@ private:
 
 			DCELHalfEdge * h1 = dcel.createEdge(v1, v2);
 			DCELHalfEdge * h2 = dcel.createEdge(v2, v3);
-			DCELHalfEdge * h3 = dcel.createEdge(v3, v1);
+			//DCELHalfEdge * h3 = dcel.createEdge(v3, v1);
 
-			DCELHalfEdge * h4 = dcel.createEdge(v1, v4);
-			DCELHalfEdge * h5 = dcel.createEdge(v2, v4);
-			DCELHalfEdge * h6 = dcel.createEdge(v3, v4);
+			//DCELHalfEdge * h4 = dcel.createEdge(v1, v4);
+			//DCELHalfEdge * h5 = dcel.createEdge(v2, v4);
+			//DCELHalfEdge * h6 = dcel.createEdge(v3, v4);
 
-			//errorCheck(dcel.getFaceCount() == 4, testClass, "createEdges & getVerticeCount", testID);
-			//errorCheck(dcel.getEdgeCount() == 6, testClass, "createEdges & getEdgeCount", testID);
+			dcel.printDCELInfo();
+			dcel.printDCEL();
+
+			errorCheck(dcel.getFaceCount() == 4, testClass, "createEdges & getVerticeCount", testID);
+			errorCheck(dcel.getEdgeCount() == 12, testClass, "createEdges & getEdgeCount", testID);
 
 			testID++;
 		}

@@ -99,6 +99,30 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 	// 1. Find 4 points that form a tetrahedron (don't lie in a common plane)
 	int p1 = -1, p2 = -1, p3 = -1, p4=-1;
 	
+	// TODO: IMPROVE ALL POSSIBLE PERMUTATIONS!!!!!!!!!1
+	p1 = 0;
+	p2 = 1;
+	
+	int i = 2;
+	while (p3 < 0 && i < points.size()) {
+		if (!checkCollinear(points[p1], points[p2], points[i])) {
+			p3 = i;
+		}
+		i++;
+	}
+
+	int i = 2;
+	while (p4 < 0 && i < points.size()) {
+		if (i != p1 && i != p2 && i != p3) {
+			if (!checkCoplanar(points[p1], points[p2], points[p3], points[i])) {
+				p4 = i;
+			}
+		}
+		i++;
+	}
+
+	// TODO: END
+
 	// If there are no 4 points coplanar in the set of points
 	if (p4 < 0 || p3 < 0 || p2 < 0 || p1 < 0) {
 		// Theoretical run 2D Convex Hull!!

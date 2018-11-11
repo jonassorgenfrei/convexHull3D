@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <utility>
 #include "point.h"
 
 class DCELVertex;
@@ -18,6 +19,8 @@ class DCEL {
 		vector<DCELHalfEdge*> halfEdges;
 		/* Facets */
 		vector<DCELFace*> surfaces;
+		
+		DCELFace * openFace;
 
 		DCEL();
 

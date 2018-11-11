@@ -1,15 +1,22 @@
 #ifndef DCELVertex_H
 #define DCELVertex_H
 
+#include <iostream>
+#include <vector>
+#include "math.h"
+
 #include "point.h"
 #include "dcelHalfEdge.h"
 
 class DCELHalfEdge;
 
+using namespace std;
+
 class DCELVertex {
 public:
 	Point * point;
 	DCELHalfEdge * leaving;
+	Vec3 normal;
 	DCELVertex() : leaving(nullptr) {}
 
 	/**
@@ -18,6 +25,12 @@ public:
 	* This function should be used to iterate over all leaving edges of a vertex.
 	*/
 	DCELHalfEdge * nextLeaving(DCELHalfEdge * edge);
+	
+	/**
+	 * Returns a Vector containing all leaving halfedges of the Vertex
+	 */
+	vector<DCELHalfEdge *> leavingEdges();
+
 };
 
 #endif

@@ -7,15 +7,37 @@
 #include "point.h"
 
 typedef struct Vec2 {
-	double x;
-	double y;
+	double x = 0.0;
+	double y = 0.0;
 } Vec2;
 
 typedef struct Vec3 {
-	double x;
-	double y;
-	double z;
+	double x = 0.0;
+	double y = 0.0;
+	double z = 0.0;
 } Vec3;
+
+
+Vec3 normalize(Vec3 v) {
+	double lV = lengthVec3(v);
+	return {v.x/lV, v.y/lV, v.z/lV};
+}
+
+Vec3 addVec3(Vec3 v1, Vec3 v2) {
+	return {v1.x+v2.x, v1.y+v2.y, v1.z+v2.z};
+}
+
+Vec3 subVec3(Vec3 v1, Vec3 v2) {
+	return { v1.x - v2.x, v1.y - v2.y, v1.z - v2.z };
+}
+
+Vec3 scalarMulVec3(double skalar, Vec3 v) {
+	return {v.x*skalar, v.y*skalar, v.z*skalar};
+}
+
+Vec3 scalarDivVec3(double skalar, Vec3 v) {
+	return {v.x/skalar, v.y/skalar, v.z/skalar};
+}
 
 bool cmpd(double A, double B, double epsilon = std::numeric_limits<double>::epsilon())
 {
@@ -35,6 +57,20 @@ Vec3 crossVec3(Vec3 v1, Vec3 v2) {
 	return res;
 };
 
+
+/**
+ * @param v - vector to project
+ * @param n - plane normal
+ * @return vec3 projected on plane described by plane normal n
+ */
+Vec3 projectVec3onPlane(Vec3 v, Vec3 n) {
+	//						   v * n
+	// projectplane(v) = v - ---------n
+	//					      ||n||^2
+	return subVec3(v,scalarMulVec3((dotVec3(v,n)/length2Vec3(n)),n));
+}
+
+
 double dotVec3(Vec3 v1, Vec3 v2) {
 	return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
 }
@@ -43,8 +79,16 @@ double length2Vec2(Vec2 v) {
 	return v.x*v.x + v.y*v.y;
 }
 
+double length2Vec3(Vec3 v) {
+	return v.x*v.x + v.y*v.y+ v.z*v.z;
+}
+
 double lengthVec2(Vec2 v) {
 	return sqrt(length2Vec2(v));
+}
+
+double lengthVec3(Vec3 v) {
+	return sqrt(length2Vec3(v));
 }
 
 double ccw(Point * p1, Point * p2, Point * p3) {

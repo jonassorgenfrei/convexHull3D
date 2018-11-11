@@ -14,7 +14,7 @@ class Point2D : public Point {
 		};
 
 		void print() {
-			std::cout << "Point {" << this->x << ", " << this->y << "}";
+			std::cout << "Point (" << this->x << "; " << this->y << ")";
 		}
 
 		double getX() {

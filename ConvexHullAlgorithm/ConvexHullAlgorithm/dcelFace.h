@@ -2,6 +2,7 @@
 #ifndef DCELFACE_H
 #define DCELFACE_H
 
+#include <iostream>
 #include <vector>
 
 class DCELHalfEdge;
@@ -10,6 +11,9 @@ class DCELVertex;
 
 using namespace std;
 
+/**
+ * Faces in Clock-Wise Order
+ */
 class DCELFace {
 public:
 	DCELHalfEdge * edge; // points to a single HaldEdge that has this Face object as its face

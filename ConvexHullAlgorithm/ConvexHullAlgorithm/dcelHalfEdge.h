@@ -1,6 +1,9 @@
 #ifndef DCELHALFEDGE_H
 #define DCELHALFEDGE_H
 
+#include <iostream>
+
+#include "math.h"
 
 class DCELVertex;
 class DCELFace;
@@ -24,7 +27,11 @@ public:
 	* This function is used to return the destination vertex as well.
 	*/
 	DCELVertex * destination();
-
+	
+	/**
+	 * Get Vector
+	 */
+	Vec3 vec3();
 };
 
 #endif
