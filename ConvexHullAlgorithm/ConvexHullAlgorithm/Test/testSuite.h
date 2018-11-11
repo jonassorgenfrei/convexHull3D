@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef TESTSUITE_H
+#define TESTsUITE_H
+
 #include <cstdlib>
 
 #include "point3D.h"
@@ -14,6 +17,13 @@ public:
 	}
 
 	void run() {
+		Vec3 v1 = {1.0, 0.0, 0.0};	
+		Vec3 v2 = {0.0, 1.0, 0.0};
+
+		printf("%f",acos(dotVec3(v1,v2)/(lengthVec3(v1)*lengthVec3(v2))));
+		printf("%f", acos(dotVec3(v2, v1) / (lengthVec3(v1)*lengthVec3(v2))));
+
+		exit(1);
 		mathClassTests();
 		convexHull2DTest();
 		convexHull3DTest();
@@ -98,7 +108,7 @@ private:
 			testID++;
 		}
 	}
-
+	
 	void convexHull3DTest() {
 		string testClass = "convexHull.h";
 		int testID = 1;
@@ -192,3 +202,5 @@ private:
 	}
 
 };
+
+#endif // !TESTSUITE_H
