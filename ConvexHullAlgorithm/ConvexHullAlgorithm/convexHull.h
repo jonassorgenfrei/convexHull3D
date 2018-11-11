@@ -6,10 +6,10 @@
 #include <vector>
 #include <algorithm>
 
-
 #include "point.h"
 #include "dcel.h"
 #include "visualisation.h"
+#include "conflictGraph.h"
 #include "math.h"
 
 /*
@@ -21,18 +21,19 @@
  *
  */
 std::vector<Point*> ConvexHull2D(std::vector<Point*> points) {
+	// Empty Convex Hull
 	std::vector<Point*> ch;
 
 	if (points.size() < 3)
 		return ch;
 
-	// Select the Point with minimum y 
+	// Select the Point with minimum y, if there are more points with min Y select Point with min X
 	double y_min = points[0]->getY();
 	Point * min_Y_Point = points[0];
 	int idx_min = 0;
 
 	for (int i = 0; i < points.size(); i++) {
-		if (y_min > points[i]->getY() || (cmpf(y_min,points[i]->getY()) &&
+		if (y_min > points[i]->getY() || (cmpd(y_min,points[i]->getY()) &&
 			points[i]->getX() < points[idx_min]->getX())) {
 				y_min = points[i]->getY();
 				min_Y_Point = points[i];
@@ -41,7 +42,7 @@ std::vector<Point*> ConvexHull2D(std::vector<Point*> points) {
 
 	}
 
-	//Swap point [0] and lowestPoint
+	//Swap points[0] with the point with the lowest y-coordinate
 	points[idx_min] = points[0];
 	points[0] = min_Y_Point;
 
@@ -64,19 +65,21 @@ std::vector<Point*> ConvexHull2D(std::vector<Point*> points) {
 		}
 	});
 
-	// S = {p0, p1}
+	// push points[{0,1,2}] to stack
 	ch.push_back(points[0]);
 	ch.push_back(points[1]);
 	ch.push_back(points[2]);
 
-
+	// for i = 3 to N-1
 	for (int i = 3; i < points.size(); i++) {
+		// while ccw(next_to_top(stack), top(stack), points[i]) <= 0:
 		while (ch.size() >= 2 && ccw(ch[ch.size() -2 ], ch[ch.size()-1], points[i]) <= 0.0) {
+			// pop stack
 			ch.pop_back();
 		}
+		// push points[i] to stack
 		ch.push_back(points[i]);
 	}
-
 
 	return ch;
 }
@@ -89,6 +92,47 @@ std::vector<Point*> ConvexHull2D(std::vector<Point*> points) {
  */
 DCEL ConvexHull3D(std::vector<Point*> points) {
 	DCEL dcel;
+
+	if (points.size() < 4)
+		return dcel;
+
+	// 1. Find 4 points that form a tetrahedron (don't lie in a common plane)
+	int p1 = -1, p2 = -1, p3 = -1, p4=-1;
+	
+	// If there are no 4 points coplanar in the set of points
+	if (p4 < 0 || p3 < 0 || p2 < 0 || p1 < 0) {
+		// Theoretical run 2D Convex Hull!!
+		return dcel;
+	}
+
+	// 2. Insert Points into DCEL
+	DCELVertex * point1 = dcel.addVertex(points[p1]);
+	DCELVertex * point2 = dcel.addVertex(points[p2]);
+	DCELVertex * point3 = dcel.addVertex(points[p3]);
+	DCELVertex * point4 = dcel.addVertex(points[p4]);
+
+	DCELHalfEdge * edge1 = dcel.createEdge(point1, point2);
+	DCELHalfEdge * edge2 = dcel.createEdge(point2, point3);
+	DCELHalfEdge * edge3 = dcel.createEdge(point3, point1);
+
+	DCELHalfEdge * edge4 = dcel.createEdge(point1, point4);
+	DCELHalfEdge * edge5 = dcel.createEdge(point2, point4);
+	DCELHalfEdge * edge6 = dcel.createEdge(point3, point4);
+
+	// theortical 4 Faces then!
+	// Delete from input set
+	points.erase(points.begin() + p1);
+	points.erase(points.begin() + p2);
+	points.erase(points.begin() + p3);
+	points.erase(points.begin() + p4);
+	
+	// 3. comput random permutation of points
+
+	// 4. Initialize the conflict graph G with all visible pairs (pt, f), where f is a facet of C and t > 4
+	ConflictGraph G();
+
+	//5.
+
 
 	/*
 	
@@ -117,10 +161,8 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 	add (p,f) to G
 	20.	Delete the node corresponding to pr and the nodes corresponding to the facets in Fconflict(pr) from G, together with their incident arcs
 	21.	return C
-
-	
-	
 	*/
+
 	return dcel;
 };
 

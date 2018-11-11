@@ -122,6 +122,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dcel.cpp" />
+    <ClCompile Include="dcelFace.cpp" />
+    <ClCompile Include="dcelHalfEdge.cpp" />
+    <ClCompile Include="dcelVertex.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="visualisation.cpp" />
@@ -131,12 +135,16 @@
     <ClInclude Include="conflictGraph.h" />
     <ClInclude Include="convexHull.h" />
     <ClInclude Include="dcel.h" />
+    <ClInclude Include="dcelFace.h" />
+    <ClInclude Include="dcelHalfEdge.h" />
+    <ClInclude Include="dcelVertex.h" />
     <ClInclude Include="edge.h" />
     <ClInclude Include="point.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="point2D.h" />
     <ClInclude Include="point3D.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="Test\testSuite.h" />
     <ClInclude Include="visualisation.h" />
   </ItemGroup>
   <ItemGroup>

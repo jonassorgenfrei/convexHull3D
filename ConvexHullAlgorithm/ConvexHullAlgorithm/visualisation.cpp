@@ -84,7 +84,7 @@ void Visualisation::addRender(std::vector<Point*> points, GLenum mode, float r, 
 	glBindVertexArray(0);
 
 	DrawAble drawAble;
-	drawAble.count = points.size();
+	drawAble.count = (unsigned int)points.size();
 	drawAble.VAO = VAO;
 	drawAble.VBO = VBO;
 	drawAble.mode = mode;
@@ -109,7 +109,7 @@ void Visualisation::render()
 	{
 		// per-frame time logic
 		// --------------------
-		float currentFrame = glfwGetTime();
+		float currentFrame = (float)glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
@@ -127,7 +127,7 @@ void Visualisation::render()
 		
 		// pass projection matrix to shader (note that in this cas it could change every frame)
 		glm::mat4 projection = glm::mat4(1.0f);
-		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10000.0f);
 		this->shader.setMat4("projection", projection);
 
 		// camera/view transformation 

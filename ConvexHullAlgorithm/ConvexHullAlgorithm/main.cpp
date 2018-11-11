@@ -21,6 +21,7 @@
 #include "point.h"
 #include "point2D.h"
 #include "point3D.h"
+#include "Test/testSuite.h"
 
 #define DEB 0
 #define MAX_VALUE 20.0
@@ -30,11 +31,13 @@ typedef enum SPACE {TWO_DIM, THREE_DIM} Space;
 // Which space we are operating in
 Space space = THREE_DIM;
 // How many input points we want to calculate
-int pointCount = 500000;
+int pointCount = 2000000;
 // Visualize Result
 bool vis = false;
 // run Convex Hull Algorithm
 bool run = false;
+// test Suite
+TestSuite testSuite = TestSuite();
 
 float random(float a, float b) {
 	float random = ((float)rand()) / (float)RAND_MAX;
@@ -45,7 +48,8 @@ float random(float a, float b) {
 
 int main(int argc, char* argv[]) {
 	std::cout << "Convex Hull Program" << std::endl << std::endl;
-
+	testSuite.run();
+	
 	try {
 		// Arguments passed to the program
 		int current_arg = 1;
@@ -55,9 +59,6 @@ int main(int argc, char* argv[]) {
 					strcmp(argv[current_arg], "--count") == 0 ||
 					strcmp(argv[current_arg], "-c") == 0)
 				{
-					int x = std::stoi(argv[++current_arg]);
-					if(x >= 0)
-						point
 					// argv[++current_arg] check if Number then adjust pointCount
 				} else if (strcmp(argv[current_arg], "-space") == 0 ||
 					strcmp(argv[current_arg], "--space") == 0 ||
@@ -170,6 +171,7 @@ int main(int argc, char* argv[]) {
 				case THREE_DIM:
 					//Run Convex Hull Algorithm 
 					dcel = ConvexHull3D(pointSet);
+					dcel.printDCELInfo();
 					if (vis) {
 						//Visualise Points and CH Result
 						Visualisation &visu = Visualisation::getInstance(); // initialize the singleton
