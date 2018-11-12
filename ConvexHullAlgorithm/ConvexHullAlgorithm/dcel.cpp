@@ -59,18 +59,18 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 	// Edge Conneting v1 -> v2
 	DCELHalfEdge * halfEdge = new DCELHalfEdge();
 	// Edge Conneting v2 -> v1
-	/*DCELHalfEdge * halfEdgeRet = new DCELHalfEdge();
+	DCELHalfEdge * halfEdgeRet = new DCELHalfEdge();
 
 	// Set Edge Attributes
 	halfEdge->origin = v1;
 	halfEdge->twin = halfEdgeRet;
-
+	halfEdge->next = halfEdgeRet;
 	halfEdge->face = openFace;
 
 	// Set Edge Attributes
 	halfEdgeRet->origin = v2;
 	halfEdgeRet->twin = halfEdge;
-
+	halfEdgeRet->next = halfEdge;
 	halfEdgeRet->face = openFace;
 
 	if (v2->leaving == nullptr) {
@@ -91,10 +91,10 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 		
 		Vec3 newEdge = projectVec3onPlane(halfEdgeRet->vec3(), normal);
 
-		//DCELHalfEdge * hs;
-		//double smallest;
-		//DCELHalfEdge * hb;
-		//double biggest;
+		DCELHalfEdge * hs = leavingEdgesOfv2[0];
+		double smallest = angleVec3(halfEdgeRet->vec3(), hs->vec3(),normal);
+		DCELHalfEdge * hb = leavingEdgesOfv2[0];
+		double biggest = angleVec3(halfEdgeRet->vec3(), hs->vec3(), normal);
 		
 		v2->normal = normal;
 	}
@@ -120,7 +120,7 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 
 
 	this->halfEdges.push_back(halfEdge);
-	this->halfEdges.push_back(halfEdgeRet);*/
+	this->halfEdges.push_back(halfEdgeRet);
 
 	return halfEdge;
 }

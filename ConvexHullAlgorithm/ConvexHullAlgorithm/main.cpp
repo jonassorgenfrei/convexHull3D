@@ -32,7 +32,7 @@ typedef enum SPACE {TWO_DIM, THREE_DIM} Space;
 // Which space we are operating in
 Space space = THREE_DIM;
 // How many input points we want to calculate
-int pointCount = 2000000;
+int pointCount = 50;
 // Visualize Result
 bool vis = false;
 // run Convex Hull Algorithm
@@ -49,7 +49,7 @@ float random(float a, float b) {
 
 int main(int argc, char* argv[]) {
 	std::cout << "Convex Hull Program" << std::endl << std::endl;
-	testSuite.run();
+	//testSuite.run();
 	
 	try {
 		// Arguments passed to the program
@@ -89,7 +89,18 @@ int main(int argc, char* argv[]) {
 					strcmp(argv[current_arg], "--help") == 0 ||
 					strcmp(argv[current_arg], "-h") == 0)
 				{
-					std::cout << "Help" << std::endl;
+					std::cout << "Sample program for convex hull calculation in 2-/3-Space" << std::endl;
+					std::cout << "Part of the seminar talk at FH Wedel 2018" << std::endl;
+					std::cout << "By Jonas Sorgenfrei (Minf101767)" << std::endl << std::endl;
+					std::cout << "" << std::endl;
+					std::cout << "ConvexHullAlgorithm.exe [-c Count] [-s Space] [-v] [-h] [-r]" << std::endl;
+					std::cout << " -c Count   count of points in space" << std::endl;
+					std::cout << " -s Space   choose space {3D,2D}, default 3D" << std::endl;
+					std::cout << " -v         visualise input and output" << std::endl;
+					std::cout << " -h         show help" << std::endl;
+					std::cout << " -r         run algorithm depending on current space" << std::endl;
+
+					return 0;
 				}
 				else if (strcmp(argv[current_arg], "-run") == 0 ||
 					strcmp(argv[current_arg], "--run") == 0 ||

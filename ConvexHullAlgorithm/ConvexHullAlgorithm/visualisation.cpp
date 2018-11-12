@@ -95,6 +95,9 @@ void Visualisation::addRender(std::vector<Point*> points, GLenum mode, float r, 
 	delete[] vertices;
 }
 
+/**
+ * 3D Render for scene/points
+ */
 void Visualisation::render()
 {
 	// configure global opengl state

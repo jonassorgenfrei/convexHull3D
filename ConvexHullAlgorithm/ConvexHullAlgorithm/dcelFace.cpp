@@ -1,4 +1,6 @@
 #pragma once
+
+
 #include "dcelFace.h"
 #include "dcelHalfEdge.h"
 #include "dcelVertex.h"
