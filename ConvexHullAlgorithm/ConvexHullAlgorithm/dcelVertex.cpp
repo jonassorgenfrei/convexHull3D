@@ -1,4 +1,5 @@
 #pragma once
+
 #include "dcelVertex.h"
 #include "dcelHalfEdge.h"
 

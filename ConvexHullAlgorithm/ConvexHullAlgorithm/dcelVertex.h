@@ -5,10 +5,10 @@
 
 #include <iostream>
 #include <vector>
-//#include "math.h"
 
 #include "point.h"
 #include "dcelHalfEdge.h"
+#include "math.h"
 
 class DCELHalfEdge;
 
@@ -18,7 +18,7 @@ class DCELVertex {
 public:
 	Point * point;
 	DCELHalfEdge * leaving;
-	//Vec3 normal;
+	Vec3 normal;
 	DCELVertex() : leaving(nullptr) {}
 
 	/**

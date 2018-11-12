@@ -7,6 +7,7 @@
 #include <vector>
 #include <utility>
 #include "point.h"
+#include "math.h"
 
 //#include "math.h"
 
