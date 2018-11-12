@@ -49,7 +49,7 @@ float random(float a, float b) {
 
 int main(int argc, char* argv[]) {
 	std::cout << "Convex Hull Program" << std::endl << std::endl;
-	//testSuite.run();
+	testSuite.run();
 	
 	try {
 		// Arguments passed to the program

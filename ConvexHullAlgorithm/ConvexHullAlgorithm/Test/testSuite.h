@@ -119,21 +119,48 @@ private:
 		}
 
 		{
-			/* Test-ID:		#5
+			/* Test-ID:		#6
 			 * Class:		math.h
-			 * Function:	angle
+			 * Function:	
 			 * Checks algorithm for finding nearest edges to new edge
 			 */
 			Vec3 v1 = { -1,-1,0 };
 			Vec3 v2 = { 1,-1,0 };
 			Vec3 v3 = { 0,-1,1 };
-			Vec3 v4 = { -1,-1,0 };
+			Vec3 v4 = { 0,-1,-1 };
+
+			Vec3 n;
+			n = addVec3(v1, v2);
+			n = addVec3(n, v3);
+			n = addVec3(n, v4);
+			n = scalarDivVec3(-4, n);
+			n = normalize(n);
+
+			/* CHECK NORMAL */
+			errorCheck(cmpd(n.y,1.0), testClass, "normal", testID);
 			
+
 			/* TODO: !!! */
 			
 			testID++;
 		}
 
+		{
+			/* Test-ID:		#7
+			 * Class:		math.h
+			 * Function:	projectVec3onPlane
+			 * Checks algorithm for finding nearest edges to new edge
+			 */
+			Vec3 v1 = { 1.0, 1.0, 1.0 };
+			Vec3 planeNormal = { 0.0, 1.0, 0.0 };
+			Vec3 v3 = {1.0, 0.0, 0.0};
+
+			Vec3 projV1 = projectVec3onPlane(v1, planeNormal);
+			
+			errorCheck(cmpd(angleVec3(projV1, v3, planeNormal),45.0), testClass, "projectVec3onPlane", testID);
+
+			testID++;
+		}
 	}
 
 	/* Test for the convex hull 2D algorithm implmented in convexHull.h */

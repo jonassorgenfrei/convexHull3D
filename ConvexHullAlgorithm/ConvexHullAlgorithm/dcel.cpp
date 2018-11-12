@@ -92,10 +92,27 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 		Vec3 newEdge = projectVec3onPlane(halfEdgeRet->vec3(), normal);
 
 		DCELHalfEdge * hs = leavingEdgesOfv2[0];
-		double smallest = angleVec3(halfEdgeRet->vec3(), hs->vec3(),normal);
+		double smallest = angleVec3(newEdge, projectVec3onPlane(hs->vec3(), normal), normal);
 		DCELHalfEdge * hb = leavingEdgesOfv2[0];
-		double biggest = angleVec3(halfEdgeRet->vec3(), hs->vec3(), normal);
-		
+		double biggest = angleVec3(newEdge, projectVec3onPlane(hs->vec3(), normal), normal);
+
+		for (int i = 1; i < leavingEdgesOfv2.size(); i++) {
+			double angle = angleVec3(newEdge, projectVec3onPlane(leavingEdgesOfv2[i]->vec3(), normal), normal);
+			if (angle < smallest) {
+				smallest = angle;
+				hs = leavingEdgesOfv2[i];
+			}
+
+			if (angle > biggest) {
+				biggest = angle;
+				hb = leavingEdgesOfv2[i];
+			}
+		}
+
+		hs->printEdge(2);
+		hb->printEdge(2);
+
+
 		v2->normal = normal;
 	}
 
@@ -105,15 +122,39 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 		halfEdgeRet->next = halfEdge;
 	}	else {
 		// Case 2: At least 1 edge leaving from v1 
-		vector<DCELHalfEdge *> leavingEdgesOfv1 = v2->leavingEdges();
+		vector<DCELHalfEdge *> leavingEdgesOfv1 = v1->leavingEdges();
+
 		// Normal of Vertex v1 (with added edge) 
 		Vec3 normal;
 
 		for (auto e : leavingEdgesOfv1) {
 			normal = addVec3(normal, e->vec3());
 		}
-		normal = addVec3(normal, halfEdgeRet->vec3());
+		normal = addVec3(normal, halfEdge->vec3());
 		normal = normalize(scalarDivVec3(-((double)(leavingEdgesOfv1.size() + 1)), normal));
+
+		Vec3 newEdge = projectVec3onPlane(halfEdge->vec3(), normal);
+
+		DCELHalfEdge * hs = leavingEdgesOfv1[0];
+		double smallest = angleVec3(newEdge, projectVec3onPlane(hs->vec3(), normal), normal);
+		DCELHalfEdge * hb = leavingEdgesOfv1[0];
+		double biggest = angleVec3(newEdge, projectVec3onPlane(hs->vec3(), normal), normal);
+
+		for (int i = 1; i < leavingEdgesOfv1.size(); i++) {
+			double angle = angleVec3(newEdge, projectVec3onPlane(leavingEdgesOfv1[i]->vec3(), normal), normal);
+			if (angle < smallest) {
+				smallest = angle;
+				hs = leavingEdgesOfv1[i];
+			}
+
+			if (angle > biggest) {
+				biggest = angle;
+				hb = leavingEdgesOfv1[i];
+			}
+		}
+
+		hs->printEdge(2);
+		hb->printEdge(2);
 
 		v1->normal = normal;
 	}
