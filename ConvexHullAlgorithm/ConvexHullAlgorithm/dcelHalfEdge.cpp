@@ -29,9 +29,9 @@ DCELVertex * DCELHalfEdge::destination() {
 	return this->next->origin;
 }
 
-Vec3 DCELHalfEdge::vec3()
+/*Vec3 DCELHalfEdge::vec3()
 {
 	return {	next->origin->point->getX() - origin->point->getX(), 
 				next->origin->point->getY() - origin->point->getY(),
 				next->origin->point->getZ() - origin->point->getZ() };
-}
+}*/

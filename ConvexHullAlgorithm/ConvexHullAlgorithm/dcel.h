@@ -9,6 +9,8 @@
 #include "point.h"
 #include "math.h"
 
+//#include "math.h"
+
 class DCELVertex;
 class DCELHalfEdge;
 class DCELFace;

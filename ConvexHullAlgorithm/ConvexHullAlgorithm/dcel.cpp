@@ -59,7 +59,7 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 	// Edge Conneting v1 -> v2
 	DCELHalfEdge * halfEdge = new DCELHalfEdge();
 	// Edge Conneting v2 -> v1
-	DCELHalfEdge * halfEdgeRet = new DCELHalfEdge();
+	/*DCELHalfEdge * halfEdgeRet = new DCELHalfEdge();
 
 	// Set Edge Attributes
 	halfEdge->origin = v1;
@@ -161,7 +161,7 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 
 
 	this->halfEdges.push_back(halfEdge);
-	this->halfEdges.push_back(halfEdgeRet);
+	this->halfEdges.push_back(halfEdgeRet);*/
 
 	return halfEdge;
 }
