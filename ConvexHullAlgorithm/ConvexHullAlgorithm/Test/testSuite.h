@@ -9,6 +9,7 @@
 #include "point2D.h"
 #include "math.h"
 #include "dcel.h"
+#include "dcelHalfEdge.h"
 
 /**
  * Test Suite to check algorithms, libraries & implementations.
@@ -222,7 +223,81 @@ private:
 		}
 
 		{
-			/* Test-ID:		#1
+			/* Test-ID:		#2
+			 * Class:		dcel.h
+			 * Function:	isConnected
+			 * Checks the Function is connected
+			 */
+			Point * point1 = new Point3D(0.0, 1.0, 5.0);
+			Point * point2 = new Point3D(4.0, 6.0, 1.0);
+
+			DCEL dcel = DCEL();
+			DCELVertex * v1 = dcel.addVertex(point1);
+			DCELVertex * v2 = dcel.addVertex(point2);
+
+			errorCheck(!dcel.isConnected(v1, v2), testClass, "isConnected", testID);
+			errorCheck(!dcel.isConnected(v2, v1), testClass, "isConnected", testID);
+
+			DCELHalfEdge * h1 = dcel.createEdge(v1, v2);
+
+			errorCheck(dcel.isConnected(v1, v2), testClass, "isConnected", testID);
+			errorCheck(dcel.isConnected(v2, v1), testClass, "isConnected", testID);
+
+			testID++;
+		}
+
+		{
+			/* Test-ID:		#3
+			 * Class:		dcel.h
+			 * Function:	createEdges
+			 * Adds Points to DCEL and creates new Vertices
+			 */
+			Point * point1 = new Point3D(0.0, 0.0, 0.0);
+			Point * point2 = new Point3D(-1.0, -1.0, 0.0);
+			Point * point3 = new Point3D(0.0, -1.0, 1.0);
+			Point * point4 = new Point3D(1.0, -1.0, 0.0);
+
+			DCEL dcel = DCEL();
+			DCELVertex * v1 = dcel.addVertex(point1);
+			DCELVertex * v2 = dcel.addVertex(point2);
+			DCELVertex * v3 = dcel.addVertex(point3);
+			DCELVertex * v4 = dcel.addVertex(point4);
+
+			DCELHalfEdge * h1 = dcel.createEdge(v2, v1);
+			DCELHalfEdge * h2 = dcel.createEdge(v1, v4);
+			DCELHalfEdge * h3 = dcel.createEdge(v1, v3);
+			DCELHalfEdge * h4 = dcel.createEdge(v3, v2);
+
+			/*
+			
+			h1->printEdge(0);
+			h1->next->printEdge(0);
+			h1->next->next->printEdge(0);
+			h1->next->next->next->printEdge(0);
+			h1->next->next->next->next->printEdge(0);
+			h1->next->next->next->next->next->printEdge(0);
+
+			printf("\n\n");
+			h1->twin->printEdge(0);
+			h1->twin->next->printEdge(0);
+			h1->twin->next->next->printEdge(0);
+			h1->twin->next->next->next->printEdge(0);
+			h1->twin->next->next->next->next->printEdge(0);
+			h1->twin->next->next->next->next->next->printEdge(0);
+			
+			*/
+
+			//DCELHalfEdge * h5 = dcel.createEdge(v2, v4);
+			//DCELHalfEdge * h6 = dcel.createEdge(v3, v4);
+
+			errorCheck(h1->next == h1->next->next->twin, testClass, "createEdges", testID);
+			errorCheck(h1->twin == h1->twin->next->next->next, testClass, "createEdges", testID);
+
+			testID++;
+		}
+	
+		{
+			/* Test-ID:		#4
 			 * Class:		dcel.h
 			 * Function:	createEdges & getEdgeCount & getFaceCount
 			 * Adds Points to DCEL and creates new Vertices
@@ -236,11 +311,11 @@ private:
 			DCELVertex * v1 = dcel.addVertex(point1);
 			DCELVertex * v2 = dcel.addVertex(point2);
 			DCELVertex * v3 = dcel.addVertex(point3);
-			DCELVertex * v4 = dcel.addVertex(point4);	// this one should be the outer ONE!
+			DCELVertex * v4 = dcel.addVertex(point4);
 
 			DCELHalfEdge * h1 = dcel.createEdge(v1, v2);
 			DCELHalfEdge * h2 = dcel.createEdge(v2, v3);
-			//DCELHalfEdge * h3 = dcel.createEdge(v3, v1);
+			DCELHalfEdge * h3 = dcel.createEdge(v3, v1);
 
 			//DCELHalfEdge * h4 = dcel.createEdge(v1, v4);
 			//DCELHalfEdge * h5 = dcel.createEdge(v2, v4);
@@ -270,9 +345,7 @@ private:
 			testID++;
 		}
 	}
-	
-
-	
+		
 	/* ---------- DON'T TOUCH THIS ---------- */
 
 	/*

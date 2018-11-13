@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-//#include "math.h"
+#include "math.h"
 
 class DCELVertex;
 class DCELFace;
@@ -33,7 +33,7 @@ public:
 	/**
 	 * Get Vector
 	 */
-	//Vec3 vec3();
+	Vec3 vec3();
 };
 
 #endif

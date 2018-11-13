@@ -6,17 +6,6 @@
 #include "dcelVertex.h"
 
 
-void DCELFace::printFace() {
-	std::cout << "Face {" << std::endl;
-	edge->printEdge(1);
-	DCELHalfEdge * temp = edge->next;
-	while (temp->origin != edge->origin) {
-		temp->printEdge(1);
-		temp = temp->next;
-	}
-	std::cout << "}" << std::endl;
-}
-
 /**
 * Given a face, return its boundary vertices in CW order
 */
@@ -77,4 +66,15 @@ vector<DCELFace*> DCELFace::getAdjacentFaces() {
 	}*/
 
 	return tempFaces;
+}
+
+void DCELFace::printFace() {
+	std::cout << "Face {" << std::endl;
+	edge->printEdge(1);
+	DCELHalfEdge * temp = edge->next;
+	while (temp->origin != edge->origin) {
+		temp->printEdge(1);
+		temp = temp->next;
+	}
+	std::cout << "}" << std::endl;
 }

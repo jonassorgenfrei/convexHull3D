@@ -28,5 +28,5 @@ vector<DCELHalfEdge*> DCELVertex::leavingEdges()
 	}
 	res.push_back(nextLeaving);
 	   	 
-	return vector<DCELHalfEdge*>();
+	return res;
 }

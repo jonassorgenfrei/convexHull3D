@@ -93,16 +93,6 @@ class DCEL {
 		bool deleteEdge(DCELVertex * v1, DCELVertex * v2);
 
 		/**
-		 * Given two DCEL structures, this function combines them together into a new DCEL.
-		 * The returned DCEL combines all the vertices, edges, and faces in both DCELs.
-		 * Except for the unbounded face, it is assumed that all vertices, edges,
-		 * and faces in both DCELs are different.
-		 * For efficiency purposes, the two input DCELs are destroyed as a result of calling
-		 * this function.
-		 */
-		DCEL * mergeAndDestroy(DCEL * d1, DCEL * d2);
-
-		/**
 		 * Prints the whole DCEL incl. exact Point Information
 		 */
 		void printDCEL();
