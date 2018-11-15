@@ -85,7 +85,7 @@ inline double ccw(Point * p1, Point * p2, Point * p3) {
 	return (p2->getX() - p1->getX())*(p3->getY() - p1->getY()) - (p2->getY() - p1->getY())*(p3->getX() - p1->getX());
 }
 
-
+/* Clockwise Angle */
 inline double angleVec3(Vec3 v1, Vec3 v2, Vec3 normal) {
 
 	double det = dotVec3(normal, crossVec3(v1, v2));

@@ -62,6 +62,8 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 		return nullptr;
 	}
 
+	/* --- Create new Edges --- */
+
 	// Edge Conneting v1 -> v2
 	DCELHalfEdge * halfEdge = new DCELHalfEdge();
 	// Edge Conneting v2 -> v1
@@ -78,6 +80,8 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 	halfEdgeRet->twin = halfEdge;
 	halfEdgeRet->next = halfEdge;
 	halfEdgeRet->face = openFace;
+
+	/* --- Connect new Edges --- */
 
 	if (v2->leaving == nullptr) {
 		// Case 1: No edge leaving from v2
@@ -115,8 +119,8 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 			}
 		}
 
-		hs->twin->next = halfEdgeRet;
-		halfEdge->next = hb;
+		hb->twin->next = halfEdgeRet;
+		halfEdge->next = hs;
 
 		v2->normal = normal;
 	}
@@ -159,12 +163,106 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 			}
 		}
 
-		hs->twin->next = halfEdge;
-		halfEdgeRet->next = hb;
+		hb->twin->next = halfEdge;
+		halfEdgeRet->next = hs;
 
 		v1->normal = normal;
 	}
 	
+	/* --- Check if face has to be created ---*/
+
+	// check if new circle is closed
+	DCELHalfEdge * tempEdge = halfEdge;
+	bool twinEdgeInc = tempEdge->next == halfEdgeRet;
+	while (!twinEdgeInc && tempEdge->next != halfEdge ) {
+		tempEdge = tempEdge->next;
+		twinEdgeInc = tempEdge->next == halfEdgeRet;
+	}
+
+	// create new face
+	if (!twinEdgeInc) {
+		DCELFace * newFace = new DCELFace();
+
+		DCELHalfEdge * tempE = halfEdge;
+		DCELHalfEdge * tempER = halfEdgeRet;
+		// if first triangle (1. triangle has to be created in ClockWiseOrder, to show the coordinate System!)
+		if (this->surfaces.size() == 0) {
+			newFace->edge = halfEdge;
+			halfEdge->face = newFace;
+			tempE = halfEdge->next;
+			while (tempE != halfEdge) {
+				tempE->face = newFace;
+				tempE = tempE->next;
+			}
+		} else {
+			/* TODO COMPARE LOOP LENGTH & */
+			while (tempE->next != halfEdge && tempER->next != halfEdgeRet) {
+				tempE = tempE->next;
+				tempER = tempER->next;
+			}
+
+			// if same length
+			if (tempE->next == halfEdge && tempER->next == halfEdgeRet) {
+				// if closing hole
+				if (halfEdge->next->face == halfEdgeRet->next->face && halfEdgeRet->next->face != openFace) {
+					newFace->edge = halfEdge;
+					halfEdge->face = newFace;
+					tempE = halfEdge->next;
+					while (tempE != halfEdge) {
+						tempE->face = newFace;
+						tempE = tempE->next;
+					}
+
+					halfEdgeRet->face = halfEdgeRet->next->face;
+					halfEdgeRet->next->face->edge = halfEdgeRet;
+				} // if spliting facet
+				else {
+					newFace->edge = halfEdge;
+					halfEdge->face = newFace;
+					tempE = halfEdge->next;
+					while (tempE != halfEdge) {
+						tempE->face = newFace;
+						tempE = tempE->next;
+					}
+
+					DCELFace * closingFace2 = new DCELFace();
+					closingFace2->edge = halfEdgeRet;
+
+					halfEdgeRet->face = closingFace2;
+					tempE = halfEdgeRet->next;
+					while (tempE != halfEdgeRet) {
+						tempE->face = closingFace2;
+						tempE = tempE->next;
+					}
+
+					this->surfaces.push_back(closingFace2);
+				} // Another Case ???
+				/* TODO: !! */
+			} else {
+				if (tempE->next == halfEdge) {
+					newFace->edge = halfEdge;
+					halfEdge->face = newFace;
+					tempE = halfEdge->next;
+					while (tempE != halfEdge) {
+						tempE->face = newFace;
+						tempE = tempE->next;
+					}
+				}
+				else {
+					newFace->edge = halfEdgeRet;
+					halfEdgeRet->face = newFace;
+					tempER = halfEdgeRet->next;
+					while (tempER != halfEdgeRet) {
+						tempER->face = newFace;
+						tempER = tempER->next;
+					}
+				}
+			}
+		}
+
+		this->surfaces.push_back(newFace);
+	}
+
 	this->halfEdges.push_back(halfEdge);
 	this->halfEdges.push_back(halfEdgeRet);
 
@@ -177,7 +275,7 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 vector<DCELFace * > DCEL::findFaces(DCELVertex * vertex) {
 	vector<DCELFace *> tempFaces;
 
-	/*if (this->surfaces.size() < 2) {
+	if (this->surfaces.size() == 1) {
 		tempFaces.push_back(this->surfaces[0]);
 		return tempFaces;
 	}
@@ -198,7 +296,7 @@ vector<DCELFace * > DCEL::findFaces(DCELVertex * vertex) {
 			tempFaces.push_back(insertFace);
 		}
 		tempEdge = vertex->nextLeaving(tempEdge);
-	}*/
+	}
 
 	return tempFaces;
 }

@@ -87,8 +87,10 @@ std::vector<Point*> ConvexHull2D(std::vector<Point*> points) {
 /*
  * Convex Hull Algorithm in 3D Space
  *
- * @param points - Input Points to operate on
- * @return Convex Hull of the Points
+ * Algorithm Convex Hull(P)
+ *
+ * @param points - A set P of n points (x,y,z) in three-space. 
+ * @return The convex hull CH(P) of P.
  */
 DCEL ConvexHull3D(std::vector<Point*> points) {
 	DCEL dcel;
@@ -129,15 +131,39 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 		return dcel;
 	}
 
-	// 2. Insert Points into DCEL
+	// 2. Insert Points into DCEL (by creating a initialise tetrahedron)
 	DCELVertex * point1 = dcel.addVertex(points[p1]);
 	DCELVertex * point2 = dcel.addVertex(points[p2]);
 	DCELVertex * point3 = dcel.addVertex(points[p3]);
 	DCELVertex * point4 = dcel.addVertex(points[p4]);
 
-	DCELHalfEdge * edge1 = dcel.createEdge(point1, point2);
-	DCELHalfEdge * edge2 = dcel.createEdge(point2, point3);
-	DCELHalfEdge * edge3 = dcel.createEdge(point3, point1);
+	Vec3 a = { points[p2]->getX() - points[p1]->getX(),
+					  points[p2]->getY() - points[p1]->getY(),
+					  points[p2]->getZ() - points[p1]->getZ()
+	};
+	Vec3 b = { points[p3]->getX() - points[p1]->getX(),
+			  points[p3]->getY() - points[p1]->getY(),
+			  points[p3]->getZ() - points[p1]->getZ() };
+	Vec3 c = { points[p4]->getX() - points[p1]->getX(),
+			  points[p4]->getY() - points[p1]->getY(),
+			  points[p4]->getZ() - points[p1]->getZ() };
+
+	double orientation = dotVec3(normalize(c), normalize(crossVec3(a, b)));
+
+	DCELHalfEdge * h1;
+	DCELHalfEdge * h2;
+	DCELHalfEdge * h3;
+
+	if (orientation > 0) {
+		h1 = dcel.createEdge(point1, point2);
+		h2 = dcel.createEdge(point2, point3);
+		h3 = dcel.createEdge(point3, point1);
+	}
+	else {
+		h1 = dcel.createEdge(point1, point3);
+		h2 = dcel.createEdge(point3, point2);
+		h3 = dcel.createEdge(point2, point2);
+	}
 
 	DCELHalfEdge * edge4 = dcel.createEdge(point1, point4);
 	DCELHalfEdge * edge5 = dcel.createEdge(point2, point4);
@@ -150,24 +176,19 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 	points.erase(points.begin() + p3);
 	points.erase(points.begin() + p4);
 	
-	// 3. comput random permutation of points
+	// 3. comput random permutation of points p5, p6, …, pn of the remaining points
 
 	// 4. Initialize the conflict graph G with all visible pairs (pt, f), where f is a facet of C and t > 4
 	//ConflictGraph G();
 
-	//5.
+	//5. for r = 5; r < n; r++
+		//6. Insert pr into C:
+			// 7. if Fconflict(pr) is not empty	// pr lies outside of C
+				// 8.
 
 
 	/*
-	
-	Algorithm Convex Hull(P)
-	Input: A set P of n points (x,y,z) in three-space. 
-	Output: The convex hull CH(P) of P.
-	1.	Find 4 points p1, p2, p3, p4 in P that form a tetrahedron.
-	2.	C  CH({p1, p2, p3, p4})
-	3.	Compute a random permutation p5, p6, …, pn of the remaining points
-	4.	Initialize the conflict graph G with all visibile pairs (pt, f), where f is a facet of C and t > 4
-	5.	for r = 5; r < n; r++
+	5.	
 	6.		do 	// Insert pr into C:
 	7.			if Fconflict(pr) is not empty	// pr lies outside of C
 	8.				then Delete all facets in Fconflict(pr) from C
@@ -184,9 +205,9 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 	19.									do if f is visible from p, 
 	add (p,f) to G
 	20.	Delete the node corresponding to pr and the nodes corresponding to the facets in Fconflict(pr) from G, together with their incident arcs
-	21.	return C
 	*/
 
+	// return C (convex hull)
 	return dcel;
 };
 

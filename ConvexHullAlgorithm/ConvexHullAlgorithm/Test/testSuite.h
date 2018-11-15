@@ -99,21 +99,21 @@ private:
 			 * Function:	angle
 			 * Checks the angle for Vectors
 			 */
-			Vec3 v1 = {0,1,0};
+			Vec3 v1 = {0,0,1};
 			Vec3 v2 = {1,0,0};
-			Vec3 v3 = {0,-1,0};
+			Vec3 v3 = {0,0,-1};
 			Vec3 v4 = {-1,0,0};
-			Vec3 v5 = {0.5,0.5,0.0};
-			Vec3 v6 = {-0.5,-0.5,0.0};
-			Vec3 n = {0.0, 0.0, 1.0};
+			Vec3 v5 = {0.5,0,0.5};
+			Vec3 v6 = {-0.5,0,-0.5};
+			Vec3 n = {0.0, 1.0, .0};
 
-			errorCheck(cmpd(angleVec3(v1, v2, n), 270.0), testClass, "angle", testID);
+			errorCheck(cmpd(angleVec3(v1, v2, n), 90.0), testClass, "angle", testID);
 			errorCheck(cmpd(angleVec3(v1, v3, n), 180.0), testClass, "angle", testID);
-			errorCheck(cmpd(angleVec3(v1, v4, n), 90.0), testClass, "angle", testID);
-			errorCheck(cmpd(angleVec3(v2, v1, n), 90.0), testClass, "angle", testID);
+			errorCheck(cmpd(angleVec3(v1, v4, n), 270.0), testClass, "angle", testID);
+			errorCheck(cmpd(angleVec3(v2, v1, n), 270.0), testClass, "angle", testID);
 			errorCheck(cmpd(angleVec3(v5, v6, n), 180.0), testClass, "angle", testID);
-			errorCheck(cmpd(angleVec3(v1, v6, n), 135.0), testClass, "angle", testID);
-			errorCheck(cmpd(angleVec3(v1, v5, n), 315.0), testClass, "angle", testID);
+			errorCheck(cmpd(angleVec3(v1, v6, n), 225.0), testClass, "angle", testID);
+			errorCheck(cmpd(angleVec3(v1, v5, n), 45.0), testClass, "angle", testID);
 
 			
 			testID++;
@@ -268,30 +268,8 @@ private:
 			DCELHalfEdge * h3 = dcel.createEdge(v1, v3);
 			DCELHalfEdge * h4 = dcel.createEdge(v3, v2);
 
-			/*
-			
-			h1->printEdge(0);
-			h1->next->printEdge(0);
-			h1->next->next->printEdge(0);
-			h1->next->next->next->printEdge(0);
-			h1->next->next->next->next->printEdge(0);
-			h1->next->next->next->next->next->printEdge(0);
-
-			printf("\n\n");
-			h1->twin->printEdge(0);
-			h1->twin->next->printEdge(0);
-			h1->twin->next->next->printEdge(0);
-			h1->twin->next->next->next->printEdge(0);
-			h1->twin->next->next->next->next->printEdge(0);
-			h1->twin->next->next->next->next->next->printEdge(0);
-			
-			*/
-
-			//DCELHalfEdge * h5 = dcel.createEdge(v2, v4);
-			//DCELHalfEdge * h6 = dcel.createEdge(v3, v4);
-
-			errorCheck(h1->next == h1->next->next->twin, testClass, "createEdges", testID);
-			errorCheck(h1->twin == h1->twin->next->next->next, testClass, "createEdges", testID);
+			errorCheck(h1 == h1->next->next->next, testClass, "createEdges", testID);
+			errorCheck(h1->twin->next->next->next == h2, testClass, "createEdges", testID);
 
 			testID++;
 		}
@@ -313,16 +291,40 @@ private:
 			DCELVertex * v3 = dcel.addVertex(point3);
 			DCELVertex * v4 = dcel.addVertex(point4);
 
-			DCELHalfEdge * h1 = dcel.createEdge(v1, v2);
-			DCELHalfEdge * h2 = dcel.createEdge(v2, v3);
-			DCELHalfEdge * h3 = dcel.createEdge(v3, v1);
+			Vec3 a = {point2->getX() -point1->getX(),
+					  point2->getY() - point1->getY(),
+			          point2->getZ() - point1->getZ()
+					};
+			Vec3 b = { point3->getX() - point1->getX(),
+					  point3->getY() - point1->getY(),
+					  point3->getZ() - point1->getZ() };
 
-			//DCELHalfEdge * h4 = dcel.createEdge(v1, v4);
-			//DCELHalfEdge * h5 = dcel.createEdge(v2, v4);
-			//DCELHalfEdge * h6 = dcel.createEdge(v3, v4);
+			Vec3 c = { point4->getX() - point1->getX(),
+					  point4->getY() - point1->getY(),
+					  point4->getZ() - point1->getZ() };
+			
+			double orientation = dotVec3(normalize(c), normalize(crossVec3(a, b)));
+			// if orientation == 0, points are coplanar!!
+			DCELHalfEdge * h1;
+			DCELHalfEdge * h2;
+			DCELHalfEdge * h3;
 
-			dcel.printDCELInfo();
-			dcel.printDCEL();
+			if (orientation > 0) {
+				h1 = dcel.createEdge(v1, v2);
+				h2 = dcel.createEdge(v2, v3);
+				h3 = dcel.createEdge(v3, v1);
+			}
+			else {
+				h1 = dcel.createEdge(v1, v3);
+				h2 = dcel.createEdge(v3, v2);
+				h3 = dcel.createEdge(v2, v1);
+			}
+			DCELHalfEdge * h4 = dcel.createEdge(v1, v4);
+			DCELHalfEdge * h5 = dcel.createEdge(v2, v4);
+			DCELHalfEdge * h6 = dcel.createEdge(v3, v4);
+
+			//dcel.printDCELInfo();
+			//dcel.printDCEL();
 
 			errorCheck(dcel.getFaceCount() == 4, testClass, "createEdges & getVerticeCount", testID);
 			errorCheck(dcel.getEdgeCount() == 12, testClass, "createEdges & getEdgeCount", testID);
