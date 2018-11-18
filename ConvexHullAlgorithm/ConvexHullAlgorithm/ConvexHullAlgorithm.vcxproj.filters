@@ -112,5 +112,14 @@
     <None Include="Quelle.tx">
       <Filter>Quelldateien</Filter>
     </None>
+    <None Include="shader\geometryShader.geom">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\pointShader.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\pointShader.frag">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

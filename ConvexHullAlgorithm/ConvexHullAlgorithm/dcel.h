@@ -85,6 +85,16 @@ class DCEL {
 		DCELHalfEdge * findIncidentEdge(DCELVertex * v, DCELFace * f);
 
 		/**
+		 * Deletes an existing Face
+		 * If on any Edge the twin is already connected to the open Face, delete edge
+		 * else connect all surrounding edges to the open Face
+		 *
+		 * @param
+		 * @return One HalfEdge which isn't deleted at this state
+		 */
+		DCELHalfEdge * deleteFace(DCELFace * face);
+
+		/**
 		 * Deletes an existing edge between two vertices.
 		 * If an edge is successfully deleted, a true is returned.
 		 * Otherwise, if the given two vertices are not connected, a false is returned.

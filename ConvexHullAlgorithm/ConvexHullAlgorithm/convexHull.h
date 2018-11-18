@@ -122,7 +122,7 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 		}
 		i++;
 	}
-
+	
 	// TODO: END
 
 	// If there are no 4 points coplanar in the set of points
@@ -138,7 +138,7 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 	DCELVertex * point4 = dcel.addVertex(points[p4]);
 
 	Vec3 a = { points[p2]->getX() - points[p1]->getX(),
-					  points[p2]->getY() - points[p1]->getY(),
+			   points[p2]->getY() - points[p1]->getY(),
 					  points[p2]->getZ() - points[p1]->getZ()
 	};
 	Vec3 b = { points[p3]->getX() - points[p1]->getX(),
@@ -162,7 +162,7 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 	else {
 		h1 = dcel.createEdge(point1, point3);
 		h2 = dcel.createEdge(point3, point2);
-		h3 = dcel.createEdge(point2, point2);
+		h3 = dcel.createEdge(point2, point1);
 	}
 
 	DCELHalfEdge * edge4 = dcel.createEdge(point1, point4);
@@ -181,33 +181,27 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 	// 4. Initialize the conflict graph G with all visible pairs (pt, f), where f is a facet of C and t > 4
 	//ConflictGraph G();
 
-	//5. for r = 5; r < n; r++
+	//5. for r = 5; r < n; r++		
+	for (Point * point: points) {
 		//6. Insert pr into C:
 			// 7. if Fconflict(pr) is not empty	// pr lies outside of C
-				// 8.
+				// 8. delete all facets in Fconflict(pr) from C
+					// 9. Walk along the boundary of the visible region of pr (which consists exactly of the facets in Fconflict(pr)) and create a list L of horizon edges in order.
+					// 10. for all e ∈ L
+						// 11. Connect e to pr by creating a triangluar facet f3
+							// 12. if f is coplanar with its neighbor f‘ along e
+								//13. merge f and f‘ into one facet, whose conflict list is the same as that of f‘
+							// 14. else 	// Determine conflicts for f:
+								// 15. Create a node for f in G.
+								// 16. Let f1 and f2 be the facets incident to e in the old convex hull.
+								// 17. P(e) <-- Pconflict(f1) U Pconflict(f2)
+								// 18. for all points p ∈ P(e)		
+									// 19. if f is visible from p
+										// add (p,f) to G
+					// 20. 	Delete the node corresponding to pr and the nodes corresponding to the facets in Fconflict(pr) from G, together with their incident arcs			
+	}
 
-
-	/*
-	5.	
-	6.		do 	// Insert pr into C:
-	7.			if Fconflict(pr) is not empty	// pr lies outside of C
-	8.				then Delete all facets in Fconflict(pr) from C
-	9.	Walk along the boundary of the visible region of pr (which consists exactly of the facets in Fconflict(pr)) and create a list L of horizon edges in order.
-	10.					for all e ∈ L
-	11.						do Connect e to pr by creating a triangluar facet f
-	12.							if f is coplanar with its neighbor f‘ along e
-	13.		then merge f and f‘ into one facet, whose conflict list is the same as that of f‘
-	14.							else 	// Determine conflicts for f:
-	15.								Create a node for f in G.
-	16.	Let f1 and f2 be the facets incident to e in the old convex hull.
-	17.								P(e)  Pconflict(f1) U Pconflict(f2)
-	18.								for all points p ∈ P(e)
-	19.									do if f is visible from p, 
-	add (p,f) to G
-	20.	Delete the node corresponding to pr and the nodes corresponding to the facets in Fconflict(pr) from G, together with their incident arcs
-	*/
-
-	// return C (convex hull)
+	// 21. return C (convex hull)
 	return dcel;
 };
 

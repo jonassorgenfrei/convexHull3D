@@ -37,6 +37,8 @@ int pointCount = 50;
 bool vis = false;
 // run Convex Hull Algorithm
 bool run = false;
+// wireframe
+bool wireFrame = false;
 // test Suite
 TestSuite testSuite = TestSuite();
 
@@ -94,12 +96,12 @@ int main(int argc, char* argv[]) {
 					std::cout << "By Jonas Sorgenfrei (Minf101767)" << std::endl << std::endl;
 					std::cout << "" << std::endl;
 					std::cout << "ConvexHullAlgorithm.exe [-c Count] [-s Space] [-v] [-h] [-r]" << std::endl;
-					std::cout << " -c Count   count of points in space" << std::endl;
-					std::cout << " -s Space   choose space {3D,2D}, default 3D" << std::endl;
+					std::cout << " -c Count   Count (>0) of random points in space" << std::endl;
+					std::cout << " -s Space   choose Space {3D,2D}, default 3D" << std::endl;
 					std::cout << " -v         visualise input and output" << std::endl;
 					std::cout << " -h         show help" << std::endl;
 					std::cout << " -r         run algorithm depending on current space" << std::endl;
-
+					std::cout << " -w         Wireframe" << std::endl;
 					return 0;
 				}
 				else if (strcmp(argv[current_arg], "-run") == 0 ||
@@ -107,6 +109,12 @@ int main(int argc, char* argv[]) {
 					strcmp(argv[current_arg], "-r") == 0)
 				{
 					run = true;
+				}
+				else if (strcmp(argv[current_arg], "-wireframe") == 0 ||
+					strcmp(argv[current_arg], "--wireframe") == 0 ||
+					strcmp(argv[current_arg], "-w") == 0)
+				{
+					wireFrame = true;
 				}
 				else {
 					std::stringstream msg;
@@ -190,8 +198,8 @@ int main(int argc, char* argv[]) {
 						//Visualise Points and CH Result
 						Visualisation &visu = Visualisation::getInstance(); // initialize the singleton
 						visu.addRender(pointSet, GL_POINTS);
-						//TODO:
-						// Show DCEL
+						visu.addRender(&dcel, wireFrame);
+
 						visu.render();
 					}
 					break;

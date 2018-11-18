@@ -1,16 +1,14 @@
 #pragma once
 
-
 #include "dcelFace.h"
 #include "dcelHalfEdge.h"
 #include "dcelVertex.h"
-
 
 /**
 * Given a face, return its boundary vertices in CW order
 */
 vector<DCELVertex*> DCELFace::getBoundary() {
-/*	vector<DCELVertex*> tempVertices;
+	vector<DCELVertex*> tempVertices;
 	DCELVertex * tempVertex;
 	DCELHalfEdge * tempEdge;
 
@@ -28,7 +26,7 @@ vector<DCELVertex*> DCELFace::getBoundary() {
 		tempEdge = tempEdge->next;
 		tempVertices.push_back(tempEdge->origin);
 	}
-	return tempVertices;*/
+	return tempVertices;
 }
 
 /**

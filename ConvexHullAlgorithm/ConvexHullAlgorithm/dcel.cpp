@@ -57,8 +57,9 @@ int DCEL::getVerticeCount()
  * creating a new face.
  */
 DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
+	//this->printDCEL();
 	// if already connected
-	if (isConnected(v1, v2)) {
+	if (v1 == v2 || isConnected(v1, v2)) {
 		return nullptr;
 	}
 
@@ -92,7 +93,7 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 		vector<DCELHalfEdge *> leavingEdgesOfv2 = v2->leavingEdges();
 		// Normal of Vertex v2 (with added edge)
 		Vec3 normal;
-
+		
 		for (auto e : leavingEdgesOfv2) {
 			normal = addVec3(normal, e->vec3());
 		}
@@ -361,11 +362,13 @@ bool DCEL::isConnected(DCELVertex * v1, DCELVertex * v2) {
 	}
 	DCELHalfEdge * tempEdge = v1->nextLeaving(startEdge);
 	while (tempEdge != startEdge) {
+		
 		if (tempEdge->destination() == v2) {
 			return true;
 		}
 		tempEdge = v1->nextLeaving(tempEdge);
 	}
+
 	return false;
 }
 
@@ -384,13 +387,26 @@ DCELHalfEdge * DCEL::findIncidentEdge(DCELVertex * v, DCELFace * f) {
 }
 
 /**
+ * Deletes an existing Face
+ * If on any Edge the twin is already connected to the open Face, delete edge
+ * else connect all surrounding edges to the open Face
+ * 
+ * @param
+ * @return one HalfEdge which isn't deleted at this state 
+ */
+DCELHalfEdge* DCEL::deleteFace(DCELFace * face) {
+
+	return new DCELHalfEdge();
+}
+
+/**
  * Deletes an existing edge between two vertices.
  * If an edge is successfully deleted, a true is returned.
  * Otherwise, if the given two vertices are not connected, a false is returned.
  * Keep in mind that deleting an edge might result in merging two faces together.
  */
 bool DCEL::deleteEdge(DCELVertex * v1, DCELVertex * v2) {
-	/*if (!isConnected(v1, v2)) {
+	/*if (v1 == v2 || !isConnected(v1, v2)) {
 		return false;
 	}
 

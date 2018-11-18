@@ -13,8 +13,6 @@ class ConflictGraph {
 public:
 	ConflictGraph() {};
 private:
-
-
 };
 
 #endif // !CONFLICT_GRAPH_H

@@ -14,6 +14,8 @@
 #include <iostream>
 
 #include "dcel.h"
+#include "dcelFace.h"
+#include "dcelVertex.h"
 #include "point2D.h"
 #include "point3D.h"
 
@@ -27,8 +29,11 @@ const unsigned int SCR_HEIGHT = 2400;
 typedef struct DrawAble {
 	unsigned int VBO;
 	unsigned int VAO;
+	unsigned int EBO = -1;
 	GLenum mode;
 	unsigned int count;
+	bool wireFrame = false;
+	glm::mat4 model;
 	glm::vec3 color;
 } DrawAble;
 
@@ -38,7 +43,7 @@ class Visualisation {
 
 		int init();
 
-		void addRender(DCEL * dcel);
+		void addRender(DCEL * dcel, bool wireFrame);
 
 		void addRender(std::vector<Point*> points, GLenum mode, float r = 1.0, float g = 1.0, float b = 1.0);
 
@@ -51,8 +56,11 @@ class Visualisation {
 	private:
 		/* Members */
 		GLFWwindow* window;
-		Shader shader;
+		Shader geoShader;
+		Shader pointShader;
 		Camera camera;
+		bool wireFrame = true;
+		bool wireFrameKey = false;
 		std::vector<DrawAble> drawAbles;
 		bool firstMouse = true;
 		float lastX = SCR_WIDTH / 2.0;
