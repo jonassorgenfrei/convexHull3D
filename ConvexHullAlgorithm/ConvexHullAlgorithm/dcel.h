@@ -112,6 +112,8 @@ class DCEL {
 		 * Keep in mind that deleting an edge might result in merging two faces together.
 		 */
 		bool deleteEdge(DCELVertex * v1, DCELVertex * v2);
+
+		bool deleteVertex(DCELVertex * v);
 };
 
 #endif // !DCEL_H

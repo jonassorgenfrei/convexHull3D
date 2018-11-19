@@ -536,6 +536,7 @@ private:
 
 			errorCheck(dcel.getFaceCount() == 0, testClass, "deleteFace", testID);
 			errorCheck(dcel.getEdgeCount() == 0, testClass, "deleteFace", testID);
+			printf("%d", dcel.getVerticeCount());
 			errorCheck(dcel.getVerticeCount() == 0, testClass, "deleteFace", testID);
 			testID++;
 		}

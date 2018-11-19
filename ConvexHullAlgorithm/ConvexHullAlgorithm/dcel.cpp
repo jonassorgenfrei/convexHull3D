@@ -426,7 +426,6 @@ DCELHalfEdge* DCEL::deleteFace(DCELFace * face) {
  * Keep in mind that deleting an edge might result in merging two faces together.
  */
 bool DCEL::deleteEdge(DCELVertex * v1, DCELVertex * v2) {
-
 	if (v1 == v2 || !isConnected(v1, v2)) {
 		return false;
 	}
@@ -437,65 +436,36 @@ bool DCEL::deleteEdge(DCELVertex * v1, DCELVertex * v2) {
 		tempEdge = v1->nextLeaving(tempEdge);
 	}
 
-	if (tempEdge->face != openFace && tempEdge->twin->face != openFace) {
-		if (tempEdge->face == openFace) {
-			tempEdge = tempEdge->twin;
-		}
-		DCELFace * tempFace = tempEdge->next->face;
+	DCELFace * tempFace = tempEdge->next->face;
 
-		for (DCELHalfEdge * halfEdges : tempEdge->twin->face->getEdgeBoundary()) {
-			halfEdges->face = tempFace;
-		}
-	}
 
-	/*if (tempEdge->next != tempEdge->twin) {
-		DCELHalfEdge * start = tempEdge->twin;
-		DCELHalfEdge * temp = start;
-		while (temp->next != start) {
-			temp = temp->next;
-		}
-		temp->next = tempEdge->next;
-	}
-	if (tempEdge->twin->next != tempEdge) {
-		DCELHalfEdge * start = tempEdge;
-		DCELHalfEdge * temp = start;
-		while (temp->next != start) {
-			temp = temp->next;
-		}
-		temp->next = tempEdge->twin->next;
-	}*/
+	if (tempEdge->face != tempEdge->twin->face) {
+		DCELFace * deleteFace = tempEdge->twin->face;
 
-	/*Delete Vertex*/
-	/*if (v1->leavingEdges().size() == 1) {
+		DCELHalfEdge * edge = tempEdge->twin->face->edge;
+		DCELHalfEdge * tEdge = edge->next;
+
+		while (tEdge != edge) {
+			tEdge->face = tempEdge->face;
+			tEdge = tEdge->next;
+		}
+
+		tEdge->face = tempEdge->face;
+
 		int idx = 0;	//index from edge
-		while (idx < this->vertices.size() && this->vertices[idx] != v1) {
+		while (this->surfaces[idx] != deleteFace) {
 			idx++;
 		}
-		if(idx < this->vertices.size())
-			this->vertices.erase(this->vertices.begin() + idx);
+		this->surfaces.erase(this->surfaces.begin() + idx);
 	}
-	else {
-		if (v1->leaving == tempEdge || v1->leaving == tempEdge->twin) {
-			v1->leaving = v1->nextLeaving(v1->leaving);
-		}
-	}*/
 
-	/* Delete Vertices if necessary*/
-	/*if (v2->leavingEdges().size() == 1) {
-		int idx = 0;	//index from edge
-		while (idx < this->vertices.size() && this->vertices[idx] != v2) {
-			idx++;
-		}
-		if (idx < this->vertices.size())
-			this->vertices.erase(this->vertices.begin() + idx);
+	if (v1->leaving == v1->nextLeaving(v1->leaving)) {
+		deleteVertex(v1);
 	}
-	else {
-		if (v2->leaving == tempEdge || v2->leaving == tempEdge->twin) {
-			v2->leaving = v2->nextLeaving(v2->leaving);
-		}
-	}*/
+	if (v2->leaving == v2->nextLeaving(v2->leaving)) {
+		deleteVertex(v2);
+	}
 
-	
 	int idx = 0;	//index from edge
 	while (this->halfEdges[idx] != tempEdge) {
 		idx++;
@@ -509,6 +479,23 @@ bool DCEL::deleteEdge(DCELVertex * v1, DCELVertex * v2) {
 	this->halfEdges.erase(this->halfEdges.begin() + idx);
 
 	return true;
+}
+
+bool DCEL::deleteVertex(DCELVertex * v) {
+	int idx = 0;
+
+	while (idx < this->vertices.size() && this->vertices[idx] != v) {
+		idx++;
+	}
+
+	if (idx < this->vertices.size()) {
+		this->vertices.erase(this->vertices.begin() +idx);
+		return true;
+	}
+	else {
+		return false;
+	}
+
 }
 
 /**
