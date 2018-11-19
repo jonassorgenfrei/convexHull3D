@@ -405,12 +405,16 @@ DCELHalfEdge* DCEL::deleteFace(DCELFace * face) {
 	}
 	
 	DCELHalfEdge * retEdge = new DCELHalfEdge();
-	for (DCELHalfEdge * halfEdge : face->getEdgeBoundary()) {
+
+	vector<DCELHalfEdge*> hB = face->getEdgeBoundary();
+	for (DCELHalfEdge * halfEdge : hB) {
 		if (halfEdge->twin->face == openFace) {
+			printf("1");
 			halfEdge->face = openFace;
 			deleteEdge(halfEdge->origin, halfEdge->next->origin);
 		}
 		else {
+			printf("2");
 			halfEdge->face = openFace;
 			retEdge = halfEdge;
 		}
@@ -436,35 +440,42 @@ bool DCEL::deleteEdge(DCELVertex * v1, DCELVertex * v2) {
 		tempEdge = v1->nextLeaving(tempEdge);
 	}
 
-	DCELFace * tempFace = tempEdge->next->face;
-
-
-	if (tempEdge->face != tempEdge->twin->face) {
-		DCELFace * deleteFace = tempEdge->twin->face;
-
-		DCELHalfEdge * edge = tempEdge->twin->face->edge;
-		DCELHalfEdge * tEdge = edge->next;
-
-		while (tEdge != edge) {
-			tEdge->face = tempEdge->face;
-			tEdge = tEdge->next;
-		}
-
-		tEdge->face = tempEdge->face;
-
-		int idx = 0;	//index from edge
-		while (this->surfaces[idx] != deleteFace) {
-			idx++;
-		}
-		this->surfaces.erase(this->surfaces.begin() + idx);
-	}
-
-	if (v1->leaving == v1->nextLeaving(v1->leaving)) {
+	if (v1->leavingEdges().size() == 1) {
+		v1->leaving = nullptr;
 		deleteVertex(v1);
 	}
-	if (v2->leaving == v2->nextLeaving(v2->leaving)) {
+	if (v2->leavingEdges().size() == 1) {
+		v2->leaving = nullptr;
 		deleteVertex(v2);
 	}
+
+	if (tempEdge->face != tempEdge->twin->face) {
+		// connecting edges to right face
+		for (DCELHalfEdge * edge : tempEdge->twin->face->getEdgeBoundary()) {
+			edge->face = tempEdge->face;
+		}
+	}
+	
+	if (tempEdge->next != tempEdge->twin) {
+		DCELHalfEdge * start = tempEdge->twin;
+		DCELHalfEdge * temp = start;
+		while (temp->next != start) {
+			temp = temp->next;
+		}
+		temp->next = tempEdge->next;
+	}
+
+	if (tempEdge->twin->next != tempEdge) {
+		DCELHalfEdge * start = tempEdge;
+		DCELHalfEdge * temp = start;
+		while (temp->next != start) {
+			temp = temp->next;
+		}
+		temp->next = tempEdge->twin->next;
+	}
+
+	tempEdge->next = tempEdge->twin;
+	tempEdge->twin->next = tempEdge;
 
 	int idx = 0;	//index from edge
 	while (this->halfEdges[idx] != tempEdge) {
@@ -503,6 +514,13 @@ bool DCEL::deleteVertex(DCELVertex * v) {
  */
 void DCEL::printDCEL() {
 	printf("DCEL : {\n");
+		printf(" Vertices: {\n");
+		for (auto &vert : this->vertices) {
+			vert->point->print();
+			printf("\n");
+		}
+		printf(" }\n\n");
+
 		printf(" EDGES: {\n");
 		for (auto &ed : this->halfEdges) {
 			ed->printEdge(2);

@@ -379,7 +379,7 @@ private:
 					  point4->getZ() - point1->getZ() };
 
 			double orientation = dotVec3(normalize(c), normalize(crossVec3(a, b)));
-			// if orientation == 0, points are coplanar!!
+
 			DCELHalfEdge * h1;
 			DCELHalfEdge * h2;
 			DCELHalfEdge * h3;
@@ -397,9 +397,6 @@ private:
 			DCELHalfEdge * h4 = dcel.createEdge(v1, v4);
 			DCELHalfEdge * h5 = dcel.createEdge(v2, v4);
 			DCELHalfEdge * h6 = dcel.createEdge(v3, v4);
-
-			//dcel.printDCELInfo();
-			//dcel.printDCEL();
 
 			errorCheck(dcel.getFaceCount() == 4, testClass, "createEdges & getVerticeCount", testID);
 			errorCheck(dcel.getEdgeCount() == 12, testClass, "createEdges & getEdgeCount", testID);
@@ -466,14 +463,14 @@ private:
 		/* Test-ID:		#7
 		 * Class:		dcel.h
 		 * Function:	deleteFace
-		 * Delectes a Face of the DCEL
+		 * Deletes a Face of the DCEL
 		 */
 		{
 
-			Point * point1 = new Point3D(14.1697, 17.7721, 15.6413);
-			Point * point2 = new Point3D(12.8306, 8.39137, 11.7557);
-			Point * point3 = new Point3D(7.21335, 7.10898, 9.85198);
-			Point * point4 = new Point3D(0.615253, 2.51289, 10.7682);
+			Point * point1 = new Point3D( 100.0,   0.0,   0.0);
+			Point * point2 = new Point3D(   0.0, 100.0,   0.0);
+			Point * point3 = new Point3D(   0.0,   0.0, 100.0);
+			Point * point4 = new Point3D(-100.0,   0.0,   0.0);
 
 			DCEL dcel = DCEL();
 			DCELVertex * v1 = dcel.addVertex(point1);
@@ -513,26 +510,41 @@ private:
 			DCELHalfEdge * h5 = dcel.createEdge(v2, v4);
 			DCELHalfEdge * h6 = dcel.createEdge(v3, v4);
 
-			DCELHalfEdge * deleteHalfEdge = dcel.deleteFace(dcel.surfaces[0]);
+			dcel.printDCEL();
 
-			errorCheck(dcel.getFaceCount() == 3, testClass, "deleteFace", testID);
-			errorCheck(dcel.getEdgeCount() == 12, testClass, "deleteFace", testID);
+			DCELHalfEdge * deleteHalfEdge = dcel.deleteFace(dcel.surfaces[0]); // Delete 1. triangle
+			
+			dcel.printDCEL();
+			
+			errorCheck(dcel.getFaceCount() == 3, testClass, "deleteFace Face count 3", testID);
+			errorCheck(dcel.getEdgeCount() == 12, testClass, "deleteFace Edge count 12", testID);
 			errorCheck(deleteHalfEdge->face == dcel.openFace, testClass, "deleteFace", testID);
 
 			DCELFace * wrongFace = new DCELFace();
 			DCELHalfEdge * nullPtr = dcel.deleteFace(wrongFace);
-			errorCheck(dcel.getFaceCount() == 3, testClass, "deleteFace", testID);
-			errorCheck(dcel.getEdgeCount() == 12, testClass, "deleteFace", testID);
+			errorCheck(dcel.getFaceCount() == 3, testClass, "deleteFace Face count 3", testID);
+			errorCheck(dcel.getEdgeCount() == 12, testClass, "deleteFace Edge count 3", testID);
 			errorCheck(nullPtr == nullPtr, testClass, "deleteFace", testID);
 
-			deleteHalfEdge = dcel.deleteFace(dcel.surfaces[0]);
-
-			errorCheck(dcel.getFaceCount() == 2, testClass, "deleteFace", testID);
-			errorCheck(dcel.getEdgeCount() == 10, testClass, "deleteFace", testID);
+			deleteHalfEdge = dcel.deleteFace(dcel.surfaces[0]); // Delete 2. triangle
+			errorCheck(dcel.getFaceCount() == 2, testClass, "deleteFace Face count 2", testID);
+			errorCheck(dcel.getEdgeCount() == 10, testClass, "deleteFace Edeg count 10", testID);
+			errorCheck(dcel.getVerticeCount() == 4, testClass, "deleteFace Vert count 4", testID);
 			errorCheck(deleteHalfEdge->face == dcel.openFace, testClass, "deleteFace", testID);
+			errorCheck(v1->leavingEdges().size() == 2, testClass, "deleteFace v1 leaving 2", testID);
+			errorCheck(v2->leavingEdges().size() == 2, testClass, "deleteFace v2 leaving 2", testID);		
+			errorCheck(h4->twin->face == dcel.openFace, testClass, "deleteFace h4->twin face openface", testID);
 
-			deleteHalfEdge = dcel.deleteFace(dcel.surfaces[0]);
-			deleteHalfEdge = dcel.deleteFace(dcel.surfaces[0]);
+			deleteHalfEdge = dcel.deleteFace(dcel.surfaces[0]); // Delete 3. triangle
+
+			errorCheck(dcel.getFaceCount() == 1, testClass, "deleteFace Face 1", testID);
+			errorCheck(dcel.getEdgeCount() == 6, testClass, "deleteFace Edge count 6", testID);
+			errorCheck(dcel.getVerticeCount() == 3, testClass, "deleteFace Vert count 3", testID);
+
+			dcel.printDCEL();
+			exit(1);
+			
+			deleteHalfEdge = dcel.deleteFace(dcel.surfaces[0]); // Delete 4. triangle
 
 			errorCheck(dcel.getFaceCount() == 0, testClass, "deleteFace", testID);
 			errorCheck(dcel.getEdgeCount() == 0, testClass, "deleteFace", testID);
