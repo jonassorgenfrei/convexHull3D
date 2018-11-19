@@ -29,6 +29,29 @@ vector<DCELVertex*> DCELFace::getBoundary() {
 	return tempVertices;
 }
 
+vector<DCELHalfEdge*> DCELFace::getEdgeBoundary()
+{
+	vector<DCELHalfEdge*> tempEdges;
+	DCELHalfEdge * startEdge;
+	DCELHalfEdge * tempEdge;
+
+	if (this == this->edge->face) {
+		startEdge = this->edge;
+	}
+	else {
+		startEdge = this->edge->twin;
+	}
+	tempEdge = startEdge->next;
+	tempEdges.push_back(startEdge);
+
+	while (startEdge != tempEdge) {
+		tempEdges.push_back(tempEdge);
+		tempEdge = tempEdge->next;
+	}
+
+	return tempEdges;
+}
+
 /**
 * Given a face, return a list of all adjacent faces
 */

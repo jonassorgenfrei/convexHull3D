@@ -26,6 +26,8 @@ public:
 	*/
 	vector<DCELVertex*> getBoundary();
 
+	vector<DCELHalfEdge *> getEdgeBoundary();
+
 	/**
 	* Given a face, return a list of all adjacent faces
 	*/

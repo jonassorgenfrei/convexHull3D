@@ -179,7 +179,15 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 	// 3. comput random permutation of points p5, p6, …, pn of the remaining points
 
 	// 4. Initialize the conflict graph G with all visible pairs (pt, f), where f is a facet of C and t > 4
-	//ConflictGraph G();
+	ConflictGraph G = ConflictGraph();
+	// loop over all points and create conflicts with faces
+	for (Point * point : points) {
+		ConflictPoint * cP = new ConflictPoint(point);
+		for (DCELFace * face : dcel.surfaces) {
+			ConflictFace * cF = G.createConflictFace(face);
+			G.checkForConflict(cP, cF);
+		}
+	}
 
 	//5. for r = 5; r < n; r++		
 	for (Point * point: points) {

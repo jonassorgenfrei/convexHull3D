@@ -16,7 +16,7 @@ void main()
 {
 	if(wireFrame){
 		//if wireFrame draw lines in white
-		FragColor = vec4(1.0);
+		FragColor = vec4(vec3(1.0),1.0);
 	} else {
 
 		 // ambient

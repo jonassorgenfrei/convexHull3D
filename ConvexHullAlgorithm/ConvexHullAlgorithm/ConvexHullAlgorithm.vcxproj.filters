@@ -31,6 +31,9 @@
     <Filter Include="Tests">
       <UniqueIdentifier>{bc4208e6-ae6a-421e-9493-327a2306e126}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\ConflictGraph">
+      <UniqueIdentifier>{7f3b705d-f064-4530-b174-2630c768528c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -60,9 +63,6 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="math.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="conflictGraph.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="point2D.h">
@@ -100,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="Test\testSuite.h">
       <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="conflictGraph.h">
+      <Filter>Headerdateien\ConflictGraph</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

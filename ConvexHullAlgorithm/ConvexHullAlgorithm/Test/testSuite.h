@@ -10,6 +10,7 @@
 #include "math.h"
 #include "dcel.h"
 #include "dcelHalfEdge.h"
+#include "conflictGraph.h"
 
 /**
  * Test Suite to check algorithms, libraries & implementations.
@@ -27,6 +28,7 @@ public:
 		convexHull2DTest();
 		convexHull3DTest();
 		dcelTest();
+		conflictGraphTest();
 	}
 private:
 	/* ---------- Add Test Collections as Functions ---------- */
@@ -460,6 +462,166 @@ private:
 
 			testID++;
 		}
+
+		/* Test-ID:		#7
+		 * Class:		dcel.h
+		 * Function:	deleteFace
+		 * Delectes a Face of the DCEL
+		 */
+		{
+
+			Point * point1 = new Point3D(14.1697, 17.7721, 15.6413);
+			Point * point2 = new Point3D(12.8306, 8.39137, 11.7557);
+			Point * point3 = new Point3D(7.21335, 7.10898, 9.85198);
+			Point * point4 = new Point3D(0.615253, 2.51289, 10.7682);
+
+			DCEL dcel = DCEL();
+			DCELVertex * v1 = dcel.addVertex(point1);
+			DCELVertex * v2 = dcel.addVertex(point2);
+			DCELVertex * v3 = dcel.addVertex(point3);
+			DCELVertex * v4 = dcel.addVertex(point4);
+
+			Vec3 a = { point2->getX() - point1->getX(),
+					  point2->getY() - point1->getY(),
+					  point2->getZ() - point1->getZ()
+			};
+			Vec3 b = { point3->getX() - point1->getX(),
+					  point3->getY() - point1->getY(),
+					  point3->getZ() - point1->getZ() };
+
+			Vec3 c = { point4->getX() - point1->getX(),
+					  point4->getY() - point1->getY(),
+					  point4->getZ() - point1->getZ() };
+
+			double orientation = dotVec3(normalize(c), normalize(crossVec3(a, b)));
+			// if orientation == 0, points are coplanar!!
+			DCELHalfEdge * h1;
+			DCELHalfEdge * h2;
+			DCELHalfEdge * h3;
+
+			if (orientation > 0) {
+				h1 = dcel.createEdge(v1, v2);
+				h2 = dcel.createEdge(v2, v3);
+				h3 = dcel.createEdge(v3, v1);
+			}
+			else {
+				h1 = dcel.createEdge(v1, v3);
+				h2 = dcel.createEdge(v3, v2);
+				h3 = dcel.createEdge(v2, v1);
+			}
+			DCELHalfEdge * h4 = dcel.createEdge(v1, v4);
+			DCELHalfEdge * h5 = dcel.createEdge(v2, v4);
+			DCELHalfEdge * h6 = dcel.createEdge(v3, v4);
+
+			DCELHalfEdge * deleteHalfEdge = dcel.deleteFace(dcel.surfaces[0]);
+
+			errorCheck(dcel.getFaceCount() == 3, testClass, "deleteFace", testID);
+			errorCheck(dcel.getEdgeCount() == 12, testClass, "deleteFace", testID);
+			errorCheck(deleteHalfEdge->face == dcel.openFace, testClass, "deleteFace", testID);
+
+			DCELFace * wrongFace = new DCELFace();
+			DCELHalfEdge * nullPtr = dcel.deleteFace(wrongFace);
+			errorCheck(dcel.getFaceCount() == 3, testClass, "deleteFace", testID);
+			errorCheck(dcel.getEdgeCount() == 12, testClass, "deleteFace", testID);
+			errorCheck(nullPtr == nullPtr, testClass, "deleteFace", testID);
+
+			deleteHalfEdge = dcel.deleteFace(dcel.surfaces[0]);
+
+			errorCheck(dcel.getFaceCount() == 2, testClass, "deleteFace", testID);
+			errorCheck(dcel.getEdgeCount() == 10, testClass, "deleteFace", testID);
+			errorCheck(deleteHalfEdge->face == dcel.openFace, testClass, "deleteFace", testID);
+
+			deleteHalfEdge = dcel.deleteFace(dcel.surfaces[0]);
+			deleteHalfEdge = dcel.deleteFace(dcel.surfaces[0]);
+
+			errorCheck(dcel.getFaceCount() == 0, testClass, "deleteFace", testID);
+			errorCheck(dcel.getEdgeCount() == 0, testClass, "deleteFace", testID);
+			errorCheck(dcel.getVerticeCount() == 0, testClass, "deleteFace", testID);
+			testID++;
+		}
+	}
+
+	/* Test for the Conflict Graph */
+	void conflictGraphTest() {
+		string testClass = "conflictGraph.h";
+		int testID = 1;
+
+		/* Test-ID:		#1
+		 * Class:		conflictGraph.h
+		 * Function:	checkForConflict
+		 * Check if Conflict Detection works fine
+		 */
+		{
+
+			Point * point1 = new Point3D(-100.0, 0.0, 0.0);
+			Point * point2 = new Point3D(100.0, 0.0, 0.0);
+			Point * point3 = new Point3D(0.0, 100.0, 0.0);
+			Point * point4 = new Point3D(0.0, 0.0, 100.0);
+
+			Point * point5 = new Point3D(0.0, 25.0, 25.0);
+			Point * point6 = new Point3D(0.0, 25.0, -25.0);
+			Point * point7 = new Point3D(0.0, 25.0, 200.0);
+			Point * point8 = new Point3D(-10.0, -200.0, 700.0);
+
+			DCEL dcel = DCEL();
+			DCELVertex * v1 = dcel.addVertex(point1);
+			DCELVertex * v2 = dcel.addVertex(point2);
+			DCELVertex * v3 = dcel.addVertex(point3);
+			DCELVertex * v4 = dcel.addVertex(point4);
+
+			Vec3 a = { point2->getX() - point1->getX(),
+					  point2->getY() - point1->getY(),
+					  point2->getZ() - point1->getZ()
+			};
+			Vec3 b = { point3->getX() - point1->getX(),
+					  point3->getY() - point1->getY(),
+					  point3->getZ() - point1->getZ() };
+
+			Vec3 c = { point4->getX() - point1->getX(),
+					  point4->getY() - point1->getY(),
+					  point4->getZ() - point1->getZ() };
+
+			double orientation = dotVec3(normalize(c), normalize(crossVec3(a, b)));
+			// if orientation == 0, points are coplanar!!
+			DCELHalfEdge * h1;
+			DCELHalfEdge * h2;
+			DCELHalfEdge * h3;
+
+			if (orientation > 0) {
+				h1 = dcel.createEdge(v1, v2);
+				h2 = dcel.createEdge(v2, v3);
+				h3 = dcel.createEdge(v3, v1);
+			}
+			else {
+				h1 = dcel.createEdge(v1, v3);
+				h2 = dcel.createEdge(v3, v2);
+				h3 = dcel.createEdge(v2, v1);
+			}
+			DCELHalfEdge * h4 = dcel.createEdge(v1, v4);
+			DCELHalfEdge * h5 = dcel.createEdge(v2, v4);
+			DCELHalfEdge * h6 = dcel.createEdge(v3, v4);
+			
+			ConflictGraph G = ConflictGraph();
+			ConflictPoint * p1 = G.createConflictPoint(point5);
+			ConflictPoint * p2 = G.createConflictPoint(point6);
+			ConflictPoint * p3 = G.createConflictPoint(point7);
+			ConflictPoint * p4 = G.createConflictPoint(point8);
+
+			for (DCELFace * face : dcel.surfaces) {
+				ConflictFace * cF = G.createConflictFace(face);
+				G.checkForConflict(p1, cF);
+				G.checkForConflict(p2, cF);
+				G.checkForConflict(p3, cF);
+				G.checkForConflict(p4, cF);
+			}
+
+			errorCheck(p1->conflicts.size() == 0, testClass, "checkForConflict 0 Conflicts", testID);
+			errorCheck(p2->conflicts.size() == 1, testClass, "checkForConflict 1 Conflict", testID);
+			errorCheck(p3->conflicts.size() == 2, testClass, "checkForConflict 2 Conflict", testID);
+			errorCheck(p4->conflicts.size() == 3, testClass, "checkForConflict 3 Conflict", testID);
+
+			testID++;
+		}
 	}
 
 	/* Test for the convex hull 3D algorithm implmented in convexHull.h */
@@ -478,7 +640,7 @@ private:
 			testID++;
 		}
 	}
-		
+
 	/* ---------- DON'T TOUCH THIS ---------- */
 
 	/*

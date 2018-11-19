@@ -95,14 +95,6 @@ class DCEL {
 		DCELHalfEdge * deleteFace(DCELFace * face);
 
 		/**
-		 * Deletes an existing edge between two vertices.
-		 * If an edge is successfully deleted, a true is returned.
-		 * Otherwise, if the given two vertices are not connected, a false is returned.
-		 * Keep in mind that deleting an edge might result in merging two faces together.
-		 */
-		bool deleteEdge(DCELVertex * v1, DCELVertex * v2);
-
-		/**
 		 * Prints the whole DCEL incl. exact Point Information
 		 */
 		void printDCEL();
@@ -113,6 +105,13 @@ class DCEL {
 		void printDCELInfo();
 
 	private:
+		/**
+		 * Deletes an existing edge between two vertices.
+		 * If an edge is successfully deleted, a true is returned.
+		 * Otherwise, if the given two vertices are not connected, a false is returned.
+		 * Keep in mind that deleting an edge might result in merging two faces together.
+		 */
+		bool deleteEdge(DCELVertex * v1, DCELVertex * v2);
 };
 
 #endif // !DCEL_H
