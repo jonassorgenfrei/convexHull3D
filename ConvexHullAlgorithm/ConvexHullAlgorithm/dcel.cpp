@@ -409,12 +409,10 @@ DCELHalfEdge* DCEL::deleteFace(DCELFace * face) {
 	vector<DCELHalfEdge*> hB = face->getEdgeBoundary();
 	for (DCELHalfEdge * halfEdge : hB) {
 		if (halfEdge->twin->face == openFace) {
-			printf("1");
 			halfEdge->face = openFace;
 			deleteEdge(halfEdge->origin, halfEdge->next->origin);
 		}
 		else {
-			printf("2");
 			halfEdge->face = openFace;
 			retEdge = halfEdge;
 		}
@@ -444,9 +442,19 @@ bool DCEL::deleteEdge(DCELVertex * v1, DCELVertex * v2) {
 		v1->leaving = nullptr;
 		deleteVertex(v1);
 	}
+	else {
+		if (v1->leaving == tempEdge || v1->leaving == tempEdge->twin) {
+			v1->leaving = v1->nextLeaving(v1->leaving);
+		}
+	}
 	if (v2->leavingEdges().size() == 1) {
 		v2->leaving = nullptr;
 		deleteVertex(v2);
+	}
+	else {
+		if (v2->leaving == tempEdge || v2->leaving == tempEdge->twin) {
+			v2->leaving = v2->nextLeaving(v2->leaving);
+		}
 	}
 
 	if (tempEdge->face != tempEdge->twin->face) {

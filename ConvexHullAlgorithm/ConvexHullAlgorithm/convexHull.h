@@ -182,7 +182,7 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 	ConflictGraph G = ConflictGraph();
 	// loop over all points and create conflicts with faces
 	for (Point * point : points) {
-		ConflictPoint * cP = new ConflictPoint(point);
+		ConflictPoint * cP = G.createConflictPoint(point);
 		for (DCELFace * face : dcel.surfaces) {
 			ConflictFace * cF = G.createConflictFace(face);
 			G.checkForConflict(cP, cF);
@@ -192,7 +192,9 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 	//5. for r = 5; r < n; r++		
 	for (Point * point: points) {
 		//6. Insert pr into C:
-			// 7. if Fconflict(pr) is not empty	// pr lies outside of C
+		ConflictPoint * cP = G.createConflictPoint(point);
+		// 7. if Fconflict(pr) is not empty	// pr lies outside of C
+		if (cP->conflicts.size() != 0) {
 				// 8. delete all facets in Fconflict(pr) from C
 					// 9. Walk along the boundary of the visible region of pr (which consists exactly of the facets in Fconflict(pr)) and create a list L of horizon edges in order.
 					// 10. for all e ∈ L
@@ -207,6 +209,7 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 									// 19. if f is visible from p
 										// add (p,f) to G
 					// 20. 	Delete the node corresponding to pr and the nodes corresponding to the facets in Fconflict(pr) from G, together with their incident arcs			
+		}
 	}
 
 	// 21. return C (convex hull)
