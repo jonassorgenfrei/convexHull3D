@@ -8,6 +8,7 @@
 
 #include "point.h"
 #include "dcel.h"
+#include "dcelHalfEdge.h"
 #include "visualisation.h"
 #include "conflictGraph.h"
 #include "math.h"
@@ -83,6 +84,9 @@ std::vector<Point*> ConvexHull2D(std::vector<Point*> points) {
 
 	return ch;
 }
+
+
+
 
 /*
  * Convex Hull Algorithm in 3D Space
@@ -178,6 +182,8 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 	
 	// 3. comput random permutation of points p5, p6, …, pn of the remaining points
 
+	// TODO! 
+
 	// 4. Initialize the conflict graph G with all visible pairs (pt, f), where f is a facet of C and t > 4
 	ConflictGraph G = ConflictGraph();
 	// loop over all points and create conflicts with faces
@@ -188,33 +194,190 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 			G.checkForConflict(cP, cF);
 		}
 	}
-
+	int run = 0; // TODO DEBUG DELETE 
 	//5. for r = 5; r < n; r++		
-	for (Point * point: points) {
+	for (Point * point : points) {
 		//6. Insert pr into C:
 		ConflictPoint * cP = G.createConflictPoint(point);
 		// 7. if Fconflict(pr) is not empty	// pr lies outside of C
 		if (cP->conflicts.size() != 0) {
+			DCELHalfEdge * horizonStart = nullptr;
+			for (auto conflict : cP->conflicts) {
 				// 8. delete all facets in Fconflict(pr) from C
-					// 9. Walk along the boundary of the visible region of pr (which consists exactly of the facets in Fconflict(pr)) and create a list L of horizon edges in order.
-					// 10. for all e ∈ L
-						// 11. Connect e to pr by creating a triangluar facet f3
-							// 12. if f is coplanar with its neighbor f‘ along e
-								//13. merge f and f‘ into one facet, whose conflict list is the same as that of f‘
+				if (horizonStart == nullptr || !(horizonStart->face == dcel.openFace && horizonStart->twin->face == dcel.openFace)) {
+					horizonStart = dcel.deleteFace(conflict->face->face); 
+				} else {
+					dcel.deleteFace(conflict->face->face);
+				}
+			}
+			// 9. Walk along the boundary of the visible region of pr (which consists exactly of the facets in Fconflict(pr)) and create a list L of horizon edges in order.
+			vector<DCELHalfEdge *> horizon;
+			
+			DCELHalfEdge * tempEdge = horizonStart;
+			while (tempEdge->next != horizonStart) {
+				horizon.push_back(tempEdge);
+				tempEdge = tempEdge->next;
+			}
+			horizon.push_back(tempEdge);
+
+			DCELVertex * newVertex = dcel.addVertex(point);
+
+			int i = 0;
+			// 10. for all e ∈ L
+			for (auto e : horizon) {
+				// 11. Connect e to pr by creating a triangluar facet f3
+				DCELHalfEdge * createdEdge = dcel.createEdge(e->origin, newVertex);
+				// 12. if f is coplanar with its neighbor f‘ along e	// skipped since we need triangles for OpenGL
+						//13. merge f and f‘ into one facet, whose conflict list is the same as that of f‘	// skipped since we need triangles for OpenGL
 							// 14. else 	// Determine conflicts for f:
-								// 15. Create a node for f in G.
-								// 16. Let f1 and f2 be the facets incident to e in the old convex hull.
-								// 17. P(e) <-- Pconflict(f1) U Pconflict(f2)
-								// 18. for all points p ∈ P(e)		
-									// 19. if f is visible from p
-										// add (p,f) to G
-					// 20. 	Delete the node corresponding to pr and the nodes corresponding to the facets in Fconflict(pr) from G, together with their incident arcs			
+				if (i == 0) {
+					// EMPTY
+				} else if(i == horizon.size() -1) {
+					// For the Edge 
+					{
+						// Face of edge
+						DCELFace * face = createdEdge->face;
+						// 15. Create a node for f in G.
+						ConflictFace * cF = G.createConflictFace(face);
+						// 16. Let f1 and f2 be the facets incident to e in the old convex hull.
+						DCELFace * f1 = e->oldFace;
+						DCELFace * f2 = e->twin->face;
+						// 17. P(e) <-- Pconflict(f1) U Pconflict(f2)
+						vector<Conflict*> conflictsf1 = G.createConflictFace(f1)->conflicts;
+						vector<Conflict*> conflictsf2 = G.createConflictFace(f2)->conflicts;
+
+						vector<ConflictPoint*> pconflictf1Uponflictf2;
+
+						for (Conflict* conflict : conflictsf1) {
+							bool isInside = false;
+							int i = 0;
+							while (!isInside && i < pconflictf1Uponflictf2.size()) {
+								isInside = (pconflictf1Uponflictf2[i] == conflict->point);
+							}
+							if (!isInside)
+								pconflictf1Uponflictf2.push_back(conflict->point);
+						}
+
+						for (Conflict* conflict : conflictsf2) {
+							bool isInside = false;
+							int i = 0;
+							while (!isInside && i < pconflictf1Uponflictf2.size()) {
+								isInside = (pconflictf1Uponflictf2[i] == conflict->point);
+							}
+							if (!isInside)
+								pconflictf1Uponflictf2.push_back(conflict->point);
+						}
+
+						// 18. for all points p ∈ P(e)		
+						for (ConflictPoint * p : pconflictf1Uponflictf2) {
+							// 19. if f is visible from p
+								// add (p,f) to G
+							G.checkForConflict(p, cF);
+						}
+					}
+
+					// For the Edge Twin
+					{
+						// Face of edge
+						DCELFace * face = createdEdge->twin->face;
+						// 15. Create a node for f in G.
+						ConflictFace * cF = G.createConflictFace(face);
+						// 16. Let f1 and f2 be the facets incident to e in the old convex hull.
+						DCELFace * f1 = horizon[0]->oldFace;
+						DCELFace * f2 = horizon[0]->twin->face;
+						// 17. P(e) <-- Pconflict(f1) U Pconflict(f2)
+						vector<Conflict*> conflictsf1 = G.createConflictFace(f1)->conflicts;
+						vector<Conflict*> conflictsf2 = G.createConflictFace(f2)->conflicts;
+
+						vector<ConflictPoint*> pconflictf1Uponflictf2;
+
+						for (Conflict* conflict : conflictsf1) {
+							bool isInside = false;
+							int i = 0;
+							while (!isInside && i < pconflictf1Uponflictf2.size()) {
+								isInside = (pconflictf1Uponflictf2[i] == conflict->point);
+							}
+							if (!isInside)
+								pconflictf1Uponflictf2.push_back(conflict->point);
+						}
+
+						for (Conflict* conflict : conflictsf2) {
+							bool isInside = false;
+							int i = 0;
+							while (!isInside && i < pconflictf1Uponflictf2.size()) {
+								isInside = (pconflictf1Uponflictf2[i] == conflict->point);
+							}
+							if (!isInside)
+								pconflictf1Uponflictf2.push_back(conflict->point);
+						}
+
+						// 18. for all points p ∈ P(e)		
+						for (ConflictPoint * p : pconflictf1Uponflictf2) {
+							// 19. if f is visible from p
+								// add (p,f) to G
+							G.checkForConflict(p, cF);
+						}
+
+					}
+
+				}
+				else {
+					// Face of edge
+					DCELFace * face = createdEdge->face;
+					// 15. Create a node for f in G.
+					ConflictFace * cF = G.createConflictFace(face);
+						// 16. Let f1 and f2 be the facets incident to e in the old convex hull.
+						DCELFace * f1 = e->oldFace;
+						DCELFace * f2 = e->twin->face;
+						// 17. P(e) <-- Pconflict(f1) U Pconflict(f2)
+						vector<Conflict*> conflictsf1 = G.createConflictFace(f1)->conflicts;
+						vector<Conflict*> conflictsf2 = G.createConflictFace(f2)->conflicts;
+
+						vector<ConflictPoint*> pconflictf1Uponflictf2;
+
+						for (Conflict* conflict : conflictsf1) {
+							bool isInside = false;
+							int i = 0;
+							while (!isInside && i < pconflictf1Uponflictf2.size()) {
+								isInside = (pconflictf1Uponflictf2[i] == conflict->point);
+							}
+							if (!isInside)
+								pconflictf1Uponflictf2.push_back(conflict->point);
+						}
+
+						for (Conflict* conflict : conflictsf2) {
+							bool isInside = false;
+							int i = 0;
+							while (!isInside && i < pconflictf1Uponflictf2.size()) {
+								isInside = (pconflictf1Uponflictf2[i] == conflict->point);
+							}
+							if (!isInside)
+								pconflictf1Uponflictf2.push_back(conflict->point);
+						}
+
+						// 18. for all points p ∈ P(e)		
+						for (ConflictPoint * p : pconflictf1Uponflictf2) {
+							// 19. if f is visible from p
+								// add (p,f) to G
+							G.checkForConflict(p,cF);
+						}
+				}
+				i++;
+			}
+			// 20. 	Delete the node corresponding to pr and the nodes corresponding to the facets in Fconflict(pr) from G, together with their incident arcs		
+			G.deleteCorrespondingNodes(cP);
 		}
+		if (++run > 0) {
+			break;
+		}
+
 	}
 
 	// 21. return C (convex hull)
 	return dcel;
 };
+
+
 
 #endif // !CONVEX_HULL_H
 

@@ -199,7 +199,7 @@ int main(int argc, char* argv[]) {
 						Visualisation &visu = Visualisation::getInstance(); // initialize the singleton
 						visu.addRender(pointSet, GL_POINTS);
 						visu.addRender(&dcel, wireFrame);
-
+						dcel.printDCEL();
 						visu.render();
 					}
 					break;

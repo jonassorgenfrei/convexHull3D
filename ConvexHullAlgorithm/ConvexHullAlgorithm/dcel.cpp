@@ -413,6 +413,7 @@ DCELHalfEdge* DCEL::deleteFace(DCELFace * face) {
 			deleteEdge(halfEdge->origin, halfEdge->next->origin);
 		}
 		else {
+			halfEdge->oldFace = halfEdge->face;
 			halfEdge->face = openFace;
 			retEdge = halfEdge;
 		}

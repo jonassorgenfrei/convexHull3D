@@ -14,6 +14,7 @@ class DCELHalfEdge {
 public:
 	DCELVertex * origin; // origin from which the HalfEdge starts
 	DCELFace * face;    //face on the left side
+	DCELFace * oldFace;	// for Convex Hull Computation, after deletion
 	DCELHalfEdge * twin; //points to the HaldEdge on the right side of the HalfEdge
 	DCELHalfEdge * next; //points to the HaldEdge that starts from h->twin->origin
 						 //ends at the next vertex h->face

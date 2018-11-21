@@ -50,6 +50,7 @@ int Visualisation::init()
 	// ------------------------------------
 	this->camera = Camera(glm::vec3(10, 10, 35.0f));
 	this->geoShader = Shader(".\\shader\\vertexShader.vert", ".\\shader\\fragmentShader.frag", ".\\shader\\geometryShader.geom");
+	//this->geoShader = Shader(".\\shader\\vertexShader.vert", ".\\shader\\fragmentShader.frag");
 	this->pointShader = Shader(".\\shader\\pointShader.vert", ".\\shader\\pointShader.frag");
 	return 1;
 }
@@ -84,7 +85,7 @@ void Visualisation::addRender(DCEL * dcel, bool wireFrame)
 	for (DCELFace * surface : dcel->surfaces) {
 		vector<DCELVertex*> surfaceVertices = surface->getBoundary();
 		if (surfaceVertices.size() == 3) {
-		
+			
 			for (DCELVertex* vertex : surfaceVertices) {
 				int idx = getIndex(dcelVertices, vertex);
 				if (idx == -1) {
@@ -187,6 +188,14 @@ void Visualisation::render()
 		float currentFrame = (float)glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+
+		if (!this->wireFrame) {
+			// Back-Face Culling
+			glEnable(GL_CULL_FACE);
+		} else {
+			// No Back-Face Culling
+			glDisable(GL_CULL_FACE);
+		}
 
 		// input
 		// -----

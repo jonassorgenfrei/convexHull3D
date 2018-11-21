@@ -92,6 +92,12 @@ public:
 		return nCF;
 	}
 
+	void deleteCorrespondingNodes(ConflictPoint * point) {
+		// Find Conflicts 
+			// Loop through conflicts 
+			
+	}
+
 private:
 	vector<ConflictPoint*> conflictPoints;
 	vector<ConflictFace*> conflictFaces;
