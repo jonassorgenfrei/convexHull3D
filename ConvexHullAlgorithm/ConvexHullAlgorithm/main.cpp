@@ -159,6 +159,16 @@ int main(int argc, char* argv[]) {
 
 		// Print Generated Points
 		std::cout << "Generated Points (" << pointSet.size() << "):" << std::endl;
+		pointSet.clear();
+		pointSet.push_back(new Point3D(100, 100, -100));
+		pointSet.push_back(new Point3D(100, 100, 100));
+		pointSet.push_back(new Point3D(100, -100, -100));
+		pointSet.push_back(new Point3D(100, -100, 100));
+		pointSet.push_back(new Point3D(-100, 100, 100));
+		pointSet.push_back(new Point3D(-100, 100, -100));
+		pointSet.push_back(new Point3D(-100, -100, 100));
+		pointSet.push_back(new Point3D(-100, -100, -100));
+
 		#if DEB
 		for (auto p : pointSet) {
 			p->print();

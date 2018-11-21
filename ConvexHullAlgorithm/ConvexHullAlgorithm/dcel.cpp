@@ -57,7 +57,6 @@ int DCEL::getVerticeCount()
  * creating a new face.
  */
 DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
-	//this->printDCEL();
 	// if already connected
 	if (v1 == v2 || isConnected(v1, v2)) {
 		return nullptr;
@@ -399,12 +398,13 @@ DCELHalfEdge* DCEL::deleteFace(DCELFace * face) {
 	while (idx < this->surfaces.size() && this->surfaces[idx] != face) {
 		idx++;
 	}
+
 	// If face is not part of the curretn DCEL
 	if (idx == this->surfaces.size()) {
 		return nullptr;
 	}
 	
-	DCELHalfEdge * retEdge = new DCELHalfEdge();
+	DCELHalfEdge * retEdge = nullptr;
 
 	vector<DCELHalfEdge*> hB = face->getEdgeBoundary();
 	for (DCELHalfEdge * halfEdge : hB) {
@@ -414,6 +414,7 @@ DCELHalfEdge* DCEL::deleteFace(DCELFace * face) {
 		}
 		else {
 			halfEdge->oldFace = halfEdge->face;
+			halfEdge->face->saveBoundary();
 			halfEdge->face = openFace;
 			retEdge = halfEdge;
 		}

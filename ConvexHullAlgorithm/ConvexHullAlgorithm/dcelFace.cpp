@@ -9,6 +9,9 @@
 */
 vector<DCELVertex*> DCELFace::getBoundary() {
 	vector<DCELVertex*> tempVertices;
+	if (this->edge == nullptr) {
+		return tempVertices;
+	}
 	DCELVertex * tempVertex;
 	DCELHalfEdge * tempEdge;
 
@@ -50,6 +53,20 @@ vector<DCELHalfEdge*> DCELFace::getEdgeBoundary()
 	}
 
 	return tempEdges;
+}
+
+void DCELFace::saveBoundary()
+{
+	this->savedBoundary = getBoundary();
+}
+
+vector<DCELVertex*> DCELFace::getSavedBoundary()
+{
+	if (this->savedBoundary.size() == 0) {
+		saveBoundary();
+	}
+
+	return this->savedBoundary;
 }
 
 /**

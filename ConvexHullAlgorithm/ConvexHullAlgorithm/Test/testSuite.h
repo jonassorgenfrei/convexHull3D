@@ -547,6 +547,65 @@ private:
 			errorCheck(dcel.getVerticeCount() == 0, testClass, "deleteFace", testID);
 			testID++;
 		}
+
+		/* Test-ID:		#8
+		 * Class:		dcel.h
+		 * Function:	createEdges
+		 * All edges connected to faces
+		 */
+		{
+
+			Point * point1 = new Point3D(14.1697, 17.7721, 15.6413);
+			Point * point2 = new Point3D(12.8306, 8.39137, 11.7557);
+			Point * point3 = new Point3D(7.21335, 7.10898, 9.85198);
+			Point * point4 = new Point3D(0.615253, 2.51289, 10.7682);
+
+			DCEL dcel = DCEL();
+			DCELVertex * v1 = dcel.addVertex(point1);
+			DCELVertex * v2 = dcel.addVertex(point2);
+			DCELVertex * v3 = dcel.addVertex(point3);
+			DCELVertex * v4 = dcel.addVertex(point4);
+
+			Vec3 a = { point2->getX() - point1->getX(),
+					  point2->getY() - point1->getY(),
+					  point2->getZ() - point1->getZ()
+			};
+			Vec3 b = { point3->getX() - point1->getX(),
+					  point3->getY() - point1->getY(),
+					  point3->getZ() - point1->getZ() };
+
+			Vec3 c = { point4->getX() - point1->getX(),
+					  point4->getY() - point1->getY(),
+					  point4->getZ() - point1->getZ() };
+
+			double orientation = dotVec3(normalize(c), normalize(crossVec3(a, b)));
+			// if orientation == 0, points are coplanar!!
+			DCELHalfEdge * h1;
+			DCELHalfEdge * h2;
+			DCELHalfEdge * h3;
+
+			if (orientation > 0) {
+				h1 = dcel.createEdge(v1, v2);
+				h2 = dcel.createEdge(v2, v3);
+				h3 = dcel.createEdge(v3, v1);
+			}
+			else {
+				h1 = dcel.createEdge(v1, v3);
+				h2 = dcel.createEdge(v3, v2);
+				h3 = dcel.createEdge(v2, v1);
+			}
+			DCELHalfEdge * h4 = dcel.createEdge(v1, v4);
+			DCELHalfEdge * h5 = dcel.createEdge(v2, v4);
+			DCELHalfEdge * h6 = dcel.createEdge(v3, v4);
+
+			errorCheck(h1->face != nullptr && h1->face  != dcel.openFace, testClass, "createEdges", testID);
+			errorCheck(h2->face != nullptr && h2->face != dcel.openFace, testClass, "createEdges", testID);
+			errorCheck(h3->face != nullptr && h3->face != dcel.openFace, testClass, "createEdges", testID);
+			errorCheck(h4->face != nullptr && h4->face != dcel.openFace, testClass, "createEdges", testID);
+			errorCheck(h5->face != nullptr && h5->face != dcel.openFace, testClass, "createEdges", testID);
+			errorCheck(h6->face != nullptr && h6->face != dcel.openFace, testClass, "createEdges", testID);
+			testID++;
+		}
 	}
 
 	/* Test for the Conflict Graph */
@@ -640,13 +699,82 @@ private:
 		/* Test-ID:		#1
 		 * Class:		convexHull.h
 		 * Function:	convexHull3D
-		 * DESCRIPTION
+		 * CH3 with 4 Points 
 		 */
 		{
-			
+			vector<Point * > vec;
+			vec.push_back(new Point3D(  0.00, 100.000,   0.000));
+			vec.push_back(new Point3D(-81.65, -33.333, -47.140));
+			vec.push_back(new Point3D( 81.65, -33.333, -47.140));
+			vec.push_back(new Point3D(  0.00, -33.333,  94.281));
+
+			DCEL dcel = ConvexHull3D(vec);
+
+			errorCheck(dcel.getVerticeCount() == 4, testClass, "ConvexHull3D", testID);
+			errorCheck(dcel.getEdgeCount() == 12, testClass, "ConvexHull3D", testID);
+			errorCheck(dcel.getFaceCount() == 4, testClass, "ConvexHull3D", testID);
+			testID++;
+		}
+
+
+		/* Test-ID:		#2
+		 * Class:		convexHull.h
+		 * Function:	convexHull3D
+		 * CH3 with 4 Points with 5 Inside Points
+		 */
+		{
+		vector<Point * > vec;
+			vec.push_back(new Point3D(  0.00, 100.000,   0.000));
+			vec.push_back(new Point3D(-81.65, -33.333, -47.140));
+			vec.push_back(new Point3D( 81.65, -33.333, -47.140));
+			vec.push_back(new Point3D(  0.00, -33.333,  94.281));
+			vec.push_back(new Point3D(  0.00,   0.000,   0.000));
+			vec.push_back(new Point3D( 10.00,  10.000,  10.000));
+			vec.push_back(new Point3D(-10.00, -10.000, -10.000));
+			vec.push_back(new Point3D( 15.00,   0.000, -10.000));
+			vec.push_back(new Point3D(  -0.08, -13.501, 67.402));
+
+			vector<Point *> res = ConvexHull2D(vec);
+
+			DCEL dcel = ConvexHull3D(vec);
+
+			errorCheck(dcel.getVerticeCount() == 4, testClass, "ConvexHull3D", testID);
+			errorCheck(dcel.getEdgeCount() == 12, testClass, "ConvexHull3D", testID);
+			errorCheck(dcel.getFaceCount() == 4, testClass, "ConvexHull3D", testID);
 
 			testID++;
 		}
+
+		/* Test-ID:		#3
+		 * Class:		convexHull.h
+		 * Function:	convexHull3D
+		 * CH3 with Cube
+		 */
+		{
+				vector<Point * > vec;
+				vec.push_back(new Point3D( 100,  100, -100));
+				vec.push_back(new Point3D( 100,  100,  100));
+				vec.push_back(new Point3D( 100, -100, -100));
+				vec.push_back(new Point3D( 100, -100,  100));
+				vec.push_back(new Point3D(-100,  100,  100));
+				vec.push_back(new Point3D(-100,  100, -100));
+				vec.push_back(new Point3D(-100, -100,  100));
+				vec.push_back(new Point3D(-100, -100, -100));
+
+				DCEL dcel = ConvexHull3D(vec);
+
+				dcel.printDCELInfo();
+				dcel.printDCEL();
+
+				errorCheck(dcel.getVerticeCount() == 8, testClass, "ConvexHull3D", testID);
+				errorCheck(dcel.getEdgeCount() == 36, testClass, "ConvexHull3D", testID);
+				errorCheck(dcel.getFaceCount() == 12, testClass, "ConvexHull3D", testID);
+
+				testID++;
+		
+		}
+
+		errorCheck(false, testClass, "TESTS SUCCEEDED", testID);
 	}
 
 	/* ---------- DON'T TOUCH THIS ---------- */

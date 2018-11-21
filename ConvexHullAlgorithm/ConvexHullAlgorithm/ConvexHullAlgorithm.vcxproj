@@ -148,12 +148,14 @@
     <ClInclude Include="visualisation.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Quelle.tx" />
     <None Include="Shader\fragmentShader.frag" />
     <None Include="shader\geometryShader.geom" />
     <None Include="shader\pointShader.frag" />
     <None Include="shader\pointShader.vert" />
     <None Include="Shader\vertexShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="debug.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

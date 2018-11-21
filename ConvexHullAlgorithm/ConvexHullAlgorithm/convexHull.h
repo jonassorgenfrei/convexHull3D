@@ -175,11 +175,17 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 
 	// theortical 4 Faces then!
 	// Delete from input set
-	points.erase(points.begin() + p1);
-	points.erase(points.begin() + p2);
-	points.erase(points.begin() + p3);
-	points.erase(points.begin() + p4);
+	if (p4 > p3) {
+		points.erase(points.begin() + p4);
+		points.erase(points.begin() + p3);
+	}
+	else {
+		points.erase(points.begin() + p3);
+		points.erase(points.begin() + p4);
+	}
 	
+	points.erase(points.begin() + p2);
+	points.erase(points.begin() + p1);
 	// 3. comput random permutation of points p5, p6, …, pn of the remaining points
 
 	// TODO! 
@@ -194,27 +200,36 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 			G.checkForConflict(cP, cF);
 		}
 	}
+
+
 	int run = 0; // TODO DEBUG DELETE 
 	//5. for r = 5; r < n; r++		
 	for (Point * point : points) {
+		
 		//6. Insert pr into C:
 		ConflictPoint * cP = G.createConflictPoint(point);
 		// 7. if Fconflict(pr) is not empty	// pr lies outside of C
+		printf("%d", cP->conflicts.size());
 		if (cP->conflicts.size() != 0) {
 			DCELHalfEdge * horizonStart = nullptr;
+
+			printf("--------------/n LAST \n ----------");
 			for (auto conflict : cP->conflicts) {
+				conflict->face->face->printFace();
+				DCELHalfEdge * half = dcel.deleteFace(conflict->face->face);
 				// 8. delete all facets in Fconflict(pr) from C
-				if (horizonStart == nullptr || !(horizonStart->face == dcel.openFace && horizonStart->twin->face == dcel.openFace)) {
-					horizonStart = dcel.deleteFace(conflict->face->face); 
-				} else {
-					dcel.deleteFace(conflict->face->face);
-				}
+				if ((horizonStart == nullptr || (half->twin->face != dcel.openFace) )&& half!= nullptr) {
+					horizonStart = half;
+				} 
 			}
+			
 			// 9. Walk along the boundary of the visible region of pr (which consists exactly of the facets in Fconflict(pr)) and create a list L of horizon edges in order.
 			vector<DCELHalfEdge *> horizon;
 			
 			DCELHalfEdge * tempEdge = horizonStart;
 			while (tempEdge->next != horizonStart) {
+			//	tempEdge->printEdge(1);
+			//	printf("\n");
 				horizon.push_back(tempEdge);
 				tempEdge = tempEdge->next;
 			}
@@ -253,6 +268,7 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 							int i = 0;
 							while (!isInside && i < pconflictf1Uponflictf2.size()) {
 								isInside = (pconflictf1Uponflictf2[i] == conflict->point);
+								i++;
 							}
 							if (!isInside)
 								pconflictf1Uponflictf2.push_back(conflict->point);
@@ -263,6 +279,7 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 							int i = 0;
 							while (!isInside && i < pconflictf1Uponflictf2.size()) {
 								isInside = (pconflictf1Uponflictf2[i] == conflict->point);
+								i++;
 							}
 							if (!isInside)
 								pconflictf1Uponflictf2.push_back(conflict->point);
@@ -296,6 +313,7 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 							int i = 0;
 							while (!isInside && i < pconflictf1Uponflictf2.size()) {
 								isInside = (pconflictf1Uponflictf2[i] == conflict->point);
+								i++;
 							}
 							if (!isInside)
 								pconflictf1Uponflictf2.push_back(conflict->point);
@@ -306,6 +324,7 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 							int i = 0;
 							while (!isInside && i < pconflictf1Uponflictf2.size()) {
 								isInside = (pconflictf1Uponflictf2[i] == conflict->point);
+								i++;
 							}
 							if (!isInside)
 								pconflictf1Uponflictf2.push_back(conflict->point);
@@ -340,6 +359,7 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 							int i = 0;
 							while (!isInside && i < pconflictf1Uponflictf2.size()) {
 								isInside = (pconflictf1Uponflictf2[i] == conflict->point);
+								i++;
 							}
 							if (!isInside)
 								pconflictf1Uponflictf2.push_back(conflict->point);
@@ -350,11 +370,12 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 							int i = 0;
 							while (!isInside && i < pconflictf1Uponflictf2.size()) {
 								isInside = (pconflictf1Uponflictf2[i] == conflict->point);
+								i++;
 							}
 							if (!isInside)
 								pconflictf1Uponflictf2.push_back(conflict->point);
 						}
-
+						
 						// 18. for all points p ∈ P(e)		
 						for (ConflictPoint * p : pconflictf1Uponflictf2) {
 							// 19. if f is visible from p
@@ -367,9 +388,9 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 			// 20. 	Delete the node corresponding to pr and the nodes corresponding to the facets in Fconflict(pr) from G, together with their incident arcs		
 			G.deleteCorrespondingNodes(cP);
 		}
-		if (++run > 0) {
+
+		if(++run > 3)
 			break;
-		}
 
 	}
 

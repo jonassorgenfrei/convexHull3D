@@ -19,7 +19,7 @@ class DCELFace {
 public:
 	DCELHalfEdge * edge; // points to a single HaldEdge that has this Face object as its face
 	DCELFace() : edge(nullptr) {}
-	
+	vector<DCELVertex*> savedBoundary;
 
 	/**
 	* Given a face, return its boundary vertices in CW order
@@ -27,6 +27,10 @@ public:
 	vector<DCELVertex*> getBoundary();
 
 	vector<DCELHalfEdge *> getEdgeBoundary();
+
+	void saveBoundary();
+
+	vector<DCELVertex *> getSavedBoundary();
 
 	/**
 	* Given a face, return a list of all adjacent faces
