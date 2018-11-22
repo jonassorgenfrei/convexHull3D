@@ -29,6 +29,8 @@ public:
 		convexHull3DTest();
 		dcelTest();
 		conflictGraphTest();
+
+	//	errorCheck(false, "TESTCLASS", "TESTS SUCCEEDED", 815);
 	}
 private:
 	/* ---------- Add Test Collections as Functions ---------- */
@@ -689,6 +691,95 @@ private:
 
 			testID++;
 		}
+
+
+		/* Test-ID:		#1
+		 * Class:		conflictGraph.h
+		 * Function:	deleteCorrespondingNodes
+		 * deleteCorrespondingNodes 
+		 */
+		{
+			ConflictGraph G = ConflictGraph();
+			ConflictPoint * p1 = new ConflictPoint(new Point3D());
+			G.conflictPoints.push_back(p1);
+			ConflictPoint * p2 = new ConflictPoint(new Point3D());
+			G.conflictPoints.push_back(p2);
+			ConflictPoint * p3 = new ConflictPoint(new Point3D());
+			G.conflictPoints.push_back(p3);
+			ConflictPoint * p4 = new ConflictPoint(new Point3D());
+			G.conflictPoints.push_back(p4);
+			ConflictPoint * p5 = new ConflictPoint(new Point3D());
+			G.conflictPoints.push_back(p5);
+			ConflictPoint * p6 = new ConflictPoint(new Point3D());
+			G.conflictPoints.push_back(p6);
+
+
+			ConflictFace * f1 = new ConflictFace(new DCELFace());
+			G.conflictFaces.push_back(f1);
+			ConflictFace * f2 = new ConflictFace(new DCELFace());
+			G.conflictFaces.push_back(f2);
+			ConflictFace * f3 = new ConflictFace(new DCELFace());
+			G.conflictFaces.push_back(f3);
+			ConflictFace * f4 = new ConflictFace(new DCELFace());
+			G.conflictFaces.push_back(f4);
+			ConflictFace * f5 = new ConflictFace(new DCELFace());
+			G.conflictFaces.push_back(f5);
+			
+			Conflict * c1 = new Conflict(p1, f2);
+			p1->conflicts.push_back(c1);
+			f2->conflicts.push_back(c1);
+
+			Conflict * c2 = new Conflict(p2, f2);
+			p2->conflicts.push_back(c2);
+			f2->conflicts.push_back(c2);
+
+			Conflict * c3 = new Conflict(p4, f4);
+			p4->conflicts.push_back(c3);
+			f4->conflicts.push_back(c3);
+
+			Conflict * c4 = new Conflict(p5, f1);
+			p5->conflicts.push_back(c4);
+			f1->conflicts.push_back(c4);
+
+			Conflict * c5 = new Conflict(p5, f2);
+			p5->conflicts.push_back(c5);
+			f2->conflicts.push_back(c5);
+
+			Conflict * c6 = new Conflict(p5, f4);
+			p5->conflicts.push_back(c6);
+			f4->conflicts.push_back(c6);
+
+			Conflict * c7 = new Conflict(p5, f5);
+			p5->conflicts.push_back(c7);
+			f5->conflicts.push_back(c7);
+
+			Conflict * c8 = new Conflict(p6, f3);
+			p6->conflicts.push_back(c8);
+			f3->conflicts.push_back(c8);
+
+			Conflict * c9 = new Conflict(p6, f4);
+			p6->conflicts.push_back(c9);
+			f4->conflicts.push_back(c9);
+
+			Conflict * c10 = new Conflict(p6, f5);
+			p6->conflicts.push_back(c10);
+			f5->conflicts.push_back(c10);
+
+			errorCheck(p5->conflicts.size() == 4, testClass, "deleteCorrespondingNodes 1", testID);
+			errorCheck(p3->conflicts.size() == 0, testClass, "deleteCorrespondingNodes 2", testID);
+
+			G.deleteCorrespondingNodes(p5);
+			
+			errorCheck(G.conflictPoints.size() == 5, testClass, "deleteCorrespondingNodes 3", testID);
+			errorCheck(G.conflictFaces.size() == 1, testClass, "deleteCorrespondingNodes 4", testID);
+			errorCheck(p1->conflicts.size() == 0, testClass, "deleteCorrespondingNodes 5", testID);
+			errorCheck(p2->conflicts.size() == 0, testClass, "deleteCorrespondingNodes 6", testID);
+			errorCheck(p6->conflicts.size() == 1, testClass, "deleteCorrespondingNodes 7", testID);
+			errorCheck(p6->conflicts[0] == c8, testClass, "deleteCorrespondingNodes 8", testID);
+
+			testID++;
+		}
+
 	}
 
 	/* Test for the convex hull 3D algorithm implmented in convexHull.h */
@@ -763,9 +854,6 @@ private:
 
 				DCEL dcel = ConvexHull3D(vec);
 
-				dcel.printDCELInfo();
-				dcel.printDCEL();
-
 				errorCheck(dcel.getVerticeCount() == 8, testClass, "ConvexHull3D", testID);
 				errorCheck(dcel.getEdgeCount() == 36, testClass, "ConvexHull3D", testID);
 				errorCheck(dcel.getFaceCount() == 12, testClass, "ConvexHull3D", testID);
@@ -774,7 +862,108 @@ private:
 		
 		}
 
-		errorCheck(false, testClass, "TESTS SUCCEEDED", testID);
+		/* Test-ID:		#4
+		 * Class:		convexHull.h
+		 * Function:	convexHull3D
+		 * CH3 with Cube & Interior points
+		 */
+		{
+			vector<Point * > vec;
+			vec.push_back(new Point3D(100, 100, -100));
+			vec.push_back(new Point3D(100, 100, 100));
+			vec.push_back(new Point3D(100, -100, -100));
+			vec.push_back(new Point3D(100, -100, 100));
+			vec.push_back(new Point3D(0, -12, -100));
+			vec.push_back(new Point3D(0, -100, 15));
+			vec.push_back(new Point3D(-100, 100, 100));
+			vec.push_back(new Point3D(-100, 100, -100));
+			vec.push_back(new Point3D(-100, -100, 100));
+			vec.push_back(new Point3D(-100, -100, -100));
+			vec.push_back(new Point3D(-50, 50, -20));
+			vec.push_back(new Point3D(-10, -10, 10));
+			
+			DCEL dcel = ConvexHull3D(vec);
+
+			errorCheck(dcel.getVerticeCount() == 8, testClass, "ConvexHull3D", testID);
+			errorCheck(dcel.getEdgeCount() == 36, testClass, "ConvexHull3D", testID);
+			errorCheck(dcel.getFaceCount() == 12, testClass, "ConvexHull3D", testID);
+
+			testID++;
+
+		}
+		
+		/* Test-ID:		#5
+		 * Class:		convexHull.h
+		 * Function:	convexHull3D
+		 * CH3 with Icosa Platonic Object
+		 */
+		{
+			vector<Point * > vec;
+			vec.push_back(new Point3D(0, 52.573, 85.065));
+			vec.push_back(new Point3D(-52.573, 85.065, 0));
+			vec.push_back(new Point3D(52.573, 85.065, 0));
+			vec.push_back(new Point3D(0, 52.573, -85.065));
+			vec.push_back(new Point3D(85.065, 0, -52.573));
+			vec.push_back(new Point3D(85.065, 0, 52.573));
+			vec.push_back(new Point3D(-85.065, 0, -52.573));
+			vec.push_back(new Point3D(0, -52.573, -85.065));
+			vec.push_back(new Point3D(52.573, -85.065, 0));
+			vec.push_back(new Point3D(-52.573, -85.065, 0));
+			vec.push_back(new Point3D(0, -52.573, 85.065));
+			vec.push_back(new Point3D(-85.065, 0, 52.573));
+			
+			DCEL dcel = ConvexHull3D(vec);
+
+			errorCheck(dcel.getVerticeCount() == 12, testClass, "ConvexHull3D", testID);
+			errorCheck(dcel.getEdgeCount() == 60, testClass, "ConvexHull3D", testID);
+			errorCheck(dcel.getFaceCount() == 20, testClass, "ConvexHull3D", testID);
+
+			testID++;
+
+		}
+
+		/* Test-ID:		#6
+		 * Class:		convexHull.h
+		 * Function:	convexHull3D
+		 * CH3 with Dodeca Platonic Object
+		 */
+		{
+			vector<Point * > vec;
+			vec.push_back(new Point3D(0, 35.682, -93.417));
+			vec.push_back(new Point3D(0,-35.682, -93.417));
+			vec.push_back(new Point3D(-93.417,0,-35.682));
+			vec.push_back(new Point3D(-93.417,0,35.682));
+			vec.push_back(new Point3D(0,35.682,93.417));
+			vec.push_back(new Point3D(0,-35.682,93.417));
+			vec.push_back(new Point3D(-35.682,-93.417,0));
+			vec.push_back(new Point3D(-57.735,-57.735,57.735));
+			vec.push_back(new Point3D(-57.735, -57.735, -57.735));
+			vec.push_back(new Point3D(35.682,-93.417,0));
+			vec.push_back(new Point3D(57.735,-57.735,57.735));
+			vec.push_back(new Point3D(93.417,0,35.682));
+			vec.push_back(new Point3D(57.753, -57.753, -57.753));
+			vec.push_back(new Point3D(93.417, 0, -35.682));
+			vec.push_back(new Point3D(57.753, 57.753, -57.753));
+			vec.push_back(new Point3D(57.753, 57.753, 57.753));
+			vec.push_back(new Point3D(35.682, 93.417, 0));
+			vec.push_back(new Point3D(-57.753, 57.753, 57.753));
+			vec.push_back(new Point3D(-57.753, 57.753, -57.753));
+			vec.push_back(new Point3D(-35.682, 93.417, 0));
+
+			DCEL dcel = ConvexHull3D(vec);
+
+			errorCheck(dcel.getVerticeCount() == 20, testClass, "ConvexHull3D Vert", testID);
+			errorCheck(dcel.getEdgeCount() == 108, testClass, "ConvexHull3D Edge", testID);
+			errorCheck(dcel.getFaceCount() == 36, testClass, "ConvexHull3D Face", testID);
+
+			testID++;
+		}
+
+
+		/* TODO: MORE TEST-CASES 
+			2 points with same coordinantes e.G. 
+		
+		*/
 	}
 
 	/* ---------- DON'T TOUCH THIS ---------- */

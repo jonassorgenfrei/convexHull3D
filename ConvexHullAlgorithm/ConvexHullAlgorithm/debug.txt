@@ -21,8 +21,6 @@ v8
   Edge {  Start: v3 End: v2  }
   Edge {  Start: v1 End: v3  }
   Edge {  Start: v3 End: v1  }
-  Edge {  Start: v7 End: v3  }
-  Edge {  Start: v3 End: v7  }
   Edge {  Start: v1 End: v5  }
   Edge {  Start: v5 End: v1  }
   Edge {  Start: v7 End: v5  }
@@ -35,18 +33,20 @@ v8
   Edge {  Start: v4 End: v3  }
   Edge {  Start: v7 End: v4  }
   Edge {  Start: v4 End: v7  }
-  Edge {  Start: v7 End: v6  }
-  Edge {  Start: v6 End: v7  }
+  Edge {  Start: v4 End: v6  }
+  Edge {  Start: v6 End: v4  }
   Edge {  Start: v3 End: v6  }
   Edge {  Start: v6 End: v3  }
   Edge {  Start: v5 End: v6  }
   Edge {  Start: v6 End: v5  }
-  Edge {  Start: v3 End: v8  }
-  Edge {  Start: v8 End: v3  }
-  Edge {  Start: v7 End: v8  }
-  Edge {  Start: v8 End: v7  }
+  Edge {  Start: v7 End: v6  }
+  Edge {  Start: v6 End: v7  }
   Edge {  Start: v4 End: v8  }
   Edge {  Start: v8 End: v4  }
+  Edge {  Start: v6 End: v8  }
+  Edge {  Start: v8 End: v6  }
+  Edge {  Start: v7 End: v8  }
+  Edge {  Start: v8 End: v7  }
  }
 
  Face: {
@@ -82,23 +82,33 @@ Face {
 }
 Face {
  Edge {  Start: v3 End: v6 }
- Edge {  Start: v6 End: v7 }
- Edge {  Start: v7 End: v8 }
- Edge {  Start: v8 End: v3 }
+ Edge {  Start: v6 End: v4 }
+ Edge {  Start: v4 End: v3 }
 }
 Face {
+ Edge {  Start: v5 End: v6 }
+ Edge {  Start: v6 End: v3 }
+ Edge {  Start: v3 End: v5 }
+}
+Face {
+ Edge {  Start: v7 End: v6 }
  Edge {  Start: v6 End: v5 }
  Edge {  Start: v5 End: v7 }
- Edge {  Start: v7 End: v6 }
 }
 Face {
- Edge {  Start: v5 End: v6 }                                                    
- Edge {  Start: v6 End: v3 }
- Edge {  Start: v3 End: v5 }                                                    }
-Face {
+ Edge {  Start: v6 End: v8 }
  Edge {  Start: v8 End: v4 }
- Edge {  Start: v4 End: v3 }
- Edge {  Start: v3 End: v8 }
+ Edge {  Start: v4 End: v6 }
+}
+Face {
+ Edge {  Start: v8 End: v7 }
+ Edge {  Start: v7 End: v4 }
+ Edge {  Start: v4 End: v8 }
+}
+Face {
+ Edge {  Start: v7 End: v8 }
+ Edge {  Start: v8 End: v6 }
+ Edge {  Start: v6 End: v7 }
 }
  }
 

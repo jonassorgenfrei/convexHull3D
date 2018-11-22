@@ -244,6 +244,7 @@ void Visualisation::render()
 				glDrawElements(drawObj.mode, drawObj.count, GL_UNSIGNED_INT, 0);
 				if (drawObj.wireFrame && this->wireFrame)
 					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 			}
 		}
 				

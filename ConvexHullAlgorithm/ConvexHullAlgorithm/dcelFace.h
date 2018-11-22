@@ -28,10 +28,6 @@ public:
 
 	vector<DCELHalfEdge *> getEdgeBoundary();
 
-	void saveBoundary();
-
-	vector<DCELVertex *> getSavedBoundary();
-
 	/**
 	* Given a face, return a list of all adjacent faces
 	*/

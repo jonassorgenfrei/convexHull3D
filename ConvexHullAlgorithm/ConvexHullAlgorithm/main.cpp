@@ -32,7 +32,7 @@ typedef enum SPACE {TWO_DIM, THREE_DIM} Space;
 // Which space we are operating in
 Space space = THREE_DIM;
 // How many input points we want to calculate
-int pointCount = 50;
+int pointCount = 400;
 // Visualize Result
 bool vis = false;
 // run Convex Hull Algorithm
@@ -159,15 +159,6 @@ int main(int argc, char* argv[]) {
 
 		// Print Generated Points
 		std::cout << "Generated Points (" << pointSet.size() << "):" << std::endl;
-		pointSet.clear();
-		pointSet.push_back(new Point3D(100, 100, -100));
-		pointSet.push_back(new Point3D(100, 100, 100));
-		pointSet.push_back(new Point3D(100, -100, -100));
-		pointSet.push_back(new Point3D(100, -100, 100));
-		pointSet.push_back(new Point3D(-100, 100, 100));
-		pointSet.push_back(new Point3D(-100, 100, -100));
-		pointSet.push_back(new Point3D(-100, -100, 100));
-		pointSet.push_back(new Point3D(-100, -100, -100));
 
 		#if DEB
 		for (auto p : pointSet) {
@@ -209,7 +200,6 @@ int main(int argc, char* argv[]) {
 						Visualisation &visu = Visualisation::getInstance(); // initialize the singleton
 						visu.addRender(pointSet, GL_POINTS);
 						visu.addRender(&dcel, wireFrame);
-						dcel.printDCEL();
 						visu.render();
 					}
 					break;
@@ -217,7 +207,6 @@ int main(int argc, char* argv[]) {
 					break;
 			}
 		}
-		
 	} catch (const std::exception& e) {
 		std::cout << e.what() << std::endl;
 	}

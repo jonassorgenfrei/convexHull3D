@@ -62,11 +62,14 @@ public:
 
 class ConflictGraph {
 public:
+	vector<ConflictPoint*> conflictPoints;
+	vector<ConflictFace*> conflictFaces;
+
 	ConflictGraph() {};
 
 	Conflict * checkForConflict(ConflictPoint * point, ConflictFace * face) {
 		// Check on Which side of the face the Point lies
-		vector<DCELVertex*> vertices = face->face->getSavedBoundary();
+		vector<DCELVertex*> vertices = face->face->getBoundary();
 		if(vertices.size() > 0){
 			Vec3 faceNormal = crossVec3(
 				{ vertices[2]->point->getX() - vertices[1]->point->getX(),
@@ -80,7 +83,7 @@ public:
 							point->point->getY() - vertices[1]->point->getY(),
 							point->point->getZ() - vertices[1]->point->getZ()
 			};
-			if (dotVec3(faceNormal, vecFP) < 0.0) {
+			if (dotVec3(faceNormal, vecFP) <= 0.0) {
 				Conflict * conflict = new Conflict(point, face);
 				face->conflicts.push_back(conflict);
 				point->conflicts.push_back(conflict);
@@ -119,20 +122,23 @@ public:
 			ConflictFace * cf = c->face;
 			// Delete Conflicts of Faces
 			for (Conflict * fc : cf->conflicts) {
-				res = res && fc->point->deleteConflict(fc);
+				if(fc->point != point)
+					res = res && fc->point->deleteConflict(fc);
 			}
 			// Delete Face
 			int idx = -1;
 			int counter = 0;
 
 			while (idx < 0 && counter < this->conflictFaces.size()) {
-				if (this->conflictFaces[counter] == cf)
+				if (this->conflictFaces[counter] == cf) {
 					idx = counter;
+				}
 				counter++;
 			}
-
-			if (idx > -1)
+			if (idx > -1) {
+				
 				this->conflictFaces.erase(this->conflictFaces.begin() + idx);
+			}
 
 			res = res && (idx > -1);
 		}
@@ -142,8 +148,9 @@ public:
 		int counter = 0;
 
 		while (idx < 0 && counter < this->conflictPoints.size()) {
-			if (this->conflictPoints[counter] == point)
+			if (this->conflictPoints[counter] == point) {
 				idx = counter;
+			}
 			counter++;
 		}
 
@@ -156,8 +163,7 @@ public:
 	}
 
 private:
-	vector<ConflictPoint*> conflictPoints;
-	vector<ConflictFace*> conflictFaces;
+
 };
 
 #endif // !CONFLICT_GRAPH_H

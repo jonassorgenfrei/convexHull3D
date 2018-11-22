@@ -55,20 +55,6 @@ vector<DCELHalfEdge*> DCELFace::getEdgeBoundary()
 	return tempEdges;
 }
 
-void DCELFace::saveBoundary()
-{
-	this->savedBoundary = getBoundary();
-}
-
-vector<DCELVertex*> DCELFace::getSavedBoundary()
-{
-	if (this->savedBoundary.size() == 0) {
-		saveBoundary();
-	}
-
-	return this->savedBoundary;
-}
-
 /**
 * Given a face, return a list of all adjacent faces
 */

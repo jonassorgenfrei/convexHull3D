@@ -171,6 +171,8 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 	
 	/* --- Check if face has to be created ---*/
 
+	/* TODO: SOMETIME INFINITY LOOP*/
+
 	// check if new circle is closed
 	DCELHalfEdge * tempEdge = halfEdge;
 	bool twinEdgeInc = tempEdge->next == halfEdgeRet;
@@ -414,7 +416,6 @@ DCELHalfEdge* DCEL::deleteFace(DCELFace * face) {
 		}
 		else {
 			halfEdge->oldFace = halfEdge->face;
-			halfEdge->face->saveBoundary();
 			halfEdge->face = openFace;
 			retEdge = halfEdge;
 		}
@@ -477,7 +478,7 @@ bool DCEL::deleteEdge(DCELVertex * v1, DCELVertex * v2) {
 
 	if (tempEdge->twin->next != tempEdge) {
 		DCELHalfEdge * start = tempEdge;
-		DCELHalfEdge * temp = start;
+		DCELHalfEdge * temp = start; /* TODO: INFINITIY LOOP */
 		while (temp->next != start) {
 			temp = temp->next;
 		}
