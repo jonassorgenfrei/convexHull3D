@@ -7,32 +7,37 @@
 #include <iostream>
 
 class Point3D : public Point {
-	public:
-		Point3D(double x = 0.0, double y = 0.0, double z = 0.0) {
-			this->x = x;
-			this->y = y;
-			this->z = z;
-		};
+public:
+	Point3D(double x = 0.0, double y = 0.0, double z = 0.0) {
+		this->x = x;
+		this->y = y;
+		this->z = z;
+	};
 
-		void print() {
-			std::cout << "Point (" << this->x << "; " << this->y << "; " << this->z << ")";
+	void print() {
+		std::cout << "Point (" << this->x << "; " << this->y << "; " << this->z << ")";
 
-		}
+	}
 
-		double getX() {
-			return this->x;
-		};
+	double getX() {
+		return this->x;
+	};
 
-		double getY() {
-			return this->y;
-		};
+	double getY() {
+		return this->y;
+	};
 
-		double getZ() {
-			return this->z;
-		};
-		PointType getType() {
-			return PointType::POINT_3D;
-		}
+	double getZ() {
+		return this->z;
+	};
+	PointType getType() {
+		return PointType::POINT_3D;
+	}
+	
+	bool isEqual(Point * p) {
+		return cmpd(this->x, p->getX()) && cmpd(this->y, p->getY()) && cmpd(this->z, p->getZ());
+	}
+		
 	private:
 		double x;
 		double y;

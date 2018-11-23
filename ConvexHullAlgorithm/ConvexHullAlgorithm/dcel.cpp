@@ -23,6 +23,14 @@ DCEL::DCEL() {
 DCELVertex * DCEL::addVertex(Point * point) {
 	DCELVertex * newVertex = new DCELVertex();
 	newVertex->point = point;
+
+	/* Avoid Double Points */
+	for (auto v: this->vertices) {
+		if (v->point->isEqual(point)) {
+			return v;
+		}
+	}
+
 	this->vertices.push_back(newVertex);
 	return newVertex;
 }

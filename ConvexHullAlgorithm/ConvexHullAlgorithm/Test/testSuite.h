@@ -919,28 +919,27 @@ private:
 			errorCheck(dcel.getFaceCount() == 20, testClass, "ConvexHull3D", testID);
 
 			testID++;
-
 		}
 
 		/* Test-ID:		#6
 		 * Class:		convexHull.h
 		 * Function:	convexHull3D
-		 * CH3 with Dodeca Platonic Object
+		 * CH3 with Points with 
 		 */
 		{
 			vector<Point * > vec;
 			vec.push_back(new Point3D(0, 35.682, -93.417));
-			vec.push_back(new Point3D(0,-35.682, -93.417));
-			vec.push_back(new Point3D(-93.417,0,-35.682));
-			vec.push_back(new Point3D(-93.417,0,35.682));
-			vec.push_back(new Point3D(0,35.682,93.417));
-			vec.push_back(new Point3D(0,-35.682,93.417));
-			vec.push_back(new Point3D(-35.682,-93.417,0));
-			vec.push_back(new Point3D(-57.735,-57.735,57.735));
+			vec.push_back(new Point3D(0, -35.682, -93.417));
+			vec.push_back(new Point3D(-93.417, 0, -35.682));
+			vec.push_back(new Point3D(-93.417, 0, 35.682));
+			vec.push_back(new Point3D(0, 35.682, 93.417));
+			vec.push_back(new Point3D(0, -35.682, 93.417));
+			vec.push_back(new Point3D(-35.682, -93.417, 0));
+			vec.push_back(new Point3D(-57.735, -57.735, 57.735));
 			vec.push_back(new Point3D(-57.735, -57.735, -57.735));
-			vec.push_back(new Point3D(35.682,-93.417,0));
-			vec.push_back(new Point3D(57.735,-57.735,57.735));
-			vec.push_back(new Point3D(93.417,0,35.682));
+			vec.push_back(new Point3D(35.682, -93.417, 0));
+			vec.push_back(new Point3D(57.735, -57.735, 57.735));
+			vec.push_back(new Point3D(93.417, 0, 35.682));
 			vec.push_back(new Point3D(57.753, -57.753, -57.753));
 			vec.push_back(new Point3D(93.417, 0, -35.682));
 			vec.push_back(new Point3D(57.753, 57.753, -57.753));
@@ -948,6 +947,7 @@ private:
 			vec.push_back(new Point3D(35.682, 93.417, 0));
 			vec.push_back(new Point3D(-57.753, 57.753, 57.753));
 			vec.push_back(new Point3D(-57.753, 57.753, -57.753));
+			vec.push_back(new Point3D(-35.682, 93.417, 0));
 			vec.push_back(new Point3D(-35.682, 93.417, 0));
 
 			DCEL dcel = ConvexHull3D(vec);
@@ -958,12 +958,6 @@ private:
 
 			testID++;
 		}
-
-
-		/* TODO: MORE TEST-CASES 
-			2 points with same coordinantes e.G. 
-		
-		*/
 	}
 
 	/* ---------- DON'T TOUCH THIS ---------- */

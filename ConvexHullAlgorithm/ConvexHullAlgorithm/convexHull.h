@@ -97,6 +97,9 @@ std::vector<Point*> ConvexHull2D(std::vector<Point*> points) {
 DCEL ConvexHull3D(std::vector<Point*> points) {
 	DCEL dcel;
 
+	// since we work on a set of points, delete double points 
+
+
 	if (points.size() < 4)
 		return dcel;
 
@@ -241,7 +244,7 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 					// For the Edge 
 					printf("%i");
 					// Face of edge
-					DCELFace * face = createdEdge->face;
+					DCELFace * face = createdEdge->face; // TODO: NULL PTR
 
 					int i = 0;
 					DCELHalfEdge * tempEdge = horizon[i];

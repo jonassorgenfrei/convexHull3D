@@ -32,7 +32,7 @@ typedef enum SPACE {TWO_DIM, THREE_DIM} Space;
 // Which space we are operating in
 Space space = THREE_DIM;
 // How many input points we want to calculate
-int pointCount = 400;
+int pointCount = 50;
 // Visualize Result
 bool vis = false;
 // run Convex Hull Algorithm

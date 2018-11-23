@@ -32,6 +32,11 @@ class Point2D : public Point {
 		PointType getType() {
 			return PointType::POINT_2D;
 		}
+
+		bool isEqual(Point * p) {
+			return cmpd(this->x, p->getX()) && cmpd(this->y, p->getY());
+		}
+
 	private: 
 		double x;
 		double y;
