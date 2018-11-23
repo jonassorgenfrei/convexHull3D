@@ -24,6 +24,9 @@ public:
 	/* Get Type */
 	virtual PointType getType() = 0;
 
+	/* Checks if 2 Points are equal (floating point with epsilon) */
+	virtual bool isEqual(Point * p) = 0;
+
 };
 
 

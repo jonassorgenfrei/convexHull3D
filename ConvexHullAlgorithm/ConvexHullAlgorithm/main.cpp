@@ -32,7 +32,7 @@ typedef enum SPACE {TWO_DIM, THREE_DIM} Space;
 // Which space we are operating in
 Space space = THREE_DIM;
 // How many input points we want to calculate
-int pointCount = 1000000;
+int pointCount = 50;
 // Visualize Result
 bool vis = false;
 // run Convex Hull Algorithm
@@ -186,7 +186,7 @@ int main(int argc, char* argv[]) {
 						//Visualise Points and CH Result
 						ch.push_back(ch[0]);
 						Visualisation &visu = Visualisation::getInstance(); // initialize the singleton
-						visu.addRender(pointSet, GL_POINTS); // visualize points as spheres
+						visu.addRender(pointSet, GL_POINTS);
 						visu.addRender(ch, GL_LINE_STRIP, 1.0, 0.0, 0.0);
 						visu.render();
 					}
