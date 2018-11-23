@@ -97,6 +97,8 @@ std::vector<Point*> ConvexHull2D(std::vector<Point*> points) {
 DCEL ConvexHull3D(std::vector<Point*> points) {
 	DCEL dcel;
 
+
+
 	if (points.size() < 4)
 		return dcel;
 
