@@ -24,7 +24,6 @@
 #include "point3D.h"
 #include "Test/testSuite.h"
 
-#define DEB 1
 #define MAX_VALUE 20.0
 
 typedef enum SPACE {TWO_DIM, THREE_DIM} Space;
@@ -32,13 +31,15 @@ typedef enum SPACE {TWO_DIM, THREE_DIM} Space;
 // Which space we are operating in
 Space space = THREE_DIM;
 // How many input points we want to calculate
-int pointCount = 10000;
+int pointCount = 1000;		// NOTE: a to high amount of numbers can result as a memory-problem in the CH 3D Calculations
 // Visualize Result
 bool vis = false;
 // run Convex Hull Algorithm
 bool run = false;
 // run tests
 bool runT = false;
+// print points
+bool printPoints = false;
 // wireframe
 bool wireFrame = false;
 // test Suite
@@ -104,6 +105,7 @@ int main(int argc, char* argv[]) {
 					std::cout << " -r         run algorithm depending on current space" << std::endl;
 					std::cout << " -w         wireframe" << std::endl;
 					std::cout << " -t         run testsuite tests" << std::endl;
+					std::cout << " -p         print Points" << std::endl;
 					return 0;
 				}
 				else if (strcmp(argv[current_arg], "-run") == 0 ||
@@ -123,6 +125,12 @@ int main(int argc, char* argv[]) {
 					strcmp(argv[current_arg], "-t") == 0)
 				{
 					runT = true;
+				}
+				else if (strcmp(argv[current_arg], "-printpoints") == 0 ||
+					strcmp(argv[current_arg], "--printpoints") == 0 ||
+					strcmp(argv[current_arg], "-p") == 0)
+				{
+					printPoints = true;
 				}
 				else {
 					std::stringstream msg;
@@ -169,15 +177,31 @@ int main(int argc, char* argv[]) {
 				break;
 		}
 
+		// Remove double points
+		int pC = 0;
+		while (pC < pointSet.size()) {
+			int pC2 = 0;
+			while (pC2 < pointSet.size() && (pC == pC2 || !pointSet[pC]->isEqual(pointSet[pC2]))) {
+				pC2++;
+			}
+			if (pC2 < pointSet.size()) {
+				pointSet.erase(pointSet.begin() + pC);
+			}
+			else {
+				pC++;
+			}
+		}
+
+
 		// Print Generated Points
 		std::cout << "Generated Points (" << pointSet.size() << "):" << std::endl;
 		
-		#if DEB
-		for (auto p : pointSet) {
-			p->print();
-			std::cout << std::endl;
+		if (printPoints) {
+			for (auto p : pointSet) {
+				p->print();
+				std::cout << std::endl;
+			}
 		}
-		#endif
 		if (run) {
 			std::vector<Point*> ch;
 			DCEL dcel;
@@ -187,12 +211,13 @@ int main(int argc, char* argv[]) {
 					ch = ConvexHull2D(pointSet);
 					std::cout << "Convex Hull Points (" << ch.size() << "):" << std::endl;
 				
-					#if DEB
-					for (auto p : ch) {
-						p->print();
-						std::cout << std::endl;
+					if (printPoints) {
+						for (auto p : ch) {
+							p->print();
+							std::cout << std::endl;
+						}
 					}
-					#endif
+
 
 					if (vis) {
 						//Visualise Points and CH Result
@@ -207,6 +232,9 @@ int main(int argc, char* argv[]) {
 					//Run Convex Hull Algorithm 
 					dcel = ConvexHull3D(pointSet);
 					dcel.printDCELInfo();
+					if (printPoints) {
+						dcel.printDCEL();
+					}
 					if (vis) {
 						//Visualise Points and CH Result
 						Visualisation &visu = Visualisation::getInstance(); // initialize the singleton

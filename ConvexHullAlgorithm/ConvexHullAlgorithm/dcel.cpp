@@ -1,14 +1,13 @@
 #pragma once
 
+/**
+ * DCEL implementation
+ */
+
 #include "dcel.h"
 #include "dcelVertex.h"
 #include "dcelHalfEdge.h"
 #include "dcelFace.h"
-
-/**
- * DCEL implementation 
- */
-
 
 /**
  * DCEL constructor
@@ -18,8 +17,10 @@ DCEL::DCEL() {
 };
 
 /**
-*  Creates and returns a new vertex at the given point location.
-*/
+ *  Creates and returns a new vertex at the given point location.
+ *	@param point - Point to wrap as a Vertex
+ *	@return new DCELVertex
+ */
 DCELVertex * DCEL::addVertex(Point * point) {
 	DCELVertex * newVertex = new DCELVertex();
 	newVertex->point = point;
@@ -36,23 +37,26 @@ DCELVertex * DCEL::addVertex(Point * point) {
 }
 
 /**
-* Returns total Count of Faces
-*/
+ *	Total count of edges
+ *	@return Total count of edges
+ */
 int DCEL::getFaceCount() {
 	return this->surfaces.size();
 }
 
 /**
-* Returns total Count of Edges
-*/
+ *	Total count of edges
+ *	@return Total count of edges
+ */
 int DCEL::getEdgeCount()
 {
 	return this->halfEdges.size();
 }
 
 /**
-* Returns total Count of Vertices
-*/
+ *	Total count of vertices
+ *	@return Total count of vertices
+ */
 int DCEL::getVerticeCount()
 {
 	return this->vertices.size();
@@ -63,6 +67,9 @@ int DCEL::getVerticeCount()
  * One of the two half edges is returned. The other half edge can be found
  * using the twin attribute. Keep in mind that inserting an edge could result in
  * creating a new face.
+ * @param v1 -
+ * @param v2 -
+ * @return new created Edge
  */
 DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 	// if already connected
@@ -179,8 +186,6 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 	
 	/* --- Check if face has to be created ---*/
 
-	/* TODO: SOMETIME INFINITY LOOP*/
-
 	// check if new circle is closed
 	DCELHalfEdge * tempEdge = halfEdge;
 	bool twinEdgeInc = tempEdge->next == halfEdgeRet;
@@ -205,7 +210,6 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 				tempE = tempE->next;
 			}
 		} else {
-			/* TODO COMPARE LOOP LENGTH & */
 			while (tempE->next != halfEdge && tempER->next != halfEdgeRet) {
 				tempE = tempE->next;
 				tempER = tempER->next;
@@ -246,8 +250,7 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 					}
 
 					this->surfaces.push_back(closingFace2);
-				} // Another Case ???
-				/* TODO: !! */
+				} 
 			} else {
 				if (tempE->next == halfEdge) {
 					newFace->edge = halfEdge;
@@ -281,6 +284,8 @@ DCELHalfEdge * DCEL::createEdge(DCELVertex * v1, DCELVertex * v2) {
 
 /**
  * Returns all faces that are adjacent to a vertex v.
+ * @param vertex -
+ * @return
  */
 vector<DCELFace * > DCEL::findFaces(DCELVertex * vertex) {
 	vector<DCELFace *> tempFaces;
@@ -312,53 +317,10 @@ vector<DCELFace * > DCEL::findFaces(DCELVertex * vertex) {
 }
 
 /**
- * Finds a common face between two vertices. A common face has the two given 
- * vertices on its boundary. If the two vertices have more than one common face,
- * any bounded face is returned. That is, if they have two common faces and one
- * of them is the unbounded face, the other one is returned. If more than one bounded
- * face exists, any of them is returned. If no common faces exist,
- * a NULL pointer is returned.
- */
-DCELFace * DCEL::findCommonFace(DCELVertex * v1, DCELVertex * v2) {
-	DCELFace * face = NULL;
-	/*vector<DCELFace *> vec;
-	if (this->surfaces.size() < 2) {
-		return surfaces[0];
-	}
-
-	for (auto &face : this->surfaces) {
-		bool v1B = false, v2B = false;
-		vector<DCELVertex*> points = face->getBoundary();
-		for (auto & point : points) {
-			if (point == v1) {
-				v1B = true;
-			}
-			if (point == v2) {
-				v2B = true;
-			}
-		}
-		if (v1B && v2B) {
-			vec.push_back(face);
-		}
-	}
-
-	if (vec.size() == 1) {
-		return vec[0];
-	}
-	if (vec.size() == 2) {
-		if (vec[0] != this->getUnboundedFace()) {
-			return vec[0];
-		}
-		else {
-			return vec[1];
-		}
-	}*/
-
-	return face;
-}
-
-/**
  * Returns true if and only if the two given vertices have a common edge between them.
+ * @param v1 -
+ * @param v2 -
+ * @return
  */
 bool DCEL::isConnected(DCELVertex * v1, DCELVertex * v2) {
 	DCELHalfEdge * startEdge = v1->leaving;
@@ -534,6 +496,8 @@ bool DCEL::deleteEdge(DCELVertex * v1, DCELVertex * v2) {
 
 /**
  * Deletes a Vertex from the DCEL Structur
+ * @param vertex -
+ * @return
  */
 bool DCEL::deleteVertex(DCELVertex * v) {
 	int idx = 0;

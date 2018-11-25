@@ -1,4 +1,14 @@
 #pragma once
+/*
+ *	Testsuite
+ *	Testsuite to test sub algorithms & data structures for the main program
+ *
+ * Part of the seminar talk at FH Wedel 2018
+ *
+ * @author -	Jonas Sorgenfrei
+ *				Minf101767
+ */
+
 
 #ifndef TESTSUITE_H
 #define TESTsUITE_H
@@ -17,6 +27,7 @@
  */
 class TestSuite {
 public:
+	// constructor
 	TestSuite() {
 	}
 
@@ -24,12 +35,21 @@ public:
 	 * Run all tests in Test Suite.
 	 */
 	void run() {
+		/* ---------- DON'T TOUCH THIS ---------- */
+		std::cout << "--- TESTS Start ---" << std::endl;
+		/* -------------------------------------- */
+
+		/* Run Test Collections */
+
 		mathClassTests();
 		convexHull2DTest();
 		dcelTest();
 		conflictGraphTest();
 		convexHull3DTest();
-	//	errorCheck(false, "TESTCLASS", "TESTS SUCCEEDED", 815);
+
+		/* ---------- DON'T TOUCH THIS ---------- */
+		std::cout << "--- TESTS SUCCEEDED ---" << std::endl;
+		/* -------------------------------------- */
 	}
 private:
 	/* ---------- Add Test Collections as Functions ---------- */
@@ -561,29 +581,6 @@ private:
 
 		/* Test-ID:		#8
 		 * Class:		dcel.h
-		 * Function:	deleteFace
-		 * Deletes a Face of the DCEL
-		 */
-		{
-			/* TODO CHANGE VALUES */
-			Point * point1 = new Point3D(100.0, 0.0, 0.0);
-			Point * point2 = new Point3D(0.0, 100.0, 0.0);
-			Point * point3 = new Point3D(0.0, 0.0, 100.0);
-			Point * point4 = new Point3D(-100.0, 0.0, 0.0);
-
-			DCEL dcel = DCEL();
-
-			DCELVertex * v1 = dcel.addVertex(point1);
-			DCELVertex * v2 = dcel.addVertex(point2);
-			DCELVertex * v3 = dcel.addVertex(point3);
-			DCELVertex * v4 = dcel.addVertex(point4);
-
-			
-			testID++;
-		}
-
-		/* Test-ID:		#9
-		 * Class:		dcel.h
 		 * Function:	createEdges
 		 * All edges connected to faces
 		 */
@@ -961,44 +958,6 @@ private:
 		}
 
 		/* Test-ID:		#6
-		 * Class:		convexHull.h
-		 * Function:	convexHull3D
-		 * CH3 with Points with double Points
-		 */
-		{
-			vector<Point * > vec;
-			vec.push_back(new Point3D(0, 35.682, -93.417));
-			vec.push_back(new Point3D(0, -35.682, -93.417));
-			vec.push_back(new Point3D(-93.417, 0, -35.682));
-			vec.push_back(new Point3D(-93.417, 0, 35.682));
-			vec.push_back(new Point3D(0, 35.682, 93.417));
-			vec.push_back(new Point3D(0, -35.682, 93.417));
-			vec.push_back(new Point3D(-35.682, -93.417, 0));
-			vec.push_back(new Point3D(-57.735, -57.735, 57.735));
-			vec.push_back(new Point3D(-57.735, -57.735, -57.735));
-			vec.push_back(new Point3D(35.682, -93.417, 0));
-			vec.push_back(new Point3D(57.735, -57.735, 57.735));
-			vec.push_back(new Point3D(93.417, 0, 35.682));
-			vec.push_back(new Point3D(57.753, -57.753, -57.753));
-			vec.push_back(new Point3D(93.417, 0, -35.682));
-			vec.push_back(new Point3D(57.753, 57.753, -57.753));
-			vec.push_back(new Point3D(57.753, 57.753, 57.753));
-			vec.push_back(new Point3D(35.682, 93.417, 0));
-			vec.push_back(new Point3D(-57.753, 57.753, 57.753));
-			vec.push_back(new Point3D(-57.753, 57.753, -57.753));
-			vec.push_back(new Point3D(-35.682, 93.417, 0));
-			vec.push_back(new Point3D(-35.682, 93.417, 0));
-
-			DCEL dcel = ConvexHull3D(vec);
-
-			errorCheck(dcel.getVerticeCount() == 20, testClass, "ConvexHull3D Vert", testID);
-			errorCheck(dcel.getEdgeCount() == 108, testClass, "ConvexHull3D Edge", testID);
-			errorCheck(dcel.getFaceCount() == 36, testClass, "ConvexHull3D Face", testID);
-
-			testID++;
-		}
-
-		/* Test-ID:		#7
 		 * Class:		convexHull.h
 		 * Function:	convexHull3D
 		 * Test 30

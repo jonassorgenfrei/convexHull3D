@@ -154,9 +154,6 @@
     <None Include="shader\pointShader.vert" />
     <None Include="Shader\vertexShader.vert" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="debug.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

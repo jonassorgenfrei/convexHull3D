@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Ressourcendateien">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Shader">
       <UniqueIdentifier>{6c46bf4c-13fb-4de9-b4d3-a088dfced967}</UniqueIdentifier>
     </Filter>
@@ -34,8 +30,8 @@
     <Filter Include="Headerdateien\ConflictGraph">
       <UniqueIdentifier>{7f3b705d-f064-4530-b174-2630c768528c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tests\TXT">
-      <UniqueIdentifier>{71066c29-1ccf-4b38-bafb-d892c428247e}</UniqueIdentifier>
+    <Filter Include="Headerdateien\Point">
+      <UniqueIdentifier>{d854bd01-431b-40a9-98ca-4f9d6f2b2c74}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -68,15 +64,6 @@
     <ClInclude Include="math.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="point2D.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="point3D.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="point.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="edge.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
@@ -107,6 +94,15 @@
     <ClInclude Include="conflictGraph.h">
       <Filter>Headerdateien\ConflictGraph</Filter>
     </ClInclude>
+    <ClInclude Include="point.h">
+      <Filter>Headerdateien\Point</Filter>
+    </ClInclude>
+    <ClInclude Include="point2D.h">
+      <Filter>Headerdateien\Point</Filter>
+    </ClInclude>
+    <ClInclude Include="point3D.h">
+      <Filter>Headerdateien\Point</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\vertexShader.vert">
@@ -124,10 +120,5 @@
     <None Include="shader\pointShader.frag">
       <Filter>Shader</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="debug.txt">
-      <Filter>Tests\TXT</Filter>
-    </Text>
   </ItemGroup>
 </Project>

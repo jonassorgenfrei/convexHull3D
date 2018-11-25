@@ -1,4 +1,14 @@
 ﻿#pragma once
+/*
+ * Convex Hull Modul
+ * Algorithm for 2D & 3D convex hull calculation.
+ *
+ * Part of the seminar talk at FH Wedel 2018
+ *
+ * @author -	Jonas Sorgenfrei
+ *				Minf101767
+ */
+
 
 #ifndef CONVEX_HULL_H
 #define CONVEX_HULL_H
@@ -96,21 +106,6 @@ std::vector<Point*> ConvexHull2D(std::vector<Point*> points) {
  */
 DCEL ConvexHull3D(std::vector<Point*> points) {
 	DCEL dcel;
-
-	// Remove 
-	int pC = 0;
-	while (pC < points.size()) {
-		int pC2 = 0;
-		while (pC2 < points.size() && (pC == pC2 || !points[pC]->isEqual(points[pC2]))) {
-			pC2++;
-		}
-		if (pC2 < points.size()) {
-			points.erase(points.begin() + pC);
-		} else {
-			pC++;
-		}
-	}
-
 
 	if (points.size() < 4)
 		return dcel;
@@ -299,18 +294,14 @@ DCEL ConvexHull3D(std::vector<Point*> points) {
 						G.checkForConflict(p, cF);
 				}
 			}
-
 		}
 		// 20. 	Delete the node corresponding to pr and the nodes corresponding to the facets in Fconflict(pr) from G, together with their incident arcs		
 		G.deleteCorrespondingNodes(cP);
-
 	}
 
 	// 21. return C (convex hull)
 	return dcel;
 };
-
-
 
 #endif // !CONVEX_HULL_H
 
