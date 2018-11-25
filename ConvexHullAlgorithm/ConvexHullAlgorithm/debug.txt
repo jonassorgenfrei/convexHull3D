@@ -1,115 +1,40 @@
-DCEL : {
- Vertices: {
-v2
-v1
-v7
-v3
-v5
-v4
-v6
-v8
- }
-
- EDGES: {
-  Edge {  Start: v2 End: v7  }
-  Edge {  Start: v7 End: v2  }
-  Edge {  Start: v7 End: v1  }
-  Edge {  Start: v1 End: v7  }
-  Edge {  Start: v1 End: v2  }
-  Edge {  Start: v2 End: v1  }
-  Edge {  Start: v2 End: v3  }
-  Edge {  Start: v3 End: v2  }
-  Edge {  Start: v1 End: v3  }
-  Edge {  Start: v3 End: v1  }
-  Edge {  Start: v1 End: v5  }
-  Edge {  Start: v5 End: v1  }
-  Edge {  Start: v7 End: v5  }
-  Edge {  Start: v5 End: v7  }
-  Edge {  Start: v3 End: v5  }
-  Edge {  Start: v5 End: v3  }
-  Edge {  Start: v2 End: v4  }
-  Edge {  Start: v4 End: v2  }
-  Edge {  Start: v3 End: v4  }
-  Edge {  Start: v4 End: v3  }
-  Edge {  Start: v7 End: v4  }
-  Edge {  Start: v4 End: v7  }
-  Edge {  Start: v4 End: v6  }
-  Edge {  Start: v6 End: v4  }
-  Edge {  Start: v3 End: v6  }
-  Edge {  Start: v6 End: v3  }
-  Edge {  Start: v5 End: v6  }
-  Edge {  Start: v6 End: v5  }
-  Edge {  Start: v7 End: v6  }
-  Edge {  Start: v6 End: v7  }
-  Edge {  Start: v4 End: v8  }
-  Edge {  Start: v8 End: v4  }
-  Edge {  Start: v6 End: v8  }
-  Edge {  Start: v8 End: v6  }
-  Edge {  Start: v7 End: v8  }
-  Edge {  Start: v8 End: v7  }
- }
-
- Face: {
 Face {
- Edge {  Start: v1 End: v2 }
- Edge {  Start: v2 End: v7 }
- Edge {  Start: v7 End: v1 }
+ Edge {  Start: V1 End: V2 }
+ Edge {  Start: V2 End: V3 }OK
+ Edge {  Start: V3 End: V1 }
 }
 Face {
- Edge {  Start: v1 End: v3 }
- Edge {  Start: v3 End: v2 }
- Edge {  Start: v2 End: v1 }
+ Edge {  Start: V4 End: V5 }
+ Edge {  Start: V5 End: V6 }OK
+ Edge {  Start: V6 End: V4 }
 }
 Face {
- Edge {  Start: v7 End: v5 }
- Edge {  Start: v5 End: v1 }
- Edge {  Start: v1 End: v7 }
+ Edge {  Start: V7 End: V5 }
+ Edge {  Start: V5 End: V4 }OK
+ Edge {  Start: V4 End: V7 }
 }
 Face {
- Edge {  Start: v5 End: v3 }
- Edge {  Start: v3 End: v1 }
- Edge {  Start: v1 End: v5 }
+ Edge {  Start: V5 End: V2 }
+ Edge {  Start: V2 End: V6 }OK
+ Edge {  Start: V6 End: V5 }
 }
 Face {
- Edge {  Start: v3 End: v4 }
- Edge {  Start: v4 End: v2 }
- Edge {  Start: v2 End: v3 }
+ Edge {  Start: V7 End: V8 }
+ Edge {  Start: V8 End: V5 }OK
+ Edge {  Start: V5 End: V7 }
 }
 Face {
- Edge {  Start: v4 End: v7 }
- Edge {  Start: v7 End: v2 }
- Edge {  Start: v2 End: v4 }
+ Edge {  Start: V3 End: V8 }
+ Edge {  Start: V8 End: V7 }OK
+ Edge {  Start: V7 End: V3 }
 }
 Face {
- Edge {  Start: v3 End: v6 }
- Edge {  Start: v6 End: v4 }
- Edge {  Start: v4 End: v3 }
+ Edge {  Start: V2 End: V8 }
+ Edge {  Start: V8 End: V3 }OK
+ Edge {  Start: V3 End: V2 }
 }
 Face {
- Edge {  Start: v5 End: v6 }
- Edge {  Start: v6 End: v3 }
- Edge {  Start: v3 End: v5 }
-}
-Face {
- Edge {  Start: v7 End: v6 }
- Edge {  Start: v6 End: v5 }
- Edge {  Start: v5 End: v7 }
-}
-Face {
- Edge {  Start: v6 End: v8 }
- Edge {  Start: v8 End: v4 }
- Edge {  Start: v4 End: v6 }
-}
-Face {
- Edge {  Start: v8 End: v7 }
- Edge {  Start: v7 End: v4 }
- Edge {  Start: v4 End: v8 }
-}
-Face {
- Edge {  Start: v7 End: v8 }
- Edge {  Start: v8 End: v6 }
- Edge {  Start: v6 End: v7 }
-}
- }
-
+ Edge {  Start: V8 End: V2 }
+ Edge {  Start: V2 End: V5 }OK
+ Edge {  Start: V5 End: V8 }
 }

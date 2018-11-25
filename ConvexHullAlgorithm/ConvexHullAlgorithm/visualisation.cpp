@@ -9,7 +9,7 @@ Visualisation::Visualisation()
 int Visualisation::init()
 {
 	// glfw: initialize and configure
-// ------------------------------
+	// ------------------------------
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -85,7 +85,6 @@ void Visualisation::addRender(DCEL * dcel, bool wireFrame)
 	for (DCELFace * surface : dcel->surfaces) {
 		vector<DCELVertex*> surfaceVertices = surface->getBoundary();
 		if (surfaceVertices.size() == 3) {
-			
 			for (DCELVertex* vertex : surfaceVertices) {
 				int idx = getIndex(dcelVertices, vertex);
 				if (idx == -1) {
@@ -177,7 +176,7 @@ void Visualisation::render()
 	this->geoShader.use();
 	this->geoShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
 	this->geoShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-	this->geoShader.setVec3("lightPos", glm::vec3(10.0f, 10.0f, 30.0f));
+	this->geoShader.setVec3("lightPos", glm::vec3(10.0f, 10.0f, 40.0f));
 
 	// render loop
 	// -----------
@@ -232,6 +231,7 @@ void Visualisation::render()
 				glBindVertexArray(drawObj.VAO);
 				this->pointShader.setMat4("model", drawObj.model);
 				this->pointShader.setVec3("color", drawObj.color);
+				glEnable(GL_PROGRAM_POINT_SIZE);
 				glDrawArrays(drawObj.mode, 0, drawObj.count);
 			} else {
 				this->geoShader.use();
@@ -253,6 +253,8 @@ void Visualisation::render()
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+	
+	//glPointSize(5.0f);
 
 	// optional: de-allocate all resources once they've outlived their purpose:
 	// ------------------------------------------------------------------------

@@ -24,7 +24,7 @@
 #include "point3D.h"
 #include "Test/testSuite.h"
 
-#define DEB 0
+#define DEB 1
 #define MAX_VALUE 20.0
 
 typedef enum SPACE {TWO_DIM, THREE_DIM} Space;
@@ -32,11 +32,13 @@ typedef enum SPACE {TWO_DIM, THREE_DIM} Space;
 // Which space we are operating in
 Space space = THREE_DIM;
 // How many input points we want to calculate
-int pointCount = 50;
+int pointCount = 10000;
 // Visualize Result
 bool vis = false;
 // run Convex Hull Algorithm
 bool run = false;
+// run tests
+bool runT = false;
 // wireframe
 bool wireFrame = false;
 // test Suite
@@ -51,8 +53,7 @@ float random(float a, float b) {
 
 int main(int argc, char* argv[]) {
 	std::cout << "Convex Hull Program" << std::endl << std::endl;
-	testSuite.run();
-	
+
 	try {
 		// Arguments passed to the program
 		int current_arg = 1;
@@ -101,7 +102,8 @@ int main(int argc, char* argv[]) {
 					std::cout << " -v         visualise input and output" << std::endl;
 					std::cout << " -h         show help" << std::endl;
 					std::cout << " -r         run algorithm depending on current space" << std::endl;
-					std::cout << " -w         Wireframe" << std::endl;
+					std::cout << " -w         wireframe" << std::endl;
+					std::cout << " -t         run testsuite tests" << std::endl;
 					return 0;
 				}
 				else if (strcmp(argv[current_arg], "-run") == 0 ||
@@ -116,6 +118,12 @@ int main(int argc, char* argv[]) {
 				{
 					wireFrame = true;
 				}
+				else if (strcmp(argv[current_arg], "-testsuite") == 0 ||
+					strcmp(argv[current_arg], "--testsuite") == 0 ||
+					strcmp(argv[current_arg], "-t") == 0)
+				{
+					runT = true;
+				}
 				else {
 					std::stringstream msg;
 					msg << "Error: Invalide Argument. ("
@@ -128,6 +136,10 @@ int main(int argc, char* argv[]) {
 				current_arg++;
 			}
 		}
+
+		// Test Suite to proof correctness of sub algorithms
+		if (runT)
+			testSuite.run();
 
 		std::srand(std::time(nullptr)); // use current time as seed for random generator
 
@@ -159,7 +171,7 @@ int main(int argc, char* argv[]) {
 
 		// Print Generated Points
 		std::cout << "Generated Points (" << pointSet.size() << "):" << std::endl;
-
+		
 		#if DEB
 		for (auto p : pointSet) {
 			p->print();
@@ -186,8 +198,8 @@ int main(int argc, char* argv[]) {
 						//Visualise Points and CH Result
 						ch.push_back(ch[0]);
 						Visualisation &visu = Visualisation::getInstance(); // initialize the singleton
-						visu.addRender(pointSet, GL_POINTS);
 						visu.addRender(ch, GL_LINE_STRIP, 1.0, 0.0, 0.0);
+						visu.addRender(pointSet, GL_POINTS);
 						visu.render();
 					}
 					break;
@@ -198,8 +210,8 @@ int main(int argc, char* argv[]) {
 					if (vis) {
 						//Visualise Points and CH Result
 						Visualisation &visu = Visualisation::getInstance(); // initialize the singleton
-						visu.addRender(pointSet, GL_POINTS);
 						visu.addRender(&dcel, wireFrame);
+						visu.addRender(pointSet, GL_POINTS);
 						visu.render();
 					}
 					break;

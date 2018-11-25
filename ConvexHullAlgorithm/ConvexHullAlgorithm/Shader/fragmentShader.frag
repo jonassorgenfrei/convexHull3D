@@ -18,7 +18,6 @@ void main()
 		//if wireFrame draw lines in white
 		FragColor = vec4(vec3(1.0),1.0);
 	} else {
-
 		 // ambient
 		float ambientStrength = 0.1;
 		vec3 ambient = ambientStrength * lightColor;
@@ -38,5 +37,6 @@ void main()
         
 		vec3 result = (ambient + diffuse + specular) * color;
 		FragColor = vec4(result, 1.0);
+
 	}
 }

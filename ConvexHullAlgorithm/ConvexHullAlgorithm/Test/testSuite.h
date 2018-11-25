@@ -26,10 +26,9 @@ public:
 	void run() {
 		mathClassTests();
 		convexHull2DTest();
-		convexHull3DTest();
 		dcelTest();
 		conflictGraphTest();
-
+		convexHull3DTest();
 	//	errorCheck(false, "TESTCLASS", "TESTS SUCCEEDED", 815);
 	}
 private:
@@ -39,7 +38,7 @@ private:
 	void mathClassTests() {
 		string testClass = "math.h";
 		int testID = 1;
-
+		std::cout << "RUN: mathClassTests" << std::endl;
 		/* Test-ID:		#1
 		 * Class:		math.h
 		 * Function:	checkCollinear
@@ -173,13 +172,16 @@ private:
 
 			testID++;
 		}
+		std::cout << "Passed: mathClassTests" << std::endl;
 	}
 
 	/* Test for the convex hull 2D algorithm implmented in convexHull.h */
 	void convexHull2DTest() {
 		string testClass = "convexHull.h";
 		int testID = 1;
-		
+
+		std::cout << "RUN: convexHull2DTest" << std::endl;
+
 		/* Test-ID:		#1
 		 * Class:		convexHull.h
 		 * Function:	convexHull2D
@@ -207,6 +209,8 @@ private:
 
 			testID++;
 		}
+
+		std::cout << "Passed: convexHull2DTest" << std::endl;
 	}
 
 	/* Test for the dcel Data structure */
@@ -214,6 +218,8 @@ private:
 		string testClass = "dcel.h";
 		int testID = 1;
 		
+		std::cout << "RUN: dcelTest" << std::endl;
+
 		/* Test-ID:		#1
 		 * Class:		dcel.h
 		 * Function:	addVertex & getVerticeCount
@@ -499,6 +505,7 @@ private:
 			DCELHalfEdge * h3;
 
 			if (orientation > 0) {
+
 				h1 = dcel.createEdge(v1, v2);
 				h2 = dcel.createEdge(v2, v3);
 				h3 = dcel.createEdge(v3, v1);
@@ -511,9 +518,9 @@ private:
 			DCELHalfEdge * h4 = dcel.createEdge(v1, v4);
 			DCELHalfEdge * h5 = dcel.createEdge(v2, v4);
 			DCELHalfEdge * h6 = dcel.createEdge(v3, v4);
-
-			DCELHalfEdge * deleteHalfEdge = dcel.deleteFace(dcel.surfaces[0]); // Delete 1. triangle
 			
+			DCELHalfEdge * deleteHalfEdge = dcel.deleteFace(dcel.surfaces[0]); // Delete 1. triangle
+
 			errorCheck(dcel.getFaceCount() == 3, testClass, "deleteFace Face count 3", testID);
 			errorCheck(dcel.getEdgeCount() == 12, testClass, "deleteFace Edge count 12", testID);
 			errorCheck(deleteHalfEdge->face == dcel.openFace, testClass, "deleteFace", testID);
@@ -541,16 +548,41 @@ private:
 			errorCheck(dcel.getFaceCount() == 1, testClass, "deleteFace Face 1", testID);
 			errorCheck(dcel.getEdgeCount() == 6, testClass, "deleteFace Edge count 6", testID);
 			errorCheck(dcel.getVerticeCount() == 3, testClass, "deleteFace Vert count 3", testID);
-			
+			errorCheck(deleteHalfEdge != nullptr, testClass, "deleteFace", testID);
 			deleteHalfEdge = dcel.deleteFace(dcel.surfaces[0]); // Delete 4. triangle
 
 			errorCheck(dcel.getFaceCount() == 0, testClass, "deleteFace", testID);
 			errorCheck(dcel.getEdgeCount() == 0, testClass, "deleteFace", testID);
 			errorCheck(dcel.getVerticeCount() == 0, testClass, "deleteFace", testID);
+			errorCheck(deleteHalfEdge == nullptr, testClass, "deleteFace", testID);
 			testID++;
 		}
 
+
 		/* Test-ID:		#8
+		 * Class:		dcel.h
+		 * Function:	deleteFace
+		 * Deletes a Face of the DCEL
+		 */
+		{
+			/* TODO CHANGE VALUES */
+			Point * point1 = new Point3D(100.0, 0.0, 0.0);
+			Point * point2 = new Point3D(0.0, 100.0, 0.0);
+			Point * point3 = new Point3D(0.0, 0.0, 100.0);
+			Point * point4 = new Point3D(-100.0, 0.0, 0.0);
+
+			DCEL dcel = DCEL();
+
+			DCELVertex * v1 = dcel.addVertex(point1);
+			DCELVertex * v2 = dcel.addVertex(point2);
+			DCELVertex * v3 = dcel.addVertex(point3);
+			DCELVertex * v4 = dcel.addVertex(point4);
+
+			
+			testID++;
+		}
+
+		/* Test-ID:		#9
 		 * Class:		dcel.h
 		 * Function:	createEdges
 		 * All edges connected to faces
@@ -608,12 +640,16 @@ private:
 			errorCheck(h6->face != nullptr && h6->face != dcel.openFace, testClass, "createEdges", testID);
 			testID++;
 		}
+
+		std::cout << "PASSED: dcelTest" << std::endl;
 	}
 
 	/* Test for the Conflict Graph */
 	void conflictGraphTest() {
 		string testClass = "conflictGraph.h";
 		int testID = 1;
+
+		std::cout << "RUN: conflictGraphTest" << std::endl;
 
 		/* Test-ID:		#1
 		 * Class:		conflictGraph.h
@@ -780,12 +816,15 @@ private:
 			testID++;
 		}
 
+		std::cout << "PASSED: conflictGraphTest" << std::endl;
 	}
 
 	/* Test for the convex hull 3D algorithm implmented in convexHull.h */
 	void convexHull3DTest() {
 		string testClass = "convexHull.h";
 		int testID = 1;
+
+		std::cout << "RUN: convexHull3DTest" << std::endl;
 
 		/* Test-ID:		#1
 		 * Class:		convexHull.h
@@ -924,7 +963,7 @@ private:
 		/* Test-ID:		#6
 		 * Class:		convexHull.h
 		 * Function:	convexHull3D
-		 * CH3 with Points with 
+		 * CH3 with Points with double Points
 		 */
 		{
 			vector<Point * > vec;
@@ -958,6 +997,55 @@ private:
 
 			testID++;
 		}
+
+		/* Test-ID:		#7
+		 * Class:		convexHull.h
+		 * Function:	convexHull3D
+		 * Test 30
+		 */
+		{
+			vector<Point * > vec;
+			vec.push_back(new Point3D(12.5736, 2.91269, 12.2782));
+			vec.push_back(new Point3D(7.36045, 9.60112, 19.3506));
+			vec.push_back(new Point3D(13.8835, 9.3643, 4.4203));
+			vec.push_back(new Point3D(8.53359, 17.0116, 13.1407));
+			vec.push_back(new Point3D(18.0255, 19.6789, 7.42332));
+			vec.push_back(new Point3D(11.182, 13.61, 11.182));
+			vec.push_back(new Point3D(15.9966, 2.66243, 8.23145));
+			vec.push_back(new Point3D(18.1304, 8.6874, 6.04877));
+			vec.push_back(new Point3D(7.48131, 10.7926, 3.56945));
+			vec.push_back(new Point3D(10.4941, 3.78613, 2.20771));
+			vec.push_back(new Point3D(0.554826, 9.15738, 8.97183));
+			vec.push_back(new Point3D(13.0052, 19.4519, 7.5515));
+			vec.push_back(new Point3D(1.70537, 11.5677, 11.9517));
+			vec.push_back(new Point3D(10.0595, 0.446791, 17.6818));
+			vec.push_back(new Point3D(3.19956, 17.7416, 2.53365));
+			vec.push_back(new Point3D(7.77978, 8.55312, 0.552995));
+			vec.push_back(new Point3D(0.0231941, 9.91913, 1.16031));
+			vec.push_back(new Point3D(17.1032, 12.9203, 6.59871));
+			vec.push_back(new Point3D(15.9905, 5.07645, 10.4038));
+			vec.push_back(new Point3D(13.5685, 5.92303, 15.4466));
+			vec.push_back(new Point3D(0.698264, 12.7262, 15.5492));
+			vec.push_back(new Point3D(13.5984, 0.19715, 7.24876));
+			vec.push_back(new Point3D(8.27296, 0.49501, 2.4659));
+			vec.push_back(new Point3D(17.0757, 12.3765, 17.0067));
+			vec.push_back(new Point3D(17.7569, 2.86142, 1.64251));
+			vec.push_back(new Point3D(4.52528, 3.65795, 16.541));
+			vec.push_back(new Point3D(16.1815, 5.00076, 17.4981));
+			vec.push_back(new Point3D(6.60848, 19.0698, 13.5075));
+			vec.push_back(new Point3D(11.1301, 16.2609, 14.4401));
+			vec.push_back(new Point3D(6.48213, 18.7329, 2.50618));
+
+		   DCEL dcel = ConvexHull3D(vec);
+
+			errorCheck(dcel.getVerticeCount() == 19, testClass, "ConvexHull3D Vert", testID);
+			errorCheck(dcel.getEdgeCount() == 102, testClass, "ConvexHull3D Edge", testID);
+			errorCheck(dcel.getFaceCount() == 34, testClass, "ConvexHull3D Face", testID);
+
+			testID++;
+		}
+
+		std::cout << "PASSED: convexHull3DTest" << std::endl;
 	}
 
 	/* ---------- DON'T TOUCH THIS ---------- */

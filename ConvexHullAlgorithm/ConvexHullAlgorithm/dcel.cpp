@@ -400,7 +400,7 @@ DCELHalfEdge * DCEL::findIncidentEdge(DCELVertex * v, DCELFace * f) {
  * If on any Edge the twin is already connected to the open Face, delete edge
  * else connect all surrounding edges to the open Face
  * 
- * @param
+ * @param face - face to delete
  * @return one HalfEdge which isn't deleted at this state 
  */
 DCELHalfEdge* DCEL::deleteFace(DCELFace * face) {
@@ -409,7 +409,7 @@ DCELHalfEdge* DCEL::deleteFace(DCELFace * face) {
 		idx++;
 	}
 
-	// If face is not part of the curretn DCEL
+	// If face is not part of the current DCEL
 	if (idx == this->surfaces.size()) {
 		return nullptr;
 	}
@@ -439,62 +439,83 @@ DCELHalfEdge* DCEL::deleteFace(DCELFace * face) {
  * Keep in mind that deleting an edge might result in merging two faces together.
  */
 bool DCEL::deleteEdge(DCELVertex * v1, DCELVertex * v2) {
+	// Check if Points are not equal & connected
 	if (v1 == v2 || !isConnected(v1, v2)) {
 		return false;
 	}
 
+	// Edge to delete
 	DCELHalfEdge * tempEdge = v1->leaving;;
 
+	// Find Edge to delete (loopping over all leaving Edges of Vertex v1)
 	while (tempEdge->destination() != v2) {
 		tempEdge = v1->nextLeaving(tempEdge);
 	}
 
+	// check if only this edge is leaving from Vertex v1
 	if (v1->leavingEdges().size() == 1) {
 		v1->leaving = nullptr;
-		deleteVertex(v1);
+		deleteVertex(v1); // delete Vertex v1
 	}
 	else {
+		// if Vertex 1 leaving edge is one of the half edges to be deleted
 		if (v1->leaving == tempEdge || v1->leaving == tempEdge->twin) {
+			// set another Edges as leaving edge
 			v1->leaving = v1->nextLeaving(v1->leaving);
 		}
 	}
+
+	// check if only this edge is leaving from Vertex v2
 	if (v2->leavingEdges().size() == 1) {
 		v2->leaving = nullptr;
-		deleteVertex(v2);
-	}
+		deleteVertex(v2); // delete Vertex v2
+	} 
 	else {
+		// if Vertex 2 leaving edge is one of the half edges to be deleted
 		if (v2->leaving == tempEdge || v2->leaving == tempEdge->twin) {
+			// set another Edges as leaving edge
 			v2->leaving = v2->nextLeaving(v2->leaving);
 		}
 	}
 
+	/* Merging 2 faces */
 	if (tempEdge->face != tempEdge->twin->face) {
 		// connecting edges to right face
 		for (DCELHalfEdge * edge : tempEdge->twin->face->getEdgeBoundary()) {
 			edge->face = tempEdge->face;
 		}
 	}
-	
+
+	DCELHalfEdge * saveConnection1Master = tempEdge;
+	DCELHalfEdge * saveConnection1Slave = tempEdge->twin;
+	DCELHalfEdge * saveConnection2Master = tempEdge->twin;
+	DCELHalfEdge * saveConnection2Slave = tempEdge;
+
+	/* Connect remaining Edges*/
 	if (tempEdge->next != tempEdge->twin) {
+		// Find Edges to be Connected
 		DCELHalfEdge * start = tempEdge->twin;
 		DCELHalfEdge * temp = start;
 		while (temp->next != start) {
 			temp = temp->next;
 		}
-		temp->next = tempEdge->next;
+		saveConnection1Master = temp;
+		saveConnection1Slave = tempEdge->next;
 	}
 
 	if (tempEdge->twin->next != tempEdge) {
 		DCELHalfEdge * start = tempEdge;
-		DCELHalfEdge * temp = start; /* TODO: INFINITIY LOOP */
+		DCELHalfEdge * temp = start;
 		while (temp->next != start) {
 			temp = temp->next;
 		}
-		temp->next = tempEdge->twin->next;
+
+		saveConnection2Master = temp;
+		saveConnection2Slave = tempEdge->twin->next;
 	}
 
-	tempEdge->next = tempEdge->twin;
-	tempEdge->twin->next = tempEdge;
+	saveConnection1Master->next = saveConnection1Slave;
+	saveConnection2Master->next = saveConnection2Slave;
 
 	int idx = 0;	//index from edge
 	while (this->halfEdges[idx] != tempEdge) {
@@ -511,6 +532,9 @@ bool DCEL::deleteEdge(DCELVertex * v1, DCELVertex * v2) {
 	return true;
 }
 
+/**
+ * Deletes a Vertex from the DCEL Structur
+ */
 bool DCEL::deleteVertex(DCELVertex * v) {
 	int idx = 0;
 
