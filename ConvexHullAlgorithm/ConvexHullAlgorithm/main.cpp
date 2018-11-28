@@ -146,7 +146,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// Test Suite to proof correctness of sub algorithms
-		if (runT)
+		if (runT) 
 			testSuite.run();
 
 		std::srand(std::time(nullptr)); // use current time as seed for random generator
@@ -202,6 +202,7 @@ int main(int argc, char* argv[]) {
 				std::cout << std::endl;
 			}
 		}
+
 		if (run) {
 			std::vector<Point*> ch;
 			DCEL dcel;
@@ -246,7 +247,31 @@ int main(int argc, char* argv[]) {
 				default:
 					break;
 			}
+		} 
+		else {
+			switch (space) {
+				case TWO_DIM:
+					if (vis) {
+						//Visualise Points and CH Result
+						Visualisation &visu = Visualisation::getInstance(); // initialize the singleton
+						visu.addRender(pointSet, GL_POINTS);
+						visu.render();
+					}
+					break;
+				case THREE_DIM:
+					if (vis) {
+						//Visualise Points and CH Result
+						Visualisation &visu = Visualisation::getInstance(); // initialize the singleton
+						visu.addRender(pointSet, GL_POINTS);
+						visu.render();
+					}
+					break;
+				default:
+					break;
+			}
+
 		}
+
 	} catch (const std::exception& e) {
 		std::cout << e.what() << std::endl;
 	}
